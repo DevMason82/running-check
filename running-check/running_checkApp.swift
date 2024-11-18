@@ -11,7 +11,8 @@ import SwiftUI
 struct running_checkApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+//            ContentView()
+            WeatherView()
         }
     }
 }
