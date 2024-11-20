@@ -145,7 +145,7 @@ class RunningEvaluator {
         return (.good, RunningCoach(
             comment: """
             날씨가 이상적입니다! 현재 체감온도는 \(feelsLike)°C로 러닝하기에 최적의 조건입니다. 
-            이온 음료를 준비하여 러닝 중 수분 공급을 유지하세요.
+            이온 음료를 준비하여 러닝 중 수분 공급을 유지하세요.🏃🏻‍♂️ 
             """,
             gear: "가벼운 러닝복과 모자",
             shoes: "쿠션감이 좋은 러닝화"
