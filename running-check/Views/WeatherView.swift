@@ -33,12 +33,11 @@ struct WeatherView: View {
                         }
                     } else {
                         VStack {
-                            Text("Current Address:")
-                                .font(.headline)
-                            Text(locationManager.address)
-                                .font(.body)
+                    
+                            Text(locationManager.locality ?? "지역 정보 불러오기 실패")
+                                .font(.title)
+                                .bold()
                                 .padding()
-                                .multilineTextAlignment(.center)
                         }
                         
                         Text("Running Grade: \(viewModel.runningGrade.rawValue)")
