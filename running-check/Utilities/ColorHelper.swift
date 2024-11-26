@@ -6,3 +6,31 @@
 //
 
 import Foundation
+import SwiftUI
+
+func colorForGrade(_ grade: RunningGrade) -> Color {
+    switch grade {
+    case .good:
+        return .green
+    case .warning:
+        return .orange
+    case .danger:
+        return .red
+    }
+}
+
+func gradeColor(for grade: RunningGrade) -> Color {
+    switch grade {
+    case .good: return .green
+    case .warning: return .orange
+    case .danger: return .red
+    }
+}
+
+func gradeBackground(for grade: RunningGrade) -> Color {
+    switch grade {
+    case .good: return Color.green.opacity(0.2)
+    case .warning: return Color.orange.opacity(0.2)
+    case .danger: return Color.red.opacity(0.2)
+    }
+}

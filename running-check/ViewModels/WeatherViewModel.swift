@@ -36,7 +36,6 @@ struct RunningCoach {
     let shoes: String
 }
 
-// 러닝 기준 평가
 class RunningEvaluator {
     static func evaluate(current: CurrentWeather) -> (grade: RunningGrade, coach: RunningCoach) {
         // 날씨 조건
@@ -46,23 +45,23 @@ class RunningEvaluator {
         let uvIndex = current.uvi
         let feelsLike = current.feels_like
         let humidity = current.humidity
-        
+
         // 강수량, 적설량 체크
         let isRain = rainVolume > 2.0
         let isSnow = snowVolume > 2.0
-        
+
         // 바람, 자외선, 온도 체크
         let isHighWind = windSpeed > 10.0
         let isUVHigh = uvIndex > 6.0
         let isTooCold = feelsLike < 5
         let isTooHot = feelsLike > 35
-        
+
         // 위험 평가
         if isRain || isSnow || isHighWind || isUVHigh || isTooCold || isTooHot {
             var dangerMessage = "러닝을 삼가는 것이 좋습니다. 안전이 최우선입니다."
             var dangerGear = "방수 재킷, 방풍 장갑"
             let dangerShoes = "미끄럼 방지 기능이 있는 러닝화"
-            
+
             if isRain {
                 dangerMessage = """
                 강수량이 \(rainVolume)mm입니다. 젖은 노면에서 미끄러질 위험이 높습니다. 
@@ -100,20 +99,20 @@ class RunningEvaluator {
                 """
                 dangerGear = "UV 차단 모자와 선글라스"
             }
-            
+
             return (.danger, RunningCoach(
                 comment: dangerMessage,
                 gear: dangerGear,
                 shoes: dangerShoes
             ))
         }
-        
+
         // 경고 평가
         if feelsLike < 10 || feelsLike > 30 || humidity > 80 {
             var warningMessage = "날씨가 적당하지 않을 수 있습니다. 준비를 철저히 하세요."
             var warningGear = "가벼운 방한복 또는 통기성 좋은 옷"
             let warningShoes = "접지력이 좋은 러닝화"
-            
+
             if feelsLike < 10 {
                 warningMessage = """
                 체감온도가 \(feelsLike)°C입니다. 추운 날씨는 근육 경직을 초래할 수 있습니다. 
@@ -133,20 +132,25 @@ class RunningEvaluator {
                 """
                 warningGear = "흡습성이 좋은 옷"
             }
-            
+
             return (.warning, RunningCoach(
                 comment: warningMessage,
                 gear: warningGear,
                 shoes: warningShoes
             ))
         }
-        
-        // 좋은 날씨 평가
+
+        // 좋은 날씨 평가 (겨울철 러닝 이점 추가)
+        let winterMessage = feelsLike < 15 ? """
+        겨울철 러닝은 지방 연소를 촉진하고 심폐 기능을 강화하는 데 효과적입니다. 
+        체감온도가 \(feelsLike)°C로 상쾌한 날씨입니다! 지금 러닝을 시작하세요.🏃🏻‍♂️
+        """ : """
+        날씨가 이상적입니다! 현재 체감온도는 \(feelsLike)°C로 러닝하기에 최적의 조건입니다. 
+        이온 음료를 준비하여 러닝 중 수분 공급을 유지하세요.🏃🏻‍♂️
+        """
+
         return (.good, RunningCoach(
-            comment: """
-            날씨가 이상적입니다! 현재 체감온도는 \(feelsLike)°C로 러닝하기에 최적의 조건입니다. 
-            이온 음료를 준비하여 러닝 중 수분 공급을 유지하세요.🏃🏻‍♂️ 
-            """,
+            comment: winterMessage,
             gear: "가벼운 러닝복과 모자",
             shoes: "쿠션감이 좋은 러닝화"
         ))
@@ -198,7 +202,7 @@ class WeatherViewModel: ObservableObject {
         
         if let weather = current.weather.first {
             self.weatherIcon = weather.icon
-            self.weatherMain = weather.main
+            self.weatherMain = translateWeatherMain(weather.main)
         }
     }
 }

@@ -8,11 +8,24 @@
 import SwiftUI
 
 struct ErrorView: View {
+    let errorMessage: String
+    let onSettingsTap: () -> Void
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text(errorMessage)
+                .foregroundColor(.red)
+                .multilineTextAlignment(.center)
+                .padding()
+            
+            Button("위치 권한 설정으로 이동", action: onSettingsTap)
+                .foregroundColor(.blue)
+                .padding()
+        }
     }
 }
 
 #Preview {
-    ErrorView()
+    ErrorView(errorMessage: "Unable to fetch location. Please check your location settings.",
+              onSettingsTap: {})
 }
