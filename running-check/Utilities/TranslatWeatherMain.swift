@@ -7,7 +7,7 @@
 
 import Foundation
 
-private func translateWeatherMain(_ main: String) -> String {
+func translateWeatherMain(_ main: String) -> String {
     switch main {
     case "Clear":
         return "맑음"

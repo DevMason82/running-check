@@ -7,12 +7,77 @@
 
 import SwiftUI
 
-struct SwiftUIView: View {
+struct RunningCoachView: View {
+    let coach: RunningCoach?
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        if let coach = coach {
+            VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("러닝코멘트")
+                        .font(.headline)
+                        .padding(.bottom, 5)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(coach.comment)
+                        .font(.body)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.white.opacity(0.8))
+                )
+//                .padding(.horizontal)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("러닝용품")
+                        .font(.headline)
+                        .padding(.bottom, 5)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(coach.gear)
+                        .font(.body)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.white.opacity(0.8))
+                )
+//                .padding(.horizontal)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("러닝화")
+                        .font(.headline)
+                        .padding(.bottom, 5)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(coach.shoes)
+                        .font(.body)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.white.opacity(0.8))
+                )
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+//            .background(Color.brown)
+            .padding(0)
+            
+        }
     }
 }
 
 #Preview {
-    SwiftUIView()
+    RunningCoachView(
+        coach: RunningCoach(
+            comment: "Great weather for running. Stay hydrated and enjoy your run!",
+            gear: "Light running clothes",
+            shoes: "Cushioned running shoes"
+        )
+    )
 }

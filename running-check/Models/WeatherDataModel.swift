@@ -6,3 +6,25 @@
 //
 
 import Foundation
+import CoreLocation
+
+struct WeatherMetaData {
+    let date: Date
+    let expirationDate: Date
+    let location: CLLocation
+}
+
+struct WeatherData {
+    let temperature: String
+    let apparentTemperature: String
+    let conditionDescription: String
+    let conditionSymbolName: String
+    let conditionMetaData: WeatherMetaData
+    let humidity: String
+    let windSpeed: String
+    let precipitationProbability: String
+    let maxTemperature: String
+    let minTemperature: String
+    let uvIndex: String
+    let snowfallAmount: String
+}

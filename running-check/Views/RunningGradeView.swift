@@ -8,11 +8,47 @@
 import SwiftUI
 
 struct RunningGradeView: View {
+    let grade: RunningGrade
+
+    
+    @State private var isMovingVertically = false
+    @State private var isMovingHorizontally = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Image(systemName: "figure.run")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 80, height: 80)
+                .foregroundColor(colorForGrade(grade))
+                .offset(x: isMovingHorizontally ? -2.5 : 5,
+                        y: isMovingVertically ? -1.2 : 2.5)
+                .animation(
+                    Animation.easeInOut(duration: 0.8).repeatForever(autoreverses: true),
+                    value: isMovingVertically
+                )
+                .animation(
+                    Animation.easeInOut(duration: 1.2).repeatForever(autoreverses: true),
+                    value: isMovingHorizontally
+                )
+                .onAppear {
+                    isMovingVertically = true
+                    isMovingHorizontally = true
+                }
+            
+            Text(grade.rawValue)
+                .font(.title)
+                .bold()
+                .foregroundColor(colorForGrade(grade))
+            
+        
+        }
+        .padding(.bottom, 5)
     }
 }
 
 #Preview {
-    RunningGradeView()
+    RunningGradeView(
+        grade: .good
+    )
 }

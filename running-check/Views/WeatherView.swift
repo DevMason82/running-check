@@ -6,95 +6,53 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct WeatherView: View {
-    @StateObject private var viewModel = WeatherViewModel()
-    @StateObject private var locationManager = LocationManager()
+    @StateObject private var weatherKitViewModel = WeatherKitViewModel()
+    @StateObject private var locationManagerNew = LocationManagerNew()
     
     var body: some View {
         ZStack {
             Color("BackgroundColor")
                 .edgesIgnoringSafeArea(.all)
+            
             ScrollView {
-                VStack {
-                    if let errorMessage = locationManager.errorMessage {
-                        VStack {
-                            Text(errorMessage)
-                                .foregroundColor(.red)
-                                .padding()
-                            
-                            if locationManager.locationStatus == .denied {
-                                Button("위치 권한 설정으로 이동") {
-                                    openAppSettings()
-                                }
-                                .foregroundColor(.blue)
-                                .padding()
-                            }
-                        }
-                    } else {
-                        VStack {
-                    
-                            Text(locationManager.locality ?? "지역 정보 불러오기 실패")
-                                .font(.title)
-                                .bold()
-                                .padding()
-                        }
+                if let errorMessage = weatherKitViewModel.errorMessage {
+                    ErrorView(
+                        errorMessage: errorMessage,
+                        onSettingsTap: openAppSettings
+                    )
+                } else if let weather = weatherKitViewModel.weatherData {
+                    VStack() {
+                        WeatherHeaderView(
+                            weather: weather,
+                            locationName: locationManagerNew.locality ?? "Loading..."
+                        )
                         
-                        Text("Running Grade: \(viewModel.runningGrade.rawValue)")
-                            .font(.title)
+                        RunningGradeView(
+                            grade: weatherKitViewModel.runningGrade ?? .good
+                        )
+                        WeatherSummaryView(weather: weather)
                         
-                        Text(viewModel.coachMessage.comment)
-                            .font(.headline)
-                            .padding()
+                        RunningCoachView(
+                            coach: weatherKitViewModel.runningCoach
+                        )
                         
-                            .lineLimit(nil)
+                        Divider().padding(.vertical, 10)
                         
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("Recommended Gear: \(viewModel.coachMessage.gear)")
-                            Text("Recommended Shoes: \(viewModel.coachMessage.shoes)")
-                        }
-                        .padding()
-                        
-                        if let iconURL = URL(string: "https://openweathermap.org/img/wn/\(viewModel.weatherIcon)@4x.png") {
-                            AsyncImage(url: iconURL) { image in
-                                image.resizable()
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .frame(width: 120, height: 120)
-                        }
-                        
-                        Text("Weather: \(viewModel.weatherMain)")
-                            .font(.subheadline)
-                        
-                        // 현재 날씨 정보
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("Current Temperature: \(viewModel.currentTemp)")
-                            Text("Feels Like: \(viewModel.feelsLike)")
-                            Text("Rain Volume: \(viewModel.rainVolume)")
-                            Text("Snow Volume: \(viewModel.snowVolume)")
-                            Text("Wind Speed: \(viewModel.windSpeed)")
-                            Text("UV Index: \(viewModel.uvIndex)")
-                        }
-                        .font(.body)
-                        .padding()
-                        
-                        Spacer()
+                        WeatherGridView(weather: weather)
                     }
+                    .padding(.horizontal)
+                } else {
+                    LoadingView(message: "Fetching Weather...")
                 }
             }
-            .padding()
         }
-        
         .onAppear {
-            if locationManager.latitude != 0.0 && locationManager.longitude != 0.0 {
-                viewModel.fetchWeather(lat: locationManager.latitude, lon: locationManager.longitude)
-            } else {
-                locationManager.checkAndRequestLocationPermission()
+            Task {
+                await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
             }
-        }
-        .onChange(of: locationManager.latitude) {
-            viewModel.fetchWeather(lat: locationManager.latitude, lon: locationManager.longitude)
         }
     }
     

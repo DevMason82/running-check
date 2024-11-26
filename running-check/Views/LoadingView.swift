@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct LoadingView: View {
+    let message: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            ProgressView(message)
+                .progressViewStyle(CircularProgressViewStyle())
+                .padding()
+            Text("Please wait while we fetch the latest weather data.")
+                .font(.caption)
+                .foregroundColor(.gray)
+                .multilineTextAlignment(.center)
+        }
+        .padding()
     }
 }
 
 #Preview {
-    LoadingView()
+    LoadingView(message: "Loading...")
 }
