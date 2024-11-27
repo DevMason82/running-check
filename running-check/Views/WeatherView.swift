@@ -17,7 +17,7 @@ struct WeatherView: View {
             Color("BackgroundColor")
                 .edgesIgnoringSafeArea(.all)
             
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 if let errorMessage = weatherKitViewModel.errorMessage {
                     ErrorView(
                         errorMessage: errorMessage,
@@ -74,6 +74,10 @@ struct WeatherView: View {
                     LoadingView(message: "Fetching Weather...")
                 }
             }
+            .refreshable {
+                print("Do your refresh work here")
+                await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
+            }
             
         }
         .onAppear {
@@ -82,16 +86,6 @@ struct WeatherView: View {
             }
         }
         
-//        .onAppear {
-//            Task {
-//                do {
-//                    let location = try await weatherKitViewModel.fetchUserLocation() // 위치 가져오기
-//                    await weatherKitViewModel.fetchWeatherAndEvaluateRunning(location: location) // 날씨 데이터 가져오기
-//                } catch {
-//                    weatherKitViewModel.errorMessage = weatherKitViewModel.translateError(error) // 에러 처리
-//                }
-//            }
-//        }
     }
     
     private func openAppSettings() {
