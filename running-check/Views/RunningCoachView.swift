@@ -13,7 +13,7 @@ struct RunningCoachView: View {
     var body: some View {
         if let coach = coach {
             VStack(alignment: .leading, spacing: 10) {
-                VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .leading, spacing: 0) {
                     Text("러닝코멘트")
                         .font(.headline)
                         .padding(.bottom, 5)

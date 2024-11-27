@@ -14,10 +14,10 @@ struct WeatherSummaryView: View {
     var body: some View {
         VStack(spacing: 5) {
             Text(weather.temperature)
-                .font(.largeTitle)
+                .font(.title2)
                 .bold()
             Text("체감온도: \(weather.apparentTemperature)")
-                .font(.title3)
+                .font(.body)
                 .foregroundColor(.gray)
         }
     }

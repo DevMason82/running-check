@@ -19,7 +19,7 @@ struct RunningGradeView: View {
             Image(systemName: "figure.run")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 80, height: 80)
+                .frame(width: 100, height: 100)
                 .foregroundColor(colorForGrade(grade))
                 .offset(x: isMovingHorizontally ? -2.5 : 5,
                         y: isMovingVertically ? -1.2 : 2.5)

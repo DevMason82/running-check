@@ -32,6 +32,7 @@ class WeatherKitViewModel: ObservableObject {
     }
 
     func fetchWeatherAndEvaluateRunning() async {
+        print("Hi!")
         let location = CLLocation(latitude: locationManager.latitude, longitude: locationManager.longitude)
 
         do {
@@ -71,6 +72,7 @@ class WeatherKitViewModel: ObservableObject {
                 uvIndex: "\(currentWeather.uvIndex.value)",
                 snowfallAmount: "\(Int(snowfallAmount)) mm (\(precipitationDescription))"
             )
+            print(self.weatherData!)
 
             // 러닝 평가 로직 실행
             let evaluation = RunningEvaluatorNew.evaluate(current: self.weatherData!)
