@@ -21,9 +21,10 @@ struct WeatherGridView: View {
             WeatherCard(title: "풍속", value: weather.windSpeed)
             WeatherCard(title: "습도", value: weather.humidity)
             WeatherCard(title: "강수량", value: weather.precipitationProbability)
-            WeatherCard(title: "적설량", value: weather.snowfallAmount)
+//            WeatherCard(title: "적설량", value: weather.snowfallAmount)
             WeatherCard(title: "자외선", value: weather.uvIndex)
         }
+        .padding(.horizontal)
     }
 }
 
