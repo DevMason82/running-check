@@ -15,13 +15,13 @@ struct WeatherHeaderView: View {
     var body: some View {
         HStack {
             Image(systemName: weather.conditionSymbolName)
-                .font(.system(size: 68))
+                .font(.system(size: 60))
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .center) {
                 Text(locationName)
                     .font(.largeTitle)
                     .bold()
-                Text(weather.conditionDescription)
+                Text(translateWeatherMain(weather.conditionDescription))
                     .font(.body)
             }
         }

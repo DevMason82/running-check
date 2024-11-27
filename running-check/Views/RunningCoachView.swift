@@ -67,6 +67,7 @@ struct RunningCoachView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
 //            .background(Color.brown)
             .padding(0)
+            .padding(.horizontal)
             
         }
     }
