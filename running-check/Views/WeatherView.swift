@@ -11,6 +11,7 @@ import CoreLocation
 struct WeatherView: View {
     @StateObject private var weatherKitViewModel = WeatherKitViewModel()
     @StateObject private var locationManagerNew = LocationManagerNew()
+    @Environment(\.scenePhase) private var scenePhase // 앱의 생명주기 감지
     
     var body: some View {
         ZStack {
@@ -45,23 +46,7 @@ struct WeatherView: View {
                     
                     
                     
-//                    Text("업데이트 시간: \(weather.conditionMetaData.date.formatted(.dateTime))")
-//                        .frame(maxWidth: .infinity, alignment: .trailing)
-//                        .padding(.horizontal)
-                    
-//                    // 업데이트 버튼
-//                                            Button(action: {
-//                                                weatherKitViewModel.updateWeatherData() // 데이터 갱신
-//                                            }) {
-//                                                Text("업데이트")
-//                                                    .font(.headline)
-//                                                    .foregroundColor(.white)
-//                                                    .padding()
-//                                                    .frame(maxWidth: .infinity)
-//                                                    .background(Color.blue)
-//                                                    .cornerRadius(10)
-//                                            }
-//                                            .padding(.top, 10)
+
                     
                     RunningCoachView(
                         coach: weatherKitViewModel.runningCoach
@@ -83,6 +68,17 @@ struct WeatherView: View {
         .onAppear {
             Task {
                 await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
+            }
+        }
+        .onChange(of: scenePhase) {
+            Task {
+                if scenePhase == .active {
+                    weatherKitViewModel.updateWeatherData() // 포그라운드 전환 시 데이터 갱신
+                } else if scenePhase == .background {
+                    print("App moved to background")
+                } else if scenePhase == .inactive {
+                    print("App is inactive")
+                }
             }
         }
         
