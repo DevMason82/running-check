@@ -4,9 +4,11 @@
 //
 //  Created by mason on 11/25/24.
 
-import WeatherKit
 import Foundation
+import WeatherKit
 import CoreLocation
+import Combine
+import UIKit
 
 @MainActor
 class WeatherKitViewModel: ObservableObject {
@@ -16,10 +18,13 @@ class WeatherKitViewModel: ObservableObject {
     @Published var runningCoach: RunningCoach?
 
     private let weatherService = WeatherService()
-    private let locationManager = LocationManagerNew() // 사용자 정의 위치 관리 객체
+    private let locationManager = LocationManagerNew()
+    private var cancellables = Set<AnyCancellable>()
+
 
     init() {
         observeLocationUpdates()
+        observeAppLifecycle() // 앱 상태 변화 감지
     }
 
     private func observeLocationUpdates() {
@@ -29,6 +34,29 @@ class WeatherKitViewModel: ObservableObject {
             }
             await fetchWeatherAndEvaluateRunning()
         }
+    }
+    
+    private func observeAppLifecycle() {
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+            .sink { [weak self] _ in
+                print("App entered foreground")
+                Task {
+                    self?.updateWeatherData() // 비동기 호출
+                }
+            }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
+            .sink { _ in
+                print("App entered background")
+                // 필요시 백그라운드 상태 전환 로직 추가
+            }
+            .store(in: &cancellables)
+    }
+    
+    // 동기 메서드 추가
+    private func updateWeatherDataSync() {
+        updateWeatherData()
     }
 
     func fetchWeatherAndEvaluateRunning() async {
