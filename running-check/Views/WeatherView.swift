@@ -29,7 +29,8 @@ struct WeatherView: View {
                     VStack {
                         WeatherHeaderView(
                             weather: weather,
-                            locationName: locationManagerNew.locality ?? "Loading..."
+                            locationName: locationManagerNew.locality ?? "Loading...",
+                            thoroughfare: locationManagerNew.thoroughfare ?? "Loading..."
                         )
                     }
                     .padding(.vertical, 20)
