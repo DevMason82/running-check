@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RunningCoachView: View {
     let coach: RunningCoach?
+    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
         if let coach = coach {
@@ -25,7 +26,7 @@ struct RunningCoachView: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.white.opacity(0.8))
+                        .fill(colorScheme == .dark ? Color.gray.opacity(0.6) : Color.white.opacity(0.8))
                 )
 //                .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -42,7 +43,7 @@ struct RunningCoachView: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.white.opacity(0.8))
+                        .fill(colorScheme == .dark ? Color.gray.opacity(0.6) : Color.white.opacity(0.8))
                 )
 //                .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -59,7 +60,7 @@ struct RunningCoachView: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.white.opacity(0.8))
+                        .fill(colorScheme == .dark ? Color.gray.opacity(0.6) : Color.white.opacity(0.8))
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
                 

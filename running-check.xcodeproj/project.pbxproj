@@ -419,6 +419,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "running-check/Info.plist";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "앱이 사용자의 운동 기록을 읽기 위해 건강 데이터를 요청합니다.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "앱이 사용자의 건강 데이터를 업데이트하여 더 나은 운동 기록을 제공합니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한을 허용해 주세요.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -460,6 +462,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "running-check/Info.plist";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "앱이 사용자의 운동 기록을 읽기 위해 건강 데이터를 요청합니다.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "앱이 사용자의 건강 데이터를 업데이트하여 더 나은 운동 기록을 제공합니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 권한을 허용해 주세요.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
