@@ -27,7 +27,16 @@ class HealthKitManager {
         try await healthStore.requestAuthorization(toShare: [], read: typesToRead)
     }
     
-    // 칼로리 소모 데이터 가져오기
+    // 오늘 칼로리 소모 데이터 가져오기
+    func fetchActiveCaloriesToday() async throws -> Double {
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfDay = calendar.startOfDay(for: now) // 수정된 부분
+        
+        return try await fetchActiveCalories(startDate: startOfDay, endDate: now)
+    }
+    
+    // 칼로리 소모 데이터 가져오기 (범위 지정)
     func fetchActiveCalories(startDate: Date, endDate: Date) async throws -> Double {
         return try await fetchQuantityData(
             typeIdentifier: .activeEnergyBurned,

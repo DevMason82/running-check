@@ -47,7 +47,7 @@ struct HealthDataView: View {
         .onAppear {
             Task {
                 await healthViewModel.requestAuthorization()
-                await healthViewModel.fetchActiveCalories()
+                await healthViewModel.fetchAllHealthDataToday()
             }
         }
     }

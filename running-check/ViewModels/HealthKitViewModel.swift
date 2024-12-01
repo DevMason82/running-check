@@ -10,55 +10,64 @@ import Foundation
 @MainActor
 class HealthKitViewModel: ObservableObject {
     @Published var activeCalories: Double = 0.0
-    @Published var runningDistance: Double = 0.0 // 러닝 거리 추가
+    @Published var runningDistance: Double = 0.0
     @Published var errorMessage: String?
     
     private let healthKitManager = HealthKitManager()
-    
+    private let calendar = Calendar.current
+
     // HealthKit 권한 요청
     func requestAuthorization() async {
         do {
             try await healthKitManager.requestAuthorization()
         } catch {
-            self.errorMessage = "Failed to authorize HealthKit: \(error.localizedDescription)"
+            setError("Failed to authorize HealthKit: \(error.localizedDescription)")
         }
     }
     
-    // 칼로리 데이터 가져오기
-    func fetchActiveCalories() async {
+    // 오늘 칼로리 데이터 가져오기
+    func fetchActiveCaloriesToday() async {
         do {
-            let startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())! // 최근 7일
-            let endDate = Date()
-            let calories = try await healthKitManager.fetchActiveCalories(startDate: startDate, endDate: endDate)
-            self.activeCalories = calories
+            let todayCalories = try await healthKitManager.fetchActiveCalories(startDate: startOfDay, endDate: Date())
+            self.activeCalories = todayCalories
         } catch {
-            self.errorMessage = "Failed to fetch calories: \(error.localizedDescription)"
+            setError("Failed to fetch today's calories: \(error.localizedDescription)")
         }
     }
     
-    // 러닝 거리 데이터 가져오기
-    func fetchRunningDistance() async {
+    // 오늘 러닝 거리 데이터 가져오기
+    func fetchRunningDistanceToday() async {
         do {
-            let startDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())! // 최근 7일
-            let endDate = Date()
-            let distance = try await healthKitManager.fetchRunningDistance(startDate: startDate, endDate: endDate)
-            self.runningDistance = distance
+            let todayDistance = try await healthKitManager.fetchRunningDistance(startDate: startOfDay, endDate: Date())
+            self.runningDistance = todayDistance
         } catch {
-            self.errorMessage = "Failed to fetch running distance: \(error.localizedDescription)"
+            setError("Failed to fetch today's running distance: \(error.localizedDescription)")
         }
     }
     
-    // 모든 데이터 가져오기 (칼로리 + 러닝 거리)
-    func fetchAllHealthData() async {
-        await fetchActiveCalories()
-        await fetchRunningDistance()
+    // 모든 데이터 가져오기 (오늘 기준)
+    func fetchAllHealthDataToday() async {
+        await fetchActiveCaloriesToday()
+        await fetchRunningDistanceToday()
+    }
+    
+    // 에러 메시지 설정
+    private func setError(_ message: String) {
+        DispatchQueue.main.async {
+            self.errorMessage = message
+        }
+    }
+
+    // 오늘의 시작 시간 계산
+    private var startOfDay: Date {
+        calendar.startOfDay(for: Date())
     }
     
     // 미리보기용 ViewModel
     static var preview: HealthKitViewModel {
         let viewModel = HealthKitViewModel()
-        viewModel.activeCalories = 350.0 // 테스트 데이터
-        viewModel.runningDistance = 5000.0 // 테스트 데이터 (5km)
+        viewModel.activeCalories = 350.0
+        viewModel.runningDistance = 5000.0
         return viewModel
     }
 }

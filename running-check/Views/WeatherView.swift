@@ -62,7 +62,7 @@ struct WeatherView: View {
             .refreshable {
                 print("Do your refresh work here")
                 await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
-                await healthViewModel.fetchActiveCalories()
+                await healthViewModel.fetchAllHealthDataToday()
             }
             
         }
