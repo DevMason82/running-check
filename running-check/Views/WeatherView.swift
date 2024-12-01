@@ -11,6 +11,7 @@ import CoreLocation
 struct WeatherView: View {
     @StateObject private var weatherKitViewModel = WeatherKitViewModel()
     @StateObject private var locationManagerNew = LocationManagerNew()
+    @StateObject private var healthViewModel = HealthKitViewModel()
     @Environment(\.scenePhase) private var scenePhase // 앱의 생명주기 감지
     
     var body: some View {
@@ -45,9 +46,7 @@ struct WeatherView: View {
                     }
                     .padding(.bottom, 15)
                     
-                    
-                    
-
+                    HealthDataView()
                     
                     RunningCoachView(
                         coach: weatherKitViewModel.runningCoach
@@ -63,6 +62,7 @@ struct WeatherView: View {
             .refreshable {
                 print("Do your refresh work here")
                 await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
+                await healthViewModel.fetchActiveCalories()
             }
             
         }
