@@ -46,7 +46,9 @@ struct WeatherView: View {
                     }
                     .padding(.bottom, 15)
                     
+                    //                    HealthDataView()
                     HealthDataView()
+                        .environmentObject(healthViewModel)
                     
                     RunningCoachView(
                         coach: weatherKitViewModel.runningCoach
@@ -74,7 +76,10 @@ struct WeatherView: View {
         .onChange(of: scenePhase) {
             Task {
                 if scenePhase == .active {
-                    weatherKitViewModel.updateWeatherData() // 포그라운드 전환 시 데이터 갱신
+                    // 포그라운드 전환 시 데이터 갱신
+                    weatherKitViewModel.updateWeatherData()
+                    await healthViewModel.fetchAllHealthDataToday()
+                    
                 } else if scenePhase == .background {
                     print("App moved to background")
                 } else if scenePhase == .inactive {
@@ -94,9 +99,11 @@ struct WeatherView: View {
 
 #Preview {
     WeatherView()
+        .environmentObject(HealthKitViewModel.preview)
 }
 
 #Preview {
     WeatherView()
         .environment(\.colorScheme, .dark)
+        .environmentObject(HealthKitViewModel.preview)
 }

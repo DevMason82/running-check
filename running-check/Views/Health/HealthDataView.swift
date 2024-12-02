@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct HealthDataView: View {
-    @StateObject private var healthViewModel = HealthKitViewModel()
+//    @StateObject private var healthViewModel = HealthKitViewModel()
+    @EnvironmentObject var healthViewModel: HealthKitViewModel
+
     
     var body: some View {
         VStack {
@@ -29,17 +31,6 @@ struct HealthDataView: View {
                     Text("\(healthViewModel.activeCalories, specifier: "%.2f") kcal")
                         .font(.title)
                         .bold()
-//                        .padding()
-//                    Spacer()
-//                    Button("Fetch Calories") {
-//                        Task {
-//                            await healthViewModel.fetchActiveCalories()
-//                        }
-//                    }
-//                    .padding(5)
-//                    .background(Color.blue)
-//                    .foregroundColor(.white)
-//                    .cornerRadius(10)
                 }
             }
         }

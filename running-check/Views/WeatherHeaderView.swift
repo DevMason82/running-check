@@ -10,8 +10,10 @@ import CoreLocation
 
 struct WeatherHeaderView: View {
     let weather: WeatherData
-    let locationName: String
-    let thoroughfare: String
+//    @Binding var locationName: String
+//    @Binding var thoroughfare: String
+        let locationName: String
+        let thoroughfare: String
     
     var body: some View {
         HStack {
@@ -23,9 +25,9 @@ struct WeatherHeaderView: View {
                     .font(.title)
                     .bold()
                 Text(thoroughfare)
-                                    .font(.body)
-//                Text(translateWeatherMain(weather.conditionDescription))
-//                    .font(.body)
+                    .font(.body)
+                //                Text(translateWeatherMain(weather.conditionDescription))
+                //                    .font(.body)
             }
         }
         .padding(.horizontal)
@@ -33,6 +35,9 @@ struct WeatherHeaderView: View {
 }
 
 #Preview {
+//    @Previewable @State var locationName = "San Francisco"
+//    @Previewable @State var thoroughfare = "Market Street"
+    
     WeatherHeaderView(
         weather: WeatherData(
             temperature: "25°C",
@@ -53,6 +58,6 @@ struct WeatherHeaderView: View {
             snowfallAmount: "0 mm"
         ),
         locationName: "San Francisco",
-        thoroughfare: "ghghh"
+        thoroughfare: "Market Street"
     )
 }
