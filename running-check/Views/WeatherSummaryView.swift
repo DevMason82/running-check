@@ -12,7 +12,7 @@ struct WeatherSummaryView: View {
     let weather: WeatherData
     
     var body: some View {
-        VStack(spacing: 5) {
+        HStack(spacing: 5) {
             Text(weather.temperature)
                 .font(.title2)
                 .bold()

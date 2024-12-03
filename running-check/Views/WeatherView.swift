@@ -46,9 +46,18 @@ struct WeatherView: View {
                     }
                     .padding(.bottom, 15)
                     
-                    //                    HealthDataView()
-                    HealthDataView()
-                        .environmentObject(healthViewModel)
+                    VStack {
+                        HealthDataView2(
+                            activeCalories: healthViewModel.activeCalories,
+                            runningDistance: healthViewModel.runningDistance,
+                            outdoorRuns: healthViewModel.outdoorRuns,
+                            indoorRuns: healthViewModel.indoorRuns
+                        )
+                    }
+                    .padding(.bottom, 15)
+                    
+//                    HealthDataView()
+//                        .environmentObject(healthViewModel)
                     
                     RunningCoachView(
                         coach: weatherKitViewModel.runningCoach
@@ -71,6 +80,7 @@ struct WeatherView: View {
         .onAppear {
             Task {
                 await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
+                await healthViewModel.fetchAllHealthDataToday()
             }
         }
         .onChange(of: scenePhase) {

@@ -73,7 +73,6 @@
 //}
 
 import Foundation
-import HealthKit
 
 @MainActor
 class HealthKitViewModel: ObservableObject {
@@ -100,6 +99,7 @@ class HealthKitViewModel: ObservableObject {
         do {
             let todayCalories = try await healthKitManager.fetchActiveCalories(startDate: startOfDay, endDate: Date())
             self.activeCalories = todayCalories
+            print("칼로리", self.activeCalories)
         } catch {
             setError("Failed to fetch today's calories: \(error.localizedDescription)")
         }
@@ -110,6 +110,7 @@ class HealthKitViewModel: ObservableObject {
         do {
             let todayDistance = try await healthKitManager.fetchRunningDistance(startDate: startOfDay, endDate: Date())
             self.runningDistance = todayDistance
+            print("거리", self.activeCalories)
         } catch {
             setError("Failed to fetch today's running distance: \(error.localizedDescription)")
         }
@@ -120,6 +121,7 @@ class HealthKitViewModel: ObservableObject {
         do {
             let runs = try await healthKitManager.fetchOutdoorRuns(startDate: startOfDay, endDate: Date())
             self.outdoorRuns = runs
+            print("실외", self.outdoorRuns)
         } catch {
             setError("Failed to fetch today's outdoor runs: \(error.localizedDescription)")
         }
@@ -130,6 +132,7 @@ class HealthKitViewModel: ObservableObject {
         do {
             let runs = try await healthKitManager.fetchIndoorRuns(startDate: startOfDay, endDate: Date())
             self.indoorRuns = runs
+            print("실내", self.indoorRuns)
         } catch {
             setError("Failed to fetch today's indoor runs: \(error.localizedDescription)")
         }
@@ -157,29 +160,29 @@ class HealthKitViewModel: ObservableObject {
     
     // 미리보기용 ViewModel
     static var preview: HealthKitViewModel {
-        let viewModel = HealthKitViewModel()
-        viewModel.activeCalories = 350.0
-        viewModel.runningDistance = 5000.0
-        viewModel.outdoorRuns = [
-            RunData(
-                duration: 3600,
-                distance: 5000,
-                calories: 300,
-                pace: 7.2 * 60, // 7.2 min/km
-                startDate: Date(),
-                endDate: Date()
-            )
-        ]
-        viewModel.indoorRuns = [
-            RunData(
-                duration: 1800,
-                distance: 3000,
-                calories: 200,
-                pace: 6.0 * 60, // 6.0 min/km
-                startDate: Date(),
-                endDate: Date()
-            )
-        ]
-        return viewModel
-    }
+            let viewModel = HealthKitViewModel()
+            viewModel.activeCalories = 450.5
+            viewModel.runningDistance = 7321.4 // 7.32 km
+            viewModel.outdoorRuns = [
+                RunData(
+                    duration: 1800, // 30 minutes
+                    distance: 5000, // 5 km
+                    calories: 320.5,
+                    pace: 360, // 6 min/km
+                    startDate: Date(),
+                    endDate: Date()
+                )
+            ]
+            viewModel.indoorRuns = [
+                RunData(
+                    duration: 1500, // 25 minutes
+                    distance: 3000, // 3 km
+                    calories: 200.0,
+                    pace: 300, // 5 min/km
+                    startDate: Date(),
+                    endDate: Date()
+                )
+            ]
+            return viewModel
+        }
 }

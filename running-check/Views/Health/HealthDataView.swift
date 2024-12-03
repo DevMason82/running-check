@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct HealthDataView: View {
-    //    @StateObject private var healthViewModel = HealthKitViewModel()
     @EnvironmentObject var healthViewModel: HealthKitViewModel
     
     
@@ -102,6 +101,8 @@ struct HealthDataView: View {
 }
 
 #Preview {
+    
     HealthDataView()
         .environmentObject(HealthKitViewModel.preview)
+    
 }
