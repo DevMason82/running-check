@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct HealthDataView2: View {
-    let activeCalories: Double
-    let runningDistance: Double
+//    let activeCalories: Double
+//    let runningDistance: Double
     let outdoorRuns: [RunData]
     let indoorRuns: [RunData]
     //    @EnvironmentObject var healthViewModel: HealthKitViewModel
@@ -17,6 +17,31 @@ struct HealthDataView2: View {
     
     var body: some View {
         VStack(alignment: .leading) {
+//            HStack {
+//                VStack {
+//                    Text("총 이동 거리")
+//                        .font(.caption)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                    Text("\(runningDistance / 1000, specifier: "%.2f") km")
+//                        .font(.title2)
+//                        .bold()
+//                        .foregroundColor(.blue)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                }
+//                Spacer()
+//                VStack {
+//                    Text("총 칼로리")
+//                        .font(.caption)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                    Text("\(activeCalories, specifier: "%.1f") kcal")
+//                        .font(.title2)
+//                        .bold()
+//                        .foregroundColor(.red)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                }
+//            }
+//            .padding(.bottom, 10)
+            
             HStack(alignment: .top, spacing: 20) {
                 // 실외 러닝 정보
                 VStack(alignment: .leading, spacing: 10) {
@@ -166,7 +191,7 @@ struct HealthDataView2: View {
 }
 
 #Preview {
-    HealthDataView2(activeCalories: 450.5, runningDistance: 7321.4, outdoorRuns: [
+    HealthDataView2(outdoorRuns: [
         RunData(
             duration: 1800, // 30 minutes
             distance: 5000, // 5 km

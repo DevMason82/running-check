@@ -23,10 +23,8 @@ struct WeatherCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: 100)
-        .background(
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color.white.opacity(0.8))
-        )
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(10)
     }
 }
 

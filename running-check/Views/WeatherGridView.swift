@@ -12,19 +12,30 @@ struct WeatherGridView: View {
     let weather: WeatherData
     
     private let columns = [
-        GridItem(.flexible()), GridItem(.flexible())
+        GridItem(.flexible())
     ]
     
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 10) {
-            WeatherCard(title: "최고 / 최저", value: "\(weather.maxTemperature) / \(weather.minTemperature)")
-            WeatherCard(title: "풍속", value: weather.windSpeed)
-            WeatherCard(title: "습도", value: weather.humidity)
-            WeatherCard(title: "강수량", value: weather.precipitationProbability)
-//            WeatherCard(title: "적설량", value: weather.snowfallAmount)
-            WeatherCard(title: "자외선", value: weather.uvIndex)
+        VStack(spacing: 0) {
+            Text("날씨 정보")
+                .font(.body)
+                .bold()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+                .padding(.bottom, 15)
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHGrid(rows: columns, spacing: 10) {
+                    WeatherCard(title: "최고 / 최저", value: "\(weather.maxTemperature) / \(weather.minTemperature)")
+                    WeatherCard(title: "풍속", value: weather.windSpeed)
+                    WeatherCard(title: "습도", value: weather.humidity)
+                    WeatherCard(title: "강수량", value: weather.precipitationProbability)
+                    //            WeatherCard(title: "적설량", value: weather.snowfallAmount)
+                    WeatherCard(title: "자외선", value: weather.uvIndex)
+                }
+                .padding(.horizontal)
+            }
         }
-        .padding(.horizontal)
+        
     }
 }
 

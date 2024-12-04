@@ -20,15 +20,16 @@ struct WeatherHeaderView: View {
             Image(systemName: weather.conditionSymbolName)
                 .font(.system(size: 40))
             
-            VStack(alignment: .center) {
+            VStack(alignment: .leading) {
                 Text(locationName)
-                    .font(.title)
+                    .font(.title2)
                     .bold()
                 Text(thoroughfare)
                     .font(.body)
-                //                Text(translateWeatherMain(weather.conditionDescription))
-                //                    .font(.body)
             }
+            Spacer()
+            
+            WeatherSummaryView(weather: weather)
         }
         .padding(.horizontal)
     }

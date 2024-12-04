@@ -19,6 +19,7 @@ struct RunningCoachView: View {
                         .font(.headline)
                         .padding(.bottom, 5)
                         .frame(maxWidth: .infinity, alignment: .leading)
+//                        .foregroundColor(Color("CardFontColor"))
                     Text(coach.comment)
                         .font(.body)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -26,7 +27,7 @@ struct RunningCoachView: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(colorScheme == .dark ? Color.gray.opacity(0.6) : Color.white.opacity(0.8))
+                        .fill(Color("CardColor"))
                 )
 //                .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -43,7 +44,7 @@ struct RunningCoachView: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(colorScheme == .dark ? Color.gray.opacity(0.6) : Color.white.opacity(0.8))
+                        .fill(Color("CardColor"))
                 )
 //                .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -60,7 +61,7 @@ struct RunningCoachView: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(colorScheme == .dark ? Color.gray.opacity(0.6) : Color.white.opacity(0.8))
+                        .fill(Color("CardColor"))
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
