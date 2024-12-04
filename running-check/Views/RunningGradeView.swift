@@ -19,7 +19,7 @@ struct RunningGradeView: View {
             Image(systemName: "figure.run")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 100, height: 100)
+                .frame(width: 120, height: 120)
                 .foregroundColor(colorForGrade(grade))
                 .offset(x: isMovingHorizontally ? -2.5 : 5,
                         y: isMovingVertically ? -1.2 : 2.5)
@@ -37,7 +37,7 @@ struct RunningGradeView: View {
                 }
             
             Text(grade.rawValue)
-                .font(.title)
+                .font(.largeTitle)
                 .bold()
                 .foregroundColor(colorForGrade(grade))
             

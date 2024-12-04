@@ -34,22 +34,24 @@ struct WeatherView: View {
                             thoroughfare: locationManagerNew.thoroughfare ?? "Loading..."
                         )
                     }
-                    .padding(.vertical, 20)
-                    
-                    
-                    RunningGradeView(
-                        grade: weatherKitViewModel.runningGrade ?? .good
-                    )
+                    .padding(.bottom, 20)
                     
                     VStack {
-                        WeatherSummaryView(weather: weather)
+                        RunningGradeView(
+                            grade: weatherKitViewModel.runningGrade ?? .good
+                        )
                     }
-                    .padding(.bottom, 15)
+                    .padding(.vertical, 25)
+                    
+//                    VStack {
+//                        WeatherSummaryView(weather: weather)
+//                    }
+//                    .padding(.bottom, 15)
                     
                     VStack {
                         HealthDataView2(
-                            activeCalories: healthViewModel.activeCalories,
-                            runningDistance: healthViewModel.runningDistance,
+//                            activeCalories: healthViewModel.activeCalories,
+//                            runningDistance: healthViewModel.runningDistance,
                             outdoorRuns: healthViewModel.outdoorRuns,
                             indoorRuns: healthViewModel.indoorRuns
                         )
@@ -59,17 +61,32 @@ struct WeatherView: View {
 //                    HealthDataView()
 //                        .environmentObject(healthViewModel)
                     
-                    RunningCoachView(
-                        coach: weatherKitViewModel.runningCoach
-                    )
+                    VStack {
+                        RunningCoachView(
+                            coach: weatherKitViewModel.runningCoach
+                        )
+                    }
+                    .padding(.bottom, 15)
                     
-                    Divider().padding(.vertical, 10)
+                    
+                    VStack {
+                        DistanceCalroView(
+                            activeCalories: healthViewModel.activeCalories,
+                            runningDistance: healthViewModel.runningDistance
+                        )
+                    }
+                    .padding(.horizontal)
+                    
+                    Divider()
+                        .padding(.vertical, 15)
+                        .padding(.horizontal)
                     
                     WeatherGridView(weather: weather)
                 } else {
                     LoadingView(message: "Fetching Weather...")
                 }
             }
+//            .padding(.vertical)
             .refreshable {
                 print("Do your refresh work here")
                 await weatherKitViewModel.fetchWeatherAndEvaluateRunning()

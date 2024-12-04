@@ -11,17 +11,17 @@ import SwiftUI
 func colorForGrade(_ grade: RunningGrade) -> Color {
     switch grade {
     case .good:
-        return .green
+        return Color("GoodGradeColor")
     case .warning:
-        return .orange
+        return Color("WarningGradeColor")
     case .danger:
-        return .red
+        return Color("DangerGradeColor")
     }
 }
 
 func gradeColor(for grade: RunningGrade) -> Color {
     switch grade {
-    case .good: return .green
+    case .good: return Color("GoodGradeColor")
     case .warning: return .orange
     case .danger: return .red
     }
