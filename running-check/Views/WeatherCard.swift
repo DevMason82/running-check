@@ -15,7 +15,6 @@ struct WeatherCard: View {
         VStack(spacing: 8) {
             Text(title)
                 .font(.headline)
-                .foregroundColor(.black.opacity(0.8))
             Text(value)
                 .font(.body)
                 .fontWeight(.bold)
