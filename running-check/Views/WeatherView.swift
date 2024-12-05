@@ -43,24 +43,6 @@ struct WeatherView: View {
                     }
                     .padding(.vertical, 25)
                     
-//                    VStack {
-//                        WeatherSummaryView(weather: weather)
-//                    }
-//                    .padding(.bottom, 15)
-                    
-                    VStack {
-                        HealthDataView2(
-//                            activeCalories: healthViewModel.activeCalories,
-//                            runningDistance: healthViewModel.runningDistance,
-                            outdoorRuns: healthViewModel.outdoorRuns,
-                            indoorRuns: healthViewModel.indoorRuns
-                        )
-                    }
-                    .padding(.bottom, 15)
-                    
-//                    HealthDataView()
-//                        .environmentObject(healthViewModel)
-                    
                     VStack {
                         RunningCoachView(
                             coach: weatherKitViewModel.runningCoach
@@ -68,6 +50,13 @@ struct WeatherView: View {
                     }
                     .padding(.bottom, 15)
                     
+                    VStack {
+                        HealthDataView2(
+                            outdoorRuns: healthViewModel.outdoorRuns,
+                            indoorRuns: healthViewModel.indoorRuns
+                        )
+                    }
+                    .padding(.bottom, 15)
                     
                     VStack {
                         DistanceCalroView(
@@ -86,7 +75,7 @@ struct WeatherView: View {
                     LoadingView(message: "Fetching Weather...")
                 }
             }
-//            .padding(.vertical)
+            //            .padding(.vertical)
             .refreshable {
                 print("Do your refresh work here")
                 await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
