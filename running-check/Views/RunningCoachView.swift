@@ -16,12 +16,16 @@ struct RunningCoachView: View {
             VStack(alignment: .leading, spacing: 10) {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("러닝코멘트")
-                        .font(.headline)
+                        .bold()
+                        .font(.caption)
+                        .foregroundColor(Color("CardFontColor"))
                         .padding(.bottom, 5)
                         .frame(maxWidth: .infinity, alignment: .leading)
 //                        .foregroundColor(Color("CardFontColor"))
                     Text(coach.comment)
+                        .bold()
                         .font(.body)
+                        .foregroundColor(Color("CardFontColor"))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding()
@@ -34,11 +38,15 @@ struct RunningCoachView: View {
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("러닝용품")
-                        .font(.headline)
+                        .bold()
+                        .font(.caption)
+                        .foregroundColor(Color("CardFontColor"))
                         .padding(.bottom, 5)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text(coach.gear)
+                        .bold()
                         .font(.body)
+                        .foregroundColor(Color("CardFontColor"))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding()
@@ -51,11 +59,15 @@ struct RunningCoachView: View {
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("러닝화")
-                        .font(.headline)
+                        .bold()
+                        .font(.caption)
+                        .foregroundColor(Color("CardFontColor"))
                         .padding(.bottom, 5)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text(coach.shoes)
+                        .bold()
                         .font(.body)
+                        .foregroundColor(Color("CardFontColor"))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding()

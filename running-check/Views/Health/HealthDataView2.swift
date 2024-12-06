@@ -50,10 +50,15 @@ struct HealthDataView2: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     if outdoorRuns.isEmpty {
-                        Text("실외 러닝 정보 없습니다.")
-                            .foregroundColor(.gray)
-                            .italic()
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        VStack {
+                            Text("기록이 없습니다.")
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding(10)
+                        .background(Color.white.opacity(0.35))
+                        .cornerRadius(10)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     } else {
                         ForEach(outdoorRuns, id: \.startDate) { run in
                             VStack(alignment: .leading, spacing: 8) {
@@ -100,7 +105,7 @@ struct HealthDataView2: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             }
                             .padding(10)
-                            .background(Color.gray.opacity(0.1))
+                            .background(Color.white.opacity(0.35))
                             .cornerRadius(10)
                         }
                     }
@@ -114,10 +119,15 @@ struct HealthDataView2: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     if indoorRuns.isEmpty {
-                        Text("실내 러닝 정보 없습니다.")
-                            .foregroundColor(.gray)
-                            .italic()
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        VStack {
+                            Text("기록이 없습니다.")
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding(10)
+                        .background(Color.white.opacity(0.35))
+                        .cornerRadius(10)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     } else {
                         ForEach(indoorRuns, id: \.startDate) { run in
                             VStack(alignment: .leading, spacing: 8) {
@@ -163,7 +173,7 @@ struct HealthDataView2: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             }
                             .padding(10)
-                            .background(Color.gray.opacity(0.1))
+                            .background(Color.white.opacity(0.35))
                             .cornerRadius(10)
                         }
                     }

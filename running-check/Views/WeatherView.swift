@@ -41,7 +41,7 @@ struct WeatherView: View {
                             grade: weatherKitViewModel.runningGrade ?? .good
                         )
                     }
-                    .padding(.vertical, 25)
+//                    .padding(.vertical, 5)
                     
                     VStack {
                         RunningCoachView(
@@ -57,6 +57,7 @@ struct WeatherView: View {
                         )
                     }
                     .padding(.bottom, 15)
+                    .padding(.horizontal)
                     
                     VStack {
                         DistanceCalroView(
@@ -65,9 +66,10 @@ struct WeatherView: View {
                         )
                     }
                     .padding(.horizontal)
+                    .padding(.bottom, 15)
                     
                     Divider()
-                        .padding(.vertical, 15)
+                        .padding(.bottom, 15)
                         .padding(.horizontal)
                     
                     WeatherGridView(weather: weather)

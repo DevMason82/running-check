@@ -37,6 +37,7 @@ struct DistanceCalroView: View {
             }
             
         }
+        .padding(.horizontal)
         .frame(maxWidth: .infinity, alignment: .trailing)
     }
 }

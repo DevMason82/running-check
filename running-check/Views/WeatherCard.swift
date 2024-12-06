@@ -22,7 +22,7 @@ struct WeatherCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: 100)
-        .background(Color.gray.opacity(0.1))
+        .background(Color.white.opacity(0.35))
         .cornerRadius(10)
     }
 }
