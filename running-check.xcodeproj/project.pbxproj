@@ -39,6 +39,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				"Launch Screen.storyboard",
 			);
 			target = 936B431A2CE9C59C0012D2EA /* running-check */;
 		};
