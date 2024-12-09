@@ -20,7 +20,8 @@ struct RunningGradeView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 120, height: 120)
-                .foregroundColor(colorForGrade(grade))
+//                .foregroundColor(colorForGrade(grade))
+                .foregroundColor(Color(.black))
                 .offset(x: isMovingHorizontally ? -2.5 : 5,
                         y: isMovingVertically ? -1.2 : 2.5)
                 .animation(
@@ -39,7 +40,8 @@ struct RunningGradeView: View {
             Text(grade.rawValue)
                 .font(.largeTitle)
                 .bold()
-                .foregroundColor(colorForGrade(grade))
+                .foregroundColor(Color(.black))
+//                .foregroundColor(colorForGrade(grade))
             
         
         }

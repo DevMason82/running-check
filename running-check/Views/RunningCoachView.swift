@@ -31,7 +31,7 @@ struct RunningCoachView: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color("CardColor"))
+                        .fill(Color("CardColor").opacity(0.3))
                 )
 //                .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -52,7 +52,7 @@ struct RunningCoachView: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color("CardColor"))
+                        .fill(Color("CardColor").opacity(0.3))
                 )
 //                .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -73,7 +73,7 @@ struct RunningCoachView: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color("CardColor"))
+                        .fill(Color("CardColor").opacity(0.3))
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
                 

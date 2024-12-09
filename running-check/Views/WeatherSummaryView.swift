@@ -18,7 +18,6 @@ struct WeatherSummaryView: View {
                 .bold()
             Text("체감온도: \(weather.apparentTemperature)")
                 .font(.body)
-                .foregroundColor(.gray)
         }
     }
 }
