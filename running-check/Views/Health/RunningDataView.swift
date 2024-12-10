@@ -1,5 +1,5 @@
 //
-//  HealthDataView.swift
+//  RunningDataView.swift
 //  running-check
 //
 //  Created by mason on 11/30/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HealthDataView2: View {
+struct RunningDataView: View {
     let outdoorRuns: [RunData]
     let indoorRuns: [RunData]
     let indoorRunCount: [RunData]
@@ -53,14 +53,14 @@ struct HealthDataView2: View {
                 }
                 .cornerRadius(10)
             }
-            .padding(.bottom, 15)
+            .padding(.bottom, 20)
             
-            HStack {
+            HStack(alignment: .top) {
                 // 실외 러닝 정보
-                SectionView(runs: outdoorRuns, title: "실외 러닝")
+                SectionView(runs: outdoorRuns, title: "\(formattedCurrentDay()) 실외 러닝")
                 
                 // 실내 러닝 정보
-                SectionView(runs: indoorRuns, title: "실내 러닝")
+                SectionView(runs: indoorRuns, title: "\(formattedCurrentDay()) 실내 러닝")
             }
             .padding(.leading, 15)
             
@@ -101,6 +101,12 @@ struct HealthDataView2: View {
         dateFormatter.dateFormat = "yy년 M월"
         return dateFormatter.string(from: Date())
     }
+    
+    private func formattedCurrentDay() -> String {
+        let calendar = Calendar.current
+        let day = calendar.component(.day, from: Date())
+        return "\(day)일"
+    }
 }
 
 // Separate section view for clarity
@@ -109,26 +115,26 @@ struct SectionView: View {
     let title: String
     
     var body: some View {
-        
-        VStack(alignment: .leading, spacing: 10) {
-//            let currentMonthCount = countCurrentMonthRuns(runs: runs)
+        VStack(spacing: 10) {
             HStack {
                 Text(title)
-                    .font(.headline)
+                    .bold()
+                    .font(.system(size: 16))
                     .foregroundColor(Color("CardFontColor"))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                
-//                Text("\(currentMonthCount)회") // Int 값을 String으로 변환하고 "회"를 추가
-//                    .font(.subheadline)
-//                    .bold()
             }
             if runs.isEmpty {
-                VStack {
-                    Text("오늘 기록이 없습니다.")
-                        .font(.body)
+                VStack{
+                    Text("아직 러닝 기록이 없네요.")
+//                        .font(.system(size: 14))
                         .foregroundColor(Color("CardFontColor"))
-                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text("지금이 시작하기에 가장 좋은 시간이에요!🏃🏻‍♀️")
+//                        .font(.system(size: 14))
+                        .foregroundColor(Color("CardFontColor"))
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                .font(.system(size: 14))
                 .padding(10)
                 .background(Color("CardColor").opacity(0.3))
                 .cornerRadius(10)
@@ -146,17 +152,17 @@ struct SectionView: View {
         }
     }
     // 이번 달 러닝 횟수 계산 함수
-    private func countCurrentMonthRuns(runs: [RunData]) -> Int {
-        let calendar = Calendar.current
-        let currentYear = calendar.component(.year, from: Date())
-        let currentMonth = calendar.component(.month, from: Date())
-        
-        return runs.filter {
-            let runYear = calendar.component(.year, from: $0.startDate)
-            let runMonth = calendar.component(.month, from: $0.startDate)
-            return runYear == currentYear && runMonth == currentMonth
-        }.count
-    }
+//    private func countCurrentMonthRuns(runs: [RunData]) -> Int {
+//        let calendar = Calendar.current
+//        let currentYear = calendar.component(.year, from: Date())
+//        let currentMonth = calendar.component(.month, from: Date())
+//        
+//        return runs.filter {
+//            let runYear = calendar.component(.year, from: $0.startDate)
+//            let runMonth = calendar.component(.month, from: $0.startDate)
+//            return runYear == currentYear && runMonth == currentMonth
+//        }.count
+//    }
     
     private func groupRunsByMonth(runs: [RunData]) -> [String: [RunData]] {
         let dateFormatter = DateFormatter()
@@ -167,29 +173,29 @@ struct SectionView: View {
         }
     }
     
-    private func formatMonth(_ month: String) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM"
-        guard let date = formatter.date(from: month) else { return month }
-        
-        // "yy년 MM월" 형식으로 변환
-        formatter.dateFormat = "yy년 MM월"
-        return formatter.string(from: date)
-    }
-    
-    // 현재 월인지 확인
-    private func checkIfCurrentMonth(month: String) -> Bool {
-        let calendar = Calendar.current
-        let currentYear = calendar.component(.year, from: Date())
-        let currentMonth = calendar.component(.month, from: Date())
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM"
-        guard let date = formatter.date(from: month) else { return false }
-        
-        let components = calendar.dateComponents([.year, .month], from: date)
-        return components.year == currentYear && components.month == currentMonth
-    }
+//    private func formatMonth(_ month: String) -> String {
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "yyyy-MM"
+//        guard let date = formatter.date(from: month) else { return month }
+//        
+//        // "yy년 MM월" 형식으로 변환
+//        formatter.dateFormat = "yy년 MM월"
+//        return formatter.string(from: date)
+//    }
+//    
+//    // 현재 월인지 확인
+//    private func checkIfCurrentMonth(month: String) -> Bool {
+//        let calendar = Calendar.current
+//        let currentYear = calendar.component(.year, from: Date())
+//        let currentMonth = calendar.component(.month, from: Date())
+//        
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "yyyy-MM"
+//        guard let date = formatter.date(from: month) else { return false }
+//        
+//        let components = calendar.dateComponents([.year, .month], from: date)
+//        return components.year == currentYear && components.month == currentMonth
+//    }
 }
 
 // View for displaying individual run details
@@ -262,7 +268,7 @@ struct RunDetailView: View {
 }
 
 #Preview {
-    HealthDataView2(outdoorRuns: [
+    RunningDataView(outdoorRuns: [
         RunData(
             duration: 1800, // 30 minutes
             distance: 5000, // 5 km
@@ -272,14 +278,14 @@ struct RunDetailView: View {
             endDate: Date()
         )
     ], indoorRuns: [
-        RunData(
-            duration: 1500, // 25 minutes
-            distance: 3000, // 3 km
-            calories: 200.0,
-            pace: 300, // 5 min/km
-            startDate: Date(),
-            endDate: Date()
-        )
+//        RunData(
+//            duration: 1500, // 25 minutes
+//            distance: 3000, // 3 km
+//            calories: 200.0,
+//            pace: 300, // 5 min/km
+//            startDate: Date(),
+//            endDate: Date()
+//        )
     ],
     indoorRunCount:[
         RunData(
@@ -302,5 +308,5 @@ struct RunDetailView: View {
         )
     ]
     )
-    .background(Color.black)
+    .background(Color.black.opacity(0.3))
 }
