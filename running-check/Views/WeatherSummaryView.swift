@@ -15,9 +15,11 @@ struct WeatherSummaryView: View {
         VStack(alignment: .trailing) {
             Text(weather.temperature)
                 .font(.title2)
+                .foregroundColor(Color("CardFontColor"))
                 .bold()
             Text("체감온도: \(weather.apparentTemperature)")
                 .font(.body)
+                .foregroundColor(Color("CardFontColor"))
         }
     }
 }

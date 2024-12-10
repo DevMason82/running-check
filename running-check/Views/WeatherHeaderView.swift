@@ -19,13 +19,16 @@ struct WeatherHeaderView: View {
         HStack {
             Image(systemName: weather.conditionSymbolName)
                 .font(.system(size: 40))
+                .foregroundColor(Color("CardFontColor"))
             
             VStack(alignment: .leading) {
                 Text(locationName)
                     .font(.title2)
+                    .foregroundColor(Color("CardFontColor"))
                     .bold()
                 Text(thoroughfare)
                     .font(.body)
+                    .foregroundColor(Color("CardFontColor"))
             }
             Spacer()
             

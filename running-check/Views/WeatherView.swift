@@ -40,13 +40,20 @@ struct WeatherView: View {
                             grade: weatherKitViewModel.runningGrade ?? .good
                         )
                     }
-                    //                    .padding(.vertical, 5)
                     
                     VStack {
                         RunningCoachView(
                             coach: weatherKitViewModel.runningCoach
                         )
                     }
+                    .padding(.bottom, 15)
+                    
+                    VStack{
+                        Divider()
+                            .bold()
+                            .overlay(Color("CardFontColor"))
+                    }
+                    .padding(.horizontal)
                     .padding(.bottom, 15)
                     
                     VStack {
@@ -60,18 +67,22 @@ struct WeatherView: View {
                     .padding(.bottom, 15)
 //                    .padding(.horizontal)
                     
-                    VStack {
-                        DistanceCalroView(
-                            activeCalories: healthViewModel.activeCalories,
-                            runningDistance: healthViewModel.runningDistance
-                        )
+//                    VStack {
+//                        DistanceCalroView(
+//                            activeCalories: healthViewModel.activeCalories,
+//                            runningDistance: healthViewModel.runningDistance
+//                        )
+//                    }
+//                    .padding(.horizontal)
+//                    .padding(.bottom, 15)
+                    
+                    VStack{
+                        Divider()
+                            .bold()
+                            .overlay(Color("CardFontColor"))
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 15)
-                    
-                    Divider()
-                        .padding(.bottom, 15)
-                        .padding(.horizontal)
                     
                     WeatherGridView(weather: weather)
                 } else {

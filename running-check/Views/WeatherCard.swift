@@ -15,15 +15,16 @@ struct WeatherCard: View {
         VStack(spacing: 8) {
             Text(title)
                 .font(.headline)
+                .foregroundColor(Color("CardFontColor"))
             Text(value)
                 .font(.body)
                 .fontWeight(.bold)
-                .foregroundColor(.blue)
+                .foregroundColor(Color("CardFontColor"))
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: 100)
-        .background(Color.white.opacity(0.35))
-        .cornerRadius(10)
+        .background(Color("CardColor").opacity(0.3))
+        .cornerRadius(12)
     }
 }
 
