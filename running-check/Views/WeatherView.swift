@@ -57,7 +57,7 @@ struct WeatherView: View {
                     .padding(.bottom, 15)
                     
                     VStack {
-                        HealthDataView2(
+                        RunningDataView(
                             outdoorRuns: healthViewModel.outdoorRuns,
                             indoorRuns: healthViewModel.indoorRuns,
                             indoorRunCount: healthViewModel.allIndoorRunsThisMonth,
