@@ -21,7 +21,8 @@ struct RunningGradeView: View {
                 .scaledToFit()
                 .frame(width: 120, height: 120)
 //                .foregroundColor(colorForGrade(grade))
-                .foregroundColor(Color(.black))
+//                .foregroundColor(Color(.black))
+                .foregroundColor(Color("CardFontColor"))
                 .offset(x: isMovingHorizontally ? -2.5 : 5,
                         y: isMovingVertically ? -1.2 : 2.5)
                 .animation(
@@ -40,7 +41,8 @@ struct RunningGradeView: View {
             Text(grade.rawValue)
                 .font(.largeTitle)
                 .bold()
-                .foregroundColor(Color(.black))
+                .foregroundColor(Color("CardFontColor"))
+//                .foregroundColor(Color(.black))
 //                .foregroundColor(colorForGrade(grade))
             
         
@@ -53,4 +55,5 @@ struct RunningGradeView: View {
     RunningGradeView(
         grade: .good
     )
+    .background(Color.black)
 }

@@ -29,11 +29,8 @@ struct RunningCoachView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color("CardColor").opacity(0.3))
-                )
-//                .padding(.horizontal)
+                .background(Color("CardColor").opacity(0.3))
+                .cornerRadius(12)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 VStack(alignment: .leading, spacing: 0) {
@@ -50,11 +47,8 @@ struct RunningCoachView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color("CardColor").opacity(0.3))
-                )
-//                .padding(.horizontal)
+                .background(Color("CardColor").opacity(0.3))
+                .cornerRadius(12)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 VStack(alignment: .leading, spacing: 0) {
@@ -71,15 +65,12 @@ struct RunningCoachView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color("CardColor").opacity(0.3))
-                )
+                .background(Color("CardColor").opacity(0.3))
+                .cornerRadius(12)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-//            .background(Color.brown)
             .padding(0)
             .padding(.horizontal)
             

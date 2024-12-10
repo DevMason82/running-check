@@ -19,6 +19,7 @@ struct WeatherGridView: View {
         VStack(spacing: 0) {
             Text("날씨 정보")
                 .font(.body)
+                .foregroundColor(Color("CardFontColor"))
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
