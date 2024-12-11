@@ -11,19 +11,32 @@ struct LoadingView: View {
     let message: String
     
     var body: some View {
-        VStack {
-            ProgressView(message)
-                .progressViewStyle(CircularProgressViewStyle())
-                .padding()
-            Text("Please wait while we fetch the latest weather data.")
-                .font(.caption)
-                .foregroundColor(.gray)
-                .multilineTextAlignment(.center)
+        ZStack {
+            Color("BackgroundColor")
+                .ignoresSafeArea()
+            
+            VStack {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: Color.accentColor))
+                    .scaleEffect(1.5)
+                    .padding()
+                Text(message)
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                    .bold()
+            }
+            .padding(30)
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color(.systemBackground).opacity(0.9)) // 반투명 배경
+                    .shadow(color: .black.opacity(0.1), radius: 10, x: 1, y: 8) // 그림자 추가
+            )
+            .padding()
         }
-        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
 #Preview {
-    LoadingView(message: "Loading...")
+    LoadingView(message: "러닝체크 로딩중...🏃🏻‍♂️")
 }
