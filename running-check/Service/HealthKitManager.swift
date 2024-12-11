@@ -38,16 +38,6 @@ class HealthKitManager {
         )
     }
     
-    // 특정 기간 동안의 러닝 거리 데이터 가져오기
-//    func fetchRunningDistance(startDate: Date, endDate: Date) async throws -> Double {
-//        return try await fetchQuantityData(
-//            typeIdentifier: .distanceWalkingRunning,
-//            startDate: startDate,
-//            endDate: endDate,
-//            unit: .meter()
-//        )
-//    }
-    
     // 특정 기간 동안의 달리기 거리 데이터 가져오기
     func fetchRunningDistance(startDate: Date, endDate: Date) async throws -> Double {
         let runningPredicate = HKQuery.predicateForWorkouts(with: .running)
@@ -345,7 +335,3 @@ struct RunData {
     let startDate: Date          // 운동 시작 시간
     let endDate: Date            // 운동 종료 시간
 }
-
-
-
-

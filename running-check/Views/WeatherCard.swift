@@ -24,7 +24,7 @@ struct WeatherCard: View {
         .padding()
         .frame(maxWidth: .infinity, maxHeight: 100)
         .background(Color("CardColor").opacity(0.3))
-        .cornerRadius(12)
+        .cornerRadius(10)
     }
 }
 

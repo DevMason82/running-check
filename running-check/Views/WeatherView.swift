@@ -4,20 +4,24 @@
 //
 //  Created by mason on 11/18/24.
 //
-
 import SwiftUI
-import CoreLocation
 
 struct WeatherView: View {
-    @StateObject private var weatherKitViewModel = WeatherKitViewModel()
-    @StateObject private var locationManagerNew = LocationManagerNew()
-    @StateObject private var healthViewModel = HealthKitViewModel()
+    @EnvironmentObject private var weatherKitViewModel: WeatherKitViewModel
+    @EnvironmentObject private var locationManagerNew: LocationManagerNew
+    @EnvironmentObject private var healthViewModel: HealthKitViewModel
     @Environment(\.scenePhase) private var scenePhase // 앱의 생명주기 감지
-    
+
     var body: some View {
         ZStack {
-            GradientBackground(runningGrade: weatherKitViewModel.runningGrade ?? .good)
-                        
+//            GradientBackground(runningGrade: weatherKitViewModel.runningGrade ?? .good)
+
+            if let runningGrade = weatherKitViewModel.runningGrade {
+                    GradientBackground(runningGrade: runningGrade)
+                } else {
+                    GradientBackgroundPlaceholder() // nil 상태에 대한 대체 UI
+                }
+            
             ScrollView(showsIndicators: false) {
                 if let errorMessage = weatherKitViewModel.errorMessage {
                     ErrorView(
@@ -25,7 +29,6 @@ struct WeatherView: View {
                         onSettingsTap: openAppSettings
                     )
                 } else if let weather = weatherKitViewModel.weatherData {
-                    //                    VStack(spacing: 10) {
                     VStack {
                         WeatherHeaderView(
                             weather: weather,
@@ -35,10 +38,12 @@ struct WeatherView: View {
                     }
                     .padding(.bottom, 20)
                     
-                    VStack {
-                        RunningGradeView(
-                            grade: weatherKitViewModel.runningGrade ?? .good
-                        )
+                    if let grade = weatherKitViewModel.runningGrade {
+                        RunningGradeView(grade: grade)
+                    } else {
+                        Text("Running grade is being evaluated...")
+                            .foregroundColor(.secondary)
+                            .padding(.bottom, 15)
                     }
                     
                     VStack {
@@ -48,7 +53,7 @@ struct WeatherView: View {
                     }
                     .padding(.bottom, 15)
                     
-                    VStack{
+                    VStack {
                         Divider()
                             .bold()
                             .overlay(Color("CardFontColor"))
@@ -65,18 +70,8 @@ struct WeatherView: View {
                         )
                     }
                     .padding(.bottom, 15)
-//                    .padding(.horizontal)
                     
-//                    VStack {
-//                        DistanceCalroView(
-//                            activeCalories: healthViewModel.activeCalories,
-//                            runningDistance: healthViewModel.runningDistance
-//                        )
-//                    }
-//                    .padding(.horizontal)
-//                    .padding(.bottom, 15)
-                    
-                    VStack{
+                    VStack {
                         Divider()
                             .bold()
                             .overlay(Color("CardFontColor"))
@@ -86,62 +81,32 @@ struct WeatherView: View {
                     
                     WeatherGridView(weather: weather)
                 } else {
-                    LoadingView(message: "Fetching Weather...")
+                    LoadingView(message: "Loading...")
                 }
             }
-            //            .padding(.vertical)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .refreshable {
-                print("Do your refresh work here")
-                await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
-                await healthViewModel.fetchAllHealthDataToday()
+                print("Refreshing data...")
+                await refreshData()
             }
-            
         }
         .onAppear {
-            Task {
-                await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
-                
-                await healthViewModel.requestAuthorization()
-                await healthViewModel.fetchAllHealthDataToday()
-                
-                
-                // 알림 권한 요청
-                NotificationManager.shared.requestNotificationPermission()
-                
-                // 아침, 점심, 저녁 알림 등록
-                NotificationManager.shared.scheduleDailyNotifications()
-            }
+            print("WeatherView appeared")
         }
         .onChange(of: scenePhase) {
-            Task {
-                if scenePhase == .active {
-                    // 포그라운드 전환 시 데이터 갱신
-                    weatherKitViewModel.updateWeatherData()
-                    await healthViewModel.fetchAllHealthDataToday()
-                    
-                } else if scenePhase == .background {
-                    print("App moved to background")
-                } else if scenePhase == .inactive {
-                    print("App is inactive")
+            if scenePhase == .active {
+                Task {
+                    await refreshData()
                 }
             }
         }
-        
     }
-    
-    private var backgroundColor: Color {
-            switch weatherKitViewModel.runningGrade {
-            case .good:
-                return Color.blue.opacity(0.3)
-            case .warning:
-                return Color.orange.opacity(0.3)
-            case .danger:
-                return Color.red.opacity(0.3)
-            default:
-                return Color("BackgroundColor") // 기본 컬러
-            }
-        }
-        
+
+    private func refreshData() async {
+        await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
+        await healthViewModel.fetchAllHealthDataToday()
+    }
+
     private func openAppSettings() {
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url)
@@ -149,13 +114,24 @@ struct WeatherView: View {
     }
 }
 
+struct GradientBackgroundPlaceholder: View {
+    var body: some View {
+        Color("BackgroundColor")
+            .ignoresSafeArea()
+    }
+}
+
 #Preview {
     WeatherView()
-        .environmentObject(HealthKitViewModel.preview)
+        .environmentObject(WeatherKitViewModel())
+        .environmentObject(LocationManagerNew())
+        .environmentObject(HealthKitViewModel())
 }
 
 #Preview {
     WeatherView()
         .environment(\.colorScheme, .dark)
-        .environmentObject(HealthKitViewModel.preview)
+        .environmentObject(WeatherKitViewModel())
+        .environmentObject(LocationManagerNew())
+        .environmentObject(HealthKitViewModel())
 }

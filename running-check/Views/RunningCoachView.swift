@@ -10,71 +10,40 @@ import SwiftUI
 struct RunningCoachView: View {
     let coach: RunningCoach?
     @Environment(\.colorScheme) private var colorScheme
-    
+
     var body: some View {
         if let coach = coach {
             VStack(alignment: .leading, spacing: 10) {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("러닝코멘트")
-                        .bold()
-                        .font(.caption)
-                        .foregroundColor(Color("CardFontColor"))
-                        .padding(.bottom, 5)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .foregroundColor(Color("CardFontColor"))
-                    Text(coach.comment)
-                        .bold()
-                        .font(.body)
-                        .foregroundColor(Color("CardFontColor"))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding()
-                .background(Color("CardColor").opacity(0.3))
-                .cornerRadius(12)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("러닝용품")
-                        .bold()
-                        .font(.caption)
-                        .foregroundColor(Color("CardFontColor"))
-                        .padding(.bottom, 5)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(coach.gear)
-                        .bold()
-                        .font(.body)
-                        .foregroundColor(Color("CardFontColor"))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding()
-                .background(Color("CardColor").opacity(0.3))
-                .cornerRadius(12)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("러닝화")
-                        .bold()
-                        .font(.caption)
-                        .foregroundColor(Color("CardFontColor"))
-                        .padding(.bottom, 5)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(coach.shoes)
-                        .bold()
-                        .font(.body)
-                        .foregroundColor(Color("CardFontColor"))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding()
-                .background(Color("CardColor").opacity(0.3))
-                .cornerRadius(12)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                
+                CoachCard(title: "러닝코멘트", content: coach.comment)
+                CoachCard(title: "러닝용품", content: coach.gear)
+                CoachCard(title: "러닝화", content: coach.shoes)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(0)
             .padding(.horizontal)
-            
         }
+    }
+}
+
+
+struct CoachCard: View {
+    let title: String
+    let content: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(title)
+                .bold()
+                .font(.headline)
+                .foregroundColor(Color("CardFontColor"))
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Text(content)
+                .bold()
+                .font(.system(size: 16))
+                .foregroundColor(Color("CardFontColor"))
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding()
+        .background(Color("CardColor").opacity(0.3))
+        .cornerRadius(10)
     }
 }
 
@@ -86,4 +55,5 @@ struct RunningCoachView: View {
             shoes: "Cushioned running shoes"
         )
     )
+    .background(Color("BackgroundColor"))
 }

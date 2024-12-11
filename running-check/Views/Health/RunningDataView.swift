@@ -234,7 +234,7 @@ struct RunDetailView: View {
                 Text("\(run.calories, specifier: "%.1f") kcal")
                     .font(.title2)
                     .bold()
-                    .foregroundColor(.red)
+                    .foregroundColor(.pink)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             VStack(alignment: .leading, spacing: 2) {
@@ -308,5 +308,5 @@ struct RunDetailView: View {
         )
     ]
     )
-    .background(Color.black.opacity(0.3))
+    .background(Color.red.opacity(1))
 }

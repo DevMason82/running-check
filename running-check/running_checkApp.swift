@@ -4,48 +4,47 @@
 //
 //  Created by mason on 11/17/24.
 //
-
 import SwiftUI
-import UserNotifications
 
 @main
 struct running_checkApp: App {
-//    private let notificationDelegate = NotificationDelegate()
-//    init() {
-//        UNUserNotificationCenter.current().delegate = notificationDelegate
-//        
-//        // 앱 시작 시 알림 권한 요청
-//        requestNotificationPermission()
-//    }
+    @StateObject private var weatherKitViewModel = WeatherKitViewModel()
+    @StateObject private var locationManagerNew = LocationManagerNew()
+    @StateObject private var healthViewModel = HealthKitViewModel()
+    
+    @State private var isLoading = true // 데이터 로딩 상태
     
     var body: some Scene {
         WindowGroup {
-            //            ContentView()
-            WeatherView()
+            ZStack {
+                            if isLoading {
+                                // 로딩 화면
+                                LoadingView(message: "러닝체크 로딩중...🏃🏻‍♂️")
+                                    .transition(.opacity) // 부드러운 전환 효과 추가
+                                    .onAppear {
+                                        Task {
+                                            await fetchInitialData()
+                                        }
+                                    }
+                            } else {
+                                // 모든 데이터가 로드되었을 때 WeatherView 표시
+                                WeatherView()
+                                    .environmentObject(weatherKitViewModel)
+                                    .environmentObject(locationManagerNew)
+                                    .environmentObject(healthViewModel)
+                                    .transition(.opacity) // 전환 효과
+                            }
+                        }
+                        .animation(.easeInOut, value: isLoading) // 상태 변경 시 애니메이션
         }
     }
     
-    // 알림 권한 요청 함수
-//    private func requestNotificationPermission() {
-//        let center = UNUserNotificationCenter.current()
-//        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-//            if let error = error {
-//                print("알림 권한 요청 실패: \(error.localizedDescription)")
-//            } else {
-//                print(granted ? "알림 권한이 허용되었습니다." : "알림 권한이 거부되었습니다.")
-//            }
-//        }
-//    }
+    private func fetchInitialData() async {
+        isLoading = true
+        // 데이터 불러오기 순서: 위치 → 날씨 → 헬스 데이터
+        await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
+        await healthViewModel.requestAuthorization()
+        await healthViewModel.fetchAllHealthDataToday()
+        isLoading = false
+    }
 }
-
-// 알림을 처리하기 위한 delegate 클래스
-//class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
-//    func userNotificationCenter(
-//        _ center: UNUserNotificationCenter,
-//        willPresent notification: UNNotification,
-//        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
-//    ) {
-//        // 앱이 활성화된 상태에서도 배너와 소리를 표시
-//        completionHandler([.banner, .sound])
-//    }
-//}
