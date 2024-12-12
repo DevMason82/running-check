@@ -8,7 +8,7 @@
 import Foundation
 import UserNotifications
 
-class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
+class NotificationManager: NSObject, UNUserNotificationCenterDelegate,ObservableObject {
     static let shared = NotificationManager()
     
     private override init() {

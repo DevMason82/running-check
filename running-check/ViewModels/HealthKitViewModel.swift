@@ -76,6 +76,8 @@ import Foundation
 
 @MainActor
 class HealthKitViewModel: ObservableObject {
+    private let healthKitManager = HealthKitManager()
+    
     @Published var activeCalories: Double = 0.0
     @Published var runningDistance: Double = 0.0
     @Published var outdoorRuns: [RunData] = [] // 실외 달리기
@@ -86,7 +88,14 @@ class HealthKitViewModel: ObservableObject {
     @Published var outdoorRunCount: Int = 0 // 실외 달리기 개수
     @Published var errorMessage: String?
     
-    private let healthKitManager = HealthKitManager()
+    @Published var totalRunningDistance: Double = 0.0
+    @Published var totalCaloriesBurned: Double = 0.0
+    @Published var totalRunningTime: TimeInterval = 0.0
+    @Published var averagePace: Double = 0.0 // 초/킬로미터
+    @Published var averageCadence: Double = 0.0 // 스텝/분
+    @Published var currentMonth: String = ""
+    
+    
     private let calendar = Calendar.current
     
     // HealthKit 권한 요청
@@ -156,6 +165,38 @@ class HealthKitViewModel: ObservableObject {
         }
     }
     
+    func fetchMonthlyData() async {
+            do {
+                // 현재 달 이름
+                let dateFormatter = DateFormatter()
+//                dateFormatter.dateFormat = "yy-MM"
+                dateFormatter.dateFormat = "yy년 M월"
+                currentMonth = dateFormatter.string(from: Date())
+                
+                let (indoorRuns, outdoorRuns, indoorCount, outdoorCount) = try await healthKitManager.fetchRunsThisMonth()
+                
+                // 총 러닝 데이터
+                let allRuns = indoorRuns + outdoorRuns
+                
+                totalRunningDistance = allRuns.reduce(0) { $0 + $1.distance } / 1000.0 // Convert to km
+                totalCaloriesBurned = allRuns.reduce(0) { $0 + $1.calories }
+                totalRunningTime = allRuns.reduce(0) { $0 + $1.duration }
+                
+                // 평균 페이스 (초/킬로미터)
+                let totalPace = allRuns.reduce(0) { $0 + $1.pace }
+                averagePace = allRuns.count > 0 ? totalPace / Double(allRuns.count) : 0
+                
+                // 평균 케이던스 계산 (예제 데이터)
+                let totalCadence = allRuns.reduce(0) { $0 + $1.cadence } // $1.cadence 사용
+                averageCadence = allRuns.count > 0 ? totalCadence / Double(allRuns.count) : 0
+                
+                indoorRunCount = indoorCount
+                outdoorRunCount = outdoorCount
+            } catch {
+                print("Error fetching monthly data: \(error.localizedDescription)")
+            }
+        }
+    
     // 모든 데이터 가져오기 (오늘 기준)
     func fetchAllHealthDataToday() async {
         await fetchActiveCaloriesToday()
@@ -163,6 +204,7 @@ class HealthKitViewModel: ObservableObject {
         await fetchOutdoorRunsToday()
         await fetchIndoorRunsToday()
         await fetchRunsThisMonth() // Include monthly runs
+        await fetchMonthlyData()
     }
     
     // 에러 메시지 설정
@@ -177,53 +219,16 @@ class HealthKitViewModel: ObservableObject {
         calendar.startOfDay(for: Date())
     }
     
-    // 미리보기용 ViewModel
     static var preview: HealthKitViewModel {
         let viewModel = HealthKitViewModel()
-        viewModel.activeCalories = 450.5
-        viewModel.runningDistance = 7321.4 // 7.32 km
-        viewModel.outdoorRuns = [
-            RunData(
-                duration: 1800, // 30 minutes
-                distance: 5000, // 5 km
-                calories: 320.5,
-                pace: 360, // 6 min/km
-                startDate: Date(),
-                endDate: Date()
-            )
-        ]
-        viewModel.indoorRuns = [
-            RunData(
-                duration: 1500, // 25 minutes
-                distance: 3000, // 3 km
-                calories: 200.0,
-                pace: 300, // 5 min/km
-                startDate: Date(),
-                endDate: Date()
-            )
-        ]
-        viewModel.allIndoorRunsThisMonth = [
-            RunData(
-                duration: 1500, // 25 minutes
-                distance: 3000, // 3 km
-                calories: 200.0,
-                pace: 300, // 5 min/km
-                startDate: Date(),
-                endDate: Date()
-            )
-        ]
-        viewModel.allOutdoorRunsThisMonth = [
-            RunData(
-                duration: 1800, // 30 minutes
-                distance: 5000, // 5 km
-                calories: 320.5,
-                pace: 360, // 6 min/km
-                startDate: Date(),
-                endDate: Date()
-            )
-        ]
-        viewModel.indoorRunCount = 1
-        viewModel.outdoorRunCount = 1
+        viewModel.totalRunningDistance = 42.195 // 샘플 러닝 거리 (42.195km)
+        viewModel.totalCaloriesBurned = 3000 // 샘플 소모 칼로리
+        viewModel.totalRunningTime = 3600 * 5 + 30 * 60 // 5시간 30분
+        viewModel.averagePace = 360 // 6분/km
+        viewModel.averageCadence = 180 // 180 spm
+        viewModel.indoorRunCount = 3 // 샘플 실내 러닝 횟수
+        viewModel.outdoorRunCount = 5 // 샘플 실외 러닝 횟수
+        viewModel.currentMonth = "12월" // 샘플 현재 달
         return viewModel
     }
 }

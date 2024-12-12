@@ -55,5 +55,18 @@ struct CoachCard: View {
             shoes: "Cushioned running shoes"
         )
     )
+    .environment(\.colorScheme, .light)
+    .background(Color("BackgroundColor"))
+}
+
+#Preview {
+    RunningCoachView(
+        coach: RunningCoach(
+            comment: "Great weather for running. Stay hydrated and enjoy your run!",
+            gear: "Light running clothes",
+            shoes: "Cushioned running shoes"
+        )
+    )
+    .environment(\.colorScheme, .dark)
     .background(Color("BackgroundColor"))
 }

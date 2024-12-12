@@ -43,7 +43,7 @@ class HealthKitManager {
         let runningPredicate = HKQuery.predicateForWorkouts(with: .running)
         let datePredicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
         let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [runningPredicate, datePredicate])
-
+        
         return try await withCheckedThrowingContinuation { continuation in
             let query = HKSampleQuery(
                 sampleType: HKWorkoutType.workoutType(),
@@ -55,16 +55,16 @@ class HealthKitManager {
                     continuation.resume(throwing: error)
                     return
                 }
-
+                
                 guard let workouts = samples as? [HKWorkout] else {
                     continuation.resume(returning: 0.0) // 데이터가 없으면 0 반환
                     return
                 }
-
+                
                 let totalDistance = workouts.reduce(0.0) { sum, workout in
                     sum + (workout.totalDistance?.doubleValue(for: .meter()) ?? 0.0)
                 }
-
+                
                 continuation.resume(returning: totalDistance)
             }
             healthStore.execute(query)
@@ -91,11 +91,11 @@ class HealthKitManager {
         let activityPredicate = HKQuery.predicateForWorkouts(with: activityType)
         let datePredicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate)
         let locationPredicate = locationType == .indoor
-            ? HKQuery.predicateForObjects(withMetadataKey: HKMetadataKeyIndoorWorkout, allowedValues: [true])
-            : HKQuery.predicateForObjects(withMetadataKey: HKMetadataKeyIndoorWorkout, allowedValues: [false])
+        ? HKQuery.predicateForObjects(withMetadataKey: HKMetadataKeyIndoorWorkout, allowedValues: [true])
+        : HKQuery.predicateForObjects(withMetadataKey: HKMetadataKeyIndoorWorkout, allowedValues: [false])
         
         let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [activityPredicate, datePredicate, locationPredicate])
-
+        
         return try await withCheckedThrowingContinuation { continuation in
             let query = HKSampleQuery(
                 sampleType: HKWorkoutType.workoutType(),
@@ -108,12 +108,12 @@ class HealthKitManager {
                     continuation.resume(throwing: error)
                     return
                 }
-
+                
                 guard let workouts = samples as? [HKWorkout] else {
                     continuation.resume(returning: [])
                     return
                 }
-
+                
                 Task {
                     var runData: [RunData] = []
                     for workout in workouts {
@@ -121,6 +121,7 @@ class HealthKitManager {
                         let distance = workout.totalDistance?.doubleValue(for: .meter()) ?? 0.0
                         let calories = try await self.fetchCaloriesForWorkout(workout)
                         let pace = distance > 0 ? (duration / distance * 1000) : 0 // 페이스 (초/km)
+                        let cadence = await self.calculateCadence(for: workout)
                         
                         runData.append(
                             RunData(
@@ -128,6 +129,7 @@ class HealthKitManager {
                                 distance: distance,
                                 calories: calories,
                                 pace: pace,
+                                cadence: cadence,
                                 startDate: workout.startDate,
                                 endDate: workout.endDate
                             )
@@ -163,6 +165,50 @@ class HealthKitManager {
         }
     }
     
+    // Cadence(스텝/분) 계산 함수
+    func calculateCadence(for workout: HKWorkout) async -> Double {
+        guard let stepCountType = HKQuantityType.quantityType(forIdentifier: .stepCount) else {
+            return 0.0 // `stepCount` 데이터가 없는 경우 0 반환
+        }
+        
+        // 워크아웃에 대한 Predicate 설정
+        let predicate = HKQuery.predicateForObjects(from: workout)
+        
+        return await withCheckedContinuation { continuation in
+            let query = HKStatisticsQuery(
+                quantityType: stepCountType,
+                quantitySamplePredicate: predicate,
+                options: .cumulativeSum
+            ) { _, statistics, error in
+                if let error = error {
+                    print("Error fetching step count: \(error.localizedDescription)")
+                    continuation.resume(returning: 0.0)
+                    return
+                }
+                
+                // 스텝 합계 가져오기
+                let totalSteps = statistics?.sumQuantity()?.doubleValue(for: .count()) ?? 0.0
+                
+                // 워크아웃 시간을 분 단위로 계산
+                let durationInMinutes = workout.duration / 60.0
+                
+                // 워크아웃 시간이 0인 경우 0 반환
+                guard durationInMinutes > 0 else {
+                    continuation.resume(returning: 0.0)
+                    return
+                }
+                
+                // 스텝/분 계산
+                let cadence = totalSteps / durationInMinutes
+                
+                continuation.resume(returning: cadence)
+            }
+            
+            // 쿼리 실행
+            healthStore.execute(query)
+        }
+    }
+    
     // 공통 데이터 가져오기 함수
     private func fetchQuantityData(
         typeIdentifier: HKQuantityTypeIdentifier,
@@ -173,9 +219,9 @@ class HealthKitManager {
         guard let quantityType = HKQuantityType.quantityType(forIdentifier: typeIdentifier) else {
             throw NSError(domain: "com.example.healthkit", code: 1, userInfo: [NSLocalizedDescriptionKey: "\(typeIdentifier.rawValue) type unavailable"])
         }
-
+        
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
-
+        
         return try await withCheckedThrowingContinuation { continuation in
             let query = HKSampleQuery(
                 sampleType: quantityType,
@@ -187,16 +233,16 @@ class HealthKitManager {
                     continuation.resume(throwing: error)
                     return
                 }
-
+                
                 guard let samples = samples as? [HKQuantitySample] else {
                     continuation.resume(returning: 0.0) // 데이터가 없는 경우 0 반환
                     return
                 }
-
+                
                 let totalValue = samples.reduce(0.0) { sum, sample in
                     sum + sample.quantity.doubleValue(for: unit)
                 }
-
+                
                 continuation.resume(returning: totalValue)
             }
             healthStore.execute(query)
@@ -210,11 +256,11 @@ class HealthKitManager {
         guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) else {
             throw NSError(domain: "com.example.healthkit", code: 2, userInfo: [NSLocalizedDescriptionKey: "Unable to calculate the start of the month."])
         }
-
+        
         let datePredicate = HKQuery.predicateForSamples(withStart: startOfMonth, end: now, options: .strictStartDate)
         let runningPredicate = HKQuery.predicateForWorkouts(with: .running)
         let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, runningPredicate])
-
+        
         return try await withCheckedThrowingContinuation { continuation in
             let query = HKSampleQuery(
                 sampleType: HKWorkoutType.workoutType(),
@@ -227,33 +273,36 @@ class HealthKitManager {
                     continuation.resume(throwing: error)
                     return
                 }
-
+                
                 guard let workouts = samples as? [HKWorkout] else {
                     continuation.resume(returning: ([], [], 0, 0)) // No data available
                     return
                 }
-
+                
                 Task {
                     var indoorRuns: [RunData] = []
                     var outdoorRuns: [RunData] = []
                     var indoorCount = 0
                     var outdoorCount = 0
-
+                    
                     for workout in workouts {
                         let duration = workout.duration
                         let distance = workout.totalDistance?.doubleValue(for: .meter()) ?? 0.0
                         let calories = try await self.fetchCaloriesForWorkout(workout)
                         let pace = distance > 0 ? (duration / distance * 1000) : 0 // Pace in seconds per km
-
+                        let cadence = await self.calculateCadence(for: workout)
+                        
+                        
                         let runData = RunData(
                             duration: duration,
                             distance: distance,
                             calories: calories,
                             pace: pace,
+                            cadence: cadence,
                             startDate: workout.startDate,
                             endDate: workout.endDate
                         )
-
+                        
                         if let isIndoor = workout.metadata?[HKMetadataKeyIndoorWorkout] as? Bool {
                             if isIndoor {
                                 indoorRuns.append(runData)
@@ -268,7 +317,7 @@ class HealthKitManager {
                             outdoorCount += 1
                         }
                     }
-
+                    
                     continuation.resume(returning: (indoorRuns, outdoorRuns, indoorCount, outdoorCount))
                 }
             }
@@ -283,24 +332,24 @@ class HealthKitManager {
         guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) else {
             throw NSError(domain: "com.example.healthkit", code: 2, userInfo: [NSLocalizedDescriptionKey: "Unable to calculate the start of the month."])
         }
-
+        
         let predicate = HKQuery.predicateForSamples(withStart: startOfMonth, end: now, options: .strictStartDate)
         let workoutType = HKWorkoutType.workoutType()
-
+        
         let query = HKSampleQuery(sampleType: workoutType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: nil) { query, samples, error in
             if let error = error {
                 print("Error fetching workouts: \(error.localizedDescription)")
                 return
             }
-
+            
             guard let workouts = samples as? [HKWorkout] else {
                 print("No workouts found.")
                 return
             }
-
+            
             var indoorCount = 0
             var outdoorCount = 0
-
+            
             for workout in workouts {
                 if workout.workoutActivityType == .running {
                     if let isIndoor = workout.metadata?[HKMetadataKeyIndoorWorkout] as? Bool {
@@ -315,12 +364,12 @@ class HealthKitManager {
                     }
                 }
             }
-
+            
             print("Indoor Runs: \(indoorCount), Outdoor Runs: \(outdoorCount)")
         }
-
+        
         healthStore.execute(query)
-
+        
         // Return counts (dummy values here as query runs asynchronously)
         return (0, 0) // Update this with actual counts once asynchronous fetching is handled
     }
@@ -332,6 +381,7 @@ struct RunData {
     let distance: Double         // 거리 (미터)
     let calories: Double         // 칼로리 (킬로칼로리)
     let pace: Double             // 페이스 (초/km)
+    let cadence: Double // 스텝/분 (새로운 속성 추가)
     let startDate: Date          // 운동 시작 시간
     let endDate: Date            // 운동 종료 시간
 }
