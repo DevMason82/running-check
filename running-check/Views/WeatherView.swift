@@ -85,11 +85,11 @@ struct WeatherView: View {
                         LoadingView(message: "Loading...")
                     }
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .refreshable {
                     print("Refreshing data...")
                     await refreshData()
                 }
+                
                 
             }
         }

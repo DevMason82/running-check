@@ -15,6 +15,7 @@ struct MonthlyInfoView: View {
     let averageCadence: Double
     let indoorRunCount: Int
     let outdoorRunCount: Int
+    let lastMonthReport: String
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -46,18 +47,19 @@ struct MonthlyInfoView: View {
             HStack {
                 Text("평균 페이스")
                 Spacer()
-                Text(formattedPace(averagePace))
+//                Text(formattedPace(averagePace))
+                Text("\(formatPace(averagePace))/km")
                     .bold()
             }
             .padding(.horizontal)
             
-            HStack {
-                Text("평균 케이던스")
-                Spacer()
-                Text(String(format: "%.0f spm", averageCadence))
-                    .bold()
-            }
-            .padding(.horizontal)
+//            HStack {
+//                Text("평균 케이던스")
+//                Spacer()
+//                Text(String(format: "%.0f spm", averageCadence))
+//                    .bold()
+//            }
+//            .padding(.horizontal)
             
             HStack {
                 Text("러닝 횟수")
@@ -67,71 +69,18 @@ struct MonthlyInfoView: View {
             }
             .padding(.horizontal)
             
-            
-            
-            
-            
-            // Highlights Section
-//            Section(header: Text("주요 데이터")
-//                .font(.headline)
-//                .padding(.horizontal)) {
-//                    VStack(spacing: 20) {
-//                        HighlightCard(
-//                            title: "총 거리",
-//                            value: String(format: "%.2f km", totalRunningDistance),
-//                            systemImage: "figure.run"
-//                        )
-//                        HighlightCard(
-//                            title: "칼로리",
-//                            value: String(format: "%.0f kcal", totalCaloriesBurned),
-//                            systemImage: "flame"
-//                        )
-//                    }
-//                    .padding(.horizontal)
-//                }
-            
-            // Time & Pace Section
-//            Section(header: Text("달리기 통계")
-//                .font(.headline)
-//                .padding(.horizontal)) {
-//                    VStack(spacing: 20) {
-//                        StatCard(
-//                            title: "총 시간",
-//                            value: formattedTime(totalRunningTime),
-//                            systemImage: "timer"
-//                        )
-//                        StatCard(
-//                            title: "평균 페이스",
-//                            value: formattedPace(averagePace),
-//                            systemImage: "speedometer"
-//                        )
-//                        StatCard(
-//                            title: "평균 케이던스",
-//                            value: String(format: "%.0f spm", averageCadence),
-//                            systemImage: "metronome"
-//                        )
-//                    }
-//                    .padding(.horizontal)
-//                }
-            
-            // Indoor & Outdoor Runs Section
-//            Section(header: Text("러닝 횟수")
-//                .font(.headline)
-//                .padding(.horizontal)) {
-//                    HStack(spacing: 20) {
-//                        StatCard(
-//                            title: "실내 러닝",
-//                            value: "\(indoorRunCount)",
-//                            systemImage: "house"
-//                        )
-//                        StatCard(
-//                            title: "실외 러닝",
-//                            value: "\(outdoorRunCount)",
-//                            systemImage: "sun.max"
-//                        )
-//                    }
-//                    .padding(.horizontal)
-//                }
+            // 보고서 표시
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text("지난달 달리기 보고서")
+                                    .font(.headline)
+                                Text(lastMonthReport)
+                                    .font(.body)
+                                    .padding()
+                                    .background(Color(.secondarySystemBackground))
+                                    .cornerRadius(10)
+                                    .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3)
+                            }
+                            .padding(.horizontal)
         }
     }
     private func formattedTime(_ time: TimeInterval) -> String {
@@ -147,6 +96,12 @@ struct MonthlyInfoView: View {
         let seconds = Int(pace) % 60
         return String(format: "%d:%02d min/km", minutes, seconds)
     }
+    
+    private func formatPace(_ pace: Double) -> String {
+            let minutes = Int(pace) / 60
+            let seconds = Int(pace) % 60
+            return String(format: "%d'%02d\"", minutes, seconds)
+        }
 }
 
 struct HighlightCard: View {
@@ -216,7 +171,15 @@ struct StatCard: View {
         averagePace: 360,
         averageCadence: 450,
         indoorRunCount: 20,
-        outdoorRunCount: 15)
+        outdoorRunCount: 15,
+        lastMonthReport: """
+                지난달 달리기 요약:
+                - 총 거리: 42.20 km
+                - 소모 칼로리: 3100 kcal
+                - 평균 페이스: 5'30"/km
+                - 평균 케이던스: 175.2 spm
+                """
+    )
 }
 
 
