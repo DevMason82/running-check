@@ -20,6 +20,35 @@ class HealthKitManager {
         try await healthStore.requestAuthorization(toShare: [], read: typesToRead)
     }
     
+    /// 오늘의 케이던스(분당 걸음 수) 데이터를 가져오는 함수
+    func fetchTodayCadence() async throws -> Double {
+        let stepCountType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
+        let startDate = Calendar.current.startOfDay(for: Date())
+        let endDate = Date()
+
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
+
+        return try await withCheckedThrowingContinuation { continuation in
+            let query = HKStatisticsQuery(quantityType: stepCountType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, statistics, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                guard let sum = statistics?.sumQuantity()?.doubleValue(for: HKUnit.count()) else {
+                    continuation.resume(returning: 0.0) // 데이터가 없으면 0 반환
+                    return
+                }
+
+                // 시간(분)으로 나누어 케이던스 계산
+                let elapsedMinutes = endDate.timeIntervalSince(startDate) / 60
+                let cadence = sum / elapsedMinutes
+                continuation.resume(returning: cadence)
+            }
+            self.healthStore.execute(query)
+        }
+    }
+    
     // 오늘 칼로리 소모 데이터 가져오기
     func fetchActiveCaloriesToday() async throws -> Double {
         let calendar = Calendar.current
@@ -73,13 +102,99 @@ class HealthKitManager {
     
     // 실외 달리기 워크아웃 데이터 가져오기
     func fetchOutdoorRuns(startDate: Date, endDate: Date) async throws -> [RunData] {
-        return try await fetchRunData(activityType: .running, locationType: .outdoor, startDate: startDate, endDate: endDate)
+        let predicate = HKQuery.predicateForWorkouts(with: .running)
+        let datePredicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
+        let locationPredicate = HKQuery.predicateForObjects(withMetadataKey: HKMetadataKeyIndoorWorkout, allowedValues: [false]) // 실외 필터
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, datePredicate, locationPredicate])
+
+        return try await withCheckedThrowingContinuation { continuation in
+            let query = HKSampleQuery(
+                sampleType: HKWorkoutType.workoutType(),
+                predicate: compoundPredicate,
+                limit: HKObjectQueryNoLimit,
+                sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)]
+            ) { _, samples, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                guard let workouts = samples as? [HKWorkout] else {
+                    continuation.resume(returning: [])
+                    return
+                }
+
+                let runs = workouts.map { workout -> RunData in
+                    let distance = workout.totalDistance?.doubleValue(for: .meter()) ?? 0.0
+                    let duration = workout.duration
+
+                    // Use statistics(for:) to replace deprecated totalEnergyBurned
+                    let calories = workout.statistics(for: HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!)?.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0.0
+
+                    // 케이던스 계산 (총 스텝 / 총 시간(분))
+                    let cadence = (workout.statistics(for: HKQuantityType.quantityType(forIdentifier: .stepCount)!)?.sumQuantity()?.doubleValue(for: .count()) ?? 0.0) / (duration / 60)
+
+                    let pace = duration / (distance / 1000) // 초/킬로미터
+                    return RunData(date: workout.startDate, duration: duration, distance: distance, calories: calories, pace: pace, cadence: cadence)
+                }
+
+                continuation.resume(returning: runs)
+            }
+            healthStore.execute(query)
+        }
     }
+    
+    //    func fetchOutdoorRuns(startDate: Date, endDate: Date) async throws -> [RunData] {
+    //        return try await fetchRunData(activityType: .running, locationType: .outdoor, startDate: startDate, endDate: endDate)
+    //    }
     
     // 실내 달리기 워크아웃 데이터 가져오기
     func fetchIndoorRuns(startDate: Date, endDate: Date) async throws -> [RunData] {
-        return try await fetchRunData(activityType: .running, locationType: .indoor, startDate: startDate, endDate: endDate)
+        let predicate = HKQuery.predicateForWorkouts(with: .running)
+        let datePredicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: .strictStartDate)
+        let locationPredicate = HKQuery.predicateForObjects(withMetadataKey: HKMetadataKeyIndoorWorkout, allowedValues: [true]) // 실내 필터
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, datePredicate, locationPredicate])
+
+        return try await withCheckedThrowingContinuation { continuation in
+            let query = HKSampleQuery(
+                sampleType: HKWorkoutType.workoutType(),
+                predicate: compoundPredicate,
+                limit: HKObjectQueryNoLimit,
+                sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)]
+            ) { _, samples, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                guard let workouts = samples as? [HKWorkout] else {
+                    continuation.resume(returning: [])
+                    return
+                }
+
+                let runs = workouts.map { workout -> RunData in
+                    let distance = workout.totalDistance?.doubleValue(for: .meter()) ?? 0.0
+                    let duration = workout.duration
+
+                    // Use statistics(for:) to replace deprecated totalEnergyBurned
+                    let calories = workout.statistics(for: HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!)?.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0.0
+
+                    // 케이던스 계산 (총 스텝 / 총 시간(분))
+                    let cadence = (workout.statistics(for: HKQuantityType.quantityType(forIdentifier: .stepCount)!)?.sumQuantity()?.doubleValue(for: .count()) ?? 0.0) / (duration / 60)
+
+                    let pace = duration / (distance / 1000) // 초/킬로미터
+                    return RunData(date: workout.startDate, duration: duration, distance: distance, calories: calories, pace: pace, cadence: cadence)
+                }
+
+                continuation.resume(returning: runs)
+            }
+            healthStore.execute(query)
+        }
     }
+    
+//    func fetchIndoorRuns(startDate: Date, endDate: Date) async throws -> [RunData] {
+//        return try await fetchRunData(activityType: .running, locationType: .indoor, startDate: startDate, endDate: endDate)
+//    }
     
     // 공통 런 데이터 가져오기 함수
     private func fetchRunData(
@@ -117,6 +232,7 @@ class HealthKitManager {
                 Task {
                     var runData: [RunData] = []
                     for workout in workouts {
+                        let date = workout.startDate
                         let duration = workout.duration
                         let distance = workout.totalDistance?.doubleValue(for: .meter()) ?? 0.0
                         let calories = try await self.fetchCaloriesForWorkout(workout)
@@ -125,13 +241,15 @@ class HealthKitManager {
                         
                         runData.append(
                             RunData(
+                                date: date,
                                 duration: duration,
                                 distance: distance,
                                 calories: calories,
                                 pace: pace,
-                                cadence: cadence,
-                                startDate: workout.startDate,
-                                endDate: workout.endDate
+                                cadence: cadence
+                                
+//                                startDate: workout.startDate,
+//                                endDate: workout.endDate
                             )
                         )
                     }
@@ -207,6 +325,30 @@ class HealthKitManager {
             // 쿼리 실행
             healthStore.execute(query)
         }
+    }
+    
+    func fetchMonthlyAverageCadence() async throws -> Double {
+        let calendar = Calendar.current
+        let now = Date()
+        guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) else {
+            throw NSError(domain: "com.example.healthkit", code: 2, userInfo: [NSLocalizedDescriptionKey: "Unable to calculate the start of the month."])
+        }
+
+        // Fetch runs for the current month
+        let (indoorRuns, outdoorRuns, _, _) = try await fetchRunsThisMonth()
+
+        // Combine indoor and outdoor runs
+        let allRuns = indoorRuns + outdoorRuns
+
+        // Calculate average cadence
+        guard !allRuns.isEmpty else {
+            return 0.0 // No data available
+        }
+
+        let totalCadence = allRuns.reduce(0.0) { $0 + $1.cadence }
+        let averageCadence = totalCadence / Double(allRuns.count)
+
+        return averageCadence
     }
     
     // 공통 데이터 가져오기 함수
@@ -286,6 +428,7 @@ class HealthKitManager {
                     var outdoorCount = 0
                     
                     for workout in workouts {
+                        let date = workout.startDate
                         let duration = workout.duration
                         let distance = workout.totalDistance?.doubleValue(for: .meter()) ?? 0.0
                         let calories = try await self.fetchCaloriesForWorkout(workout)
@@ -294,13 +437,13 @@ class HealthKitManager {
                         
                         
                         let runData = RunData(
+                            date: date,
                             duration: duration,
                             distance: distance,
                             calories: calories,
                             pace: pace,
-                            cadence: cadence,
-                            startDate: workout.startDate,
-                            endDate: workout.endDate
+                            cadence: cadence
+                            
                         )
                         
                         if let isIndoor = workout.metadata?[HKMetadataKeyIndoorWorkout] as? Bool {
@@ -373,15 +516,4 @@ class HealthKitManager {
         // Return counts (dummy values here as query runs asynchronously)
         return (0, 0) // Update this with actual counts once asynchronous fetching is handled
     }
-}
-
-// 런 데이터 구조체
-struct RunData {
-    let duration: TimeInterval   // 운동 시간 (초 단위)
-    let distance: Double         // 거리 (미터)
-    let calories: Double         // 칼로리 (킬로칼로리)
-    let pace: Double             // 페이스 (초/km)
-    let cadence: Double // 스텝/분 (새로운 속성 추가)
-    let startDate: Date          // 운동 시작 시간
-    let endDate: Date            // 운동 종료 시간
 }

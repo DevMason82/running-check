@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MonthlyRunningDataView: View {
     @StateObject private var healthViewModel = HealthKitViewModel()
+    @StateObject private var prevRunningReportViewModel = PrevRunningReportViewModel()
     @State private var isLoading = true // 로딩 상태를 관리
     
     var body: some View {
@@ -24,9 +25,10 @@ struct MonthlyRunningDataView: View {
                             totalCaloriesBurned: healthViewModel.totalCaloriesBurned,
                             totalRunningTime: healthViewModel.totalRunningTime,
                             averagePace: healthViewModel.averagePace,
-                            averageCadence: healthViewModel.averageCadence,
+                            averageCadence: healthViewModel.averageMonthlyCadence,
                             indoorRunCount: healthViewModel.indoorRunCount,
-                            outdoorRunCount: healthViewModel.outdoorRunCount
+                            outdoorRunCount: healthViewModel.outdoorRunCount,
+                            lastMonthReport: prevRunningReportViewModel.lastMonthReport
                         )
                     } else {
                         NoDataView()
@@ -37,6 +39,7 @@ struct MonthlyRunningDataView: View {
         }
         .navigationTitle("\(healthViewModel.currentMonth) 러닝 기록")
         .navigationBarTitleDisplayMode(.large)
+//        .navigationBarBackButtonHidden(true)
         .onAppear {
             fetchData()
         }
@@ -46,6 +49,7 @@ struct MonthlyRunningDataView: View {
         Task {
             isLoading = true
             await healthViewModel.fetchMonthlyData()
+            await prevRunningReportViewModel.fetchLastMonthReport()
             isLoading = false
         }
     }

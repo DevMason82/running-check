@@ -15,84 +15,84 @@ struct RunningDataView: View {
     let outdoorRunCount: [RunData]
     
     var body: some View {
-       
-            
-            
-            VStack(alignment: .leading) {
-                // 이번 달 러닝 횟수 섹션
-                VStack(alignment: .leading, spacing: 10) {
-                    
-                    Text("\(formattedCurrentMonthYear()) 러닝 기록")
-                        .font(.title2)
+        
+        
+        
+        VStack(alignment: .leading) {
+            // 이번 달 러닝 횟수 섹션
+            VStack(alignment: .leading, spacing: 10) {
+                
+                Text("\(formattedCurrentMonthYear()) 러닝 기록")
+                    .font(.title2)
+                    .bold()
+                    .foregroundColor(Color("CardFontColor"))
+                
+                
+                
+                HStack {
+                    Image(systemName: "figure.run")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 28, height: 28)
+                        .foregroundColor(Color("CardFontColor"))
+                    Text("실외 러닝")
+                        .font(.headline)
+                        .foregroundColor(Color("CardFontColor"))
+                    Text("\(outdoorRunCount.count)회")
                         .bold()
                         .foregroundColor(Color("CardFontColor"))
+                        .font(.system(size: 20))
                     
+                    Spacer()
                     
-                    
-                    HStack {
-                        Image(systemName: "figure.run")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 28, height: 28)
-                            .foregroundColor(Color("CardFontColor"))
-                        Text("실외 러닝")
-                            .font(.headline)
-                            .foregroundColor(Color("CardFontColor"))
-                        Text("\(outdoorRunCount.count)회")
-                            .bold()
-                            .foregroundColor(Color("CardFontColor"))
-                            .font(.system(size: 20))
-                        
-                        Spacer()
-                        
-                        Image(systemName: "figure.run.treadmill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 28, height: 28)
-                            .foregroundColor(Color("CardFontColor"))
-                        Text("실내 러닝")
-                            .foregroundColor(Color("CardFontColor"))
-                            .font(.headline)
-                        Text("\(indoorRunCount.count)회")
-                            .bold()
-                            .foregroundColor(Color("CardFontColor"))
-                            .font(.system(size: 20))
-                    }
-                    .cornerRadius(10)
+                    Image(systemName: "figure.run.treadmill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 28, height: 28)
+                        .foregroundColor(Color("CardFontColor"))
+                    Text("실내 러닝")
+                        .foregroundColor(Color("CardFontColor"))
+                        .font(.headline)
+                    Text("\(indoorRunCount.count)회")
+                        .bold()
+                        .foregroundColor(Color("CardFontColor"))
+                        .font(.system(size: 20))
                 }
-                .padding(.bottom, 20)
-                
-                HStack(alignment: .top) {
-                    // 실외 러닝 정보
-                    SectionView(runs: outdoorRuns, title: "\(formattedCurrentDay()) 실외 러닝")
-                    
-                    // 실내 러닝 정보
-                    SectionView(runs: indoorRuns, title: "\(formattedCurrentDay()) 실내 러닝")
-                }
-                .padding(.leading, 15)
-                .padding(.bottom, 5)
-                
-                // NavigationLink to MonthlyRunningDataView
-                NavigationLink(destination: MonthlyRunningDataView()) {
-                    HStack {
-                            
-                            Text("이번 달 상세 기록 보기")
-                                .font(.headline)
-                                .foregroundColor(Color("CardFontColor"))
-                        Image(systemName: "arrow.forward")
-                            .font(.title3)
-                            .foregroundColor(Color("CardFontColor"))
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity)
-//                        .background(Color("CardColor").opacity(0.3))
-                        .cornerRadius(12)
-                        .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
-                }
-                
-                
+                .cornerRadius(10)
             }
-            .padding(.horizontal)
+            .padding(.bottom, 20)
+            
+            HStack(alignment: .top) {
+                // 실외 러닝 정보
+                SectionView(runs: outdoorRuns, title: "\(formattedCurrentDay()) 실외 러닝")
+                
+                // 실내 러닝 정보
+                SectionView(runs: indoorRuns, title: "\(formattedCurrentDay()) 실내 러닝")
+            }
+            .padding(.leading, 15)
+            .padding(.bottom, 5)
+            
+            // NavigationLink to MonthlyRunningDataView
+            NavigationLink(destination: MonthlyRunningDataView()) {
+                HStack {
+                    
+                    Text("이번 달 상세 기록 보기")
+                        .font(.headline)
+                        .foregroundColor(Color("CardFontColor"))
+                    Image(systemName: "arrow.forward")
+                        .font(.title3)
+                        .foregroundColor(Color("CardFontColor"))
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                //                        .background(Color("CardColor").opacity(0.3))
+                .cornerRadius(12)
+                .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+            }
+            
+            
+        }
+        .padding(.horizontal)
     }
     
     // 시간 포맷 함수
@@ -115,8 +115,8 @@ struct RunningDataView: View {
         let currentMonth = calendar.component(.month, from: Date())
         
         return runs.filter {
-            let runYear = calendar.component(.year, from: $0.startDate)
-            let runMonth = calendar.component(.month, from: $0.startDate)
+            let runYear = calendar.component(.year, from: $0.date)
+            let runMonth = calendar.component(.month, from: $0.date)
             return runYear == currentYear && runMonth == currentMonth
         }.count
     }
@@ -169,7 +169,7 @@ struct SectionView: View {
                 let groupedRuns = groupRunsByMonth(runs: runs)
                 ForEach(groupedRuns.sorted { $0.key > $1.key }, id: \.key) { month, runs in
                     VStack(alignment: .leading, spacing: 10) {
-                        ForEach(runs, id: \.startDate) { run in
+                        ForEach(runs, id: \.date) { run in
                             RunDetailView(run: run)
                         }
                     }
@@ -177,51 +177,15 @@ struct SectionView: View {
             }
         }
     }
-    // 이번 달 러닝 횟수 계산 함수
-    //    private func countCurrentMonthRuns(runs: [RunData]) -> Int {
-    //        let calendar = Calendar.current
-    //        let currentYear = calendar.component(.year, from: Date())
-    //        let currentMonth = calendar.component(.month, from: Date())
-    //
-    //        return runs.filter {
-    //            let runYear = calendar.component(.year, from: $0.startDate)
-    //            let runMonth = calendar.component(.month, from: $0.startDate)
-    //            return runYear == currentYear && runMonth == currentMonth
-    //        }.count
-    //    }
     
     private func groupRunsByMonth(runs: [RunData]) -> [String: [RunData]] {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM"
         
         return Dictionary(grouping: runs) { run in
-            dateFormatter.string(from: run.startDate)
+            dateFormatter.string(from: run.date)
         }
     }
-    
-    //    private func formatMonth(_ month: String) -> String {
-    //        let formatter = DateFormatter()
-    //        formatter.dateFormat = "yyyy-MM"
-    //        guard let date = formatter.date(from: month) else { return month }
-    //
-    //        // "yy년 MM월" 형식으로 변환
-    //        formatter.dateFormat = "yy년 MM월"
-    //        return formatter.string(from: date)
-    //    }
-    //
-    //    // 현재 월인지 확인
-    //    private func checkIfCurrentMonth(month: String) -> Bool {
-    //        let calendar = Calendar.current
-    //        let currentYear = calendar.component(.year, from: Date())
-    //        let currentMonth = calendar.component(.month, from: Date())
-    //
-    //        let formatter = DateFormatter()
-    //        formatter.dateFormat = "yyyy-MM"
-    //        guard let date = formatter.date(from: month) else { return false }
-    //
-    //        let components = calendar.dateComponents([.year, .month], from: date)
-    //        return components.year == currentYear && components.month == currentMonth
-    //    }
 }
 
 // View for displaying individual run details
@@ -268,7 +232,18 @@ struct RunDetailView: View {
                     .font(.caption)
                     .foregroundColor(Color("CardFontColor"))
                     .bold()
-                Text("\(run.pace / 60, specifier: "%.2f")/km")
+                Text("\(formatPace(run.pace))/km")
+                    .font(.title2)
+                    .bold()
+                    .foregroundColor(.mint)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("케이던스")
+                    .font(.caption)
+                    .foregroundColor(Color("CardFontColor"))
+                    .bold()
+                Text("\(run.cadence, specifier: "%.1f")spm")
                     .font(.title2)
                     .bold()
                     .foregroundColor(.mint)
@@ -291,48 +266,46 @@ struct RunDetailView: View {
             return "\(minutes):\(String(format: "%02d", seconds))"
         }
     }
+    
+    private func formatPace(_ pace: Double) -> String {
+            let minutes = Int(pace) / 60
+            let seconds = Int(pace) % 60
+            return String(format: "%d'%02d\"", minutes, seconds)
+        }
 }
 
 #Preview {
     RunningDataView(outdoorRuns: [
         RunData(
+            date: Date(),
             duration: 1800, // 30 minutes
             distance: 5000, // 5 km
             calories: 320.5,
-            pace: 360, cadence: 165.4, // 6 min/km
-            startDate: Date(),
-            endDate: Date()
+            pace: 360,
+            cadence: 110
         )
     ], indoorRuns: [
-        //        RunData(
-        //            duration: 1500, // 25 minutes
-        //            distance: 3000, // 3 km
-        //            calories: 200.0,
-        //            pace: 300, // 5 min/km
-        //            startDate: Date(),
-        //            endDate: Date()
-        //        )
     ],
-                    indoorRunCount:[
-                        RunData(
-                            duration: 1500, // 25 minutes
-                            distance: 3000, // 3 km
-                            calories: 200.0,
-                            pace: 300, cadence: 175.4, // 5 min/km
-                            startDate: Date(),
-                            endDate: Date()
-                        )
-                    ],
-                    outdoorRunCount: [
-                        RunData(
-                            duration: 1500, // 25 minutes
-                            distance: 3000, // 3 km
-                            calories: 200.0,
-                            pace: 300, cadence: 120, // 5 min/km
-                            startDate: Date(),
-                            endDate: Date()
-                        )
-                    ]
+    indoorRunCount:[
+        RunData(
+            date: Date(),
+            duration: 1500, // 25 minutes
+            distance: 3000, // 3 km
+            calories: 200.0,
+            pace: 300,
+            cadence: 175// 5 min/km
+        )
+    ],
+    outdoorRunCount: [
+        RunData(
+            date: Date(),
+            duration: 1500, // 25 minutes
+            distance: 3000, // 3 km
+            calories: 200.0,
+            pace: 300,
+            cadence: 120 // 5 min/km
+        )
+    ]
     )
     .background(Color.green)
     .environment(\.colorScheme, .light)
@@ -341,12 +314,14 @@ struct RunDetailView: View {
 #Preview {
     RunningDataView(outdoorRuns: [
         RunData(
+            date: Date(),
             duration: 1800, // 30 minutes
             distance: 5000, // 5 km
             calories: 320.5,
-            pace: 360, cadence: 165.4, // 6 min/km
-            startDate: Date(),
-            endDate: Date()
+            pace: 360,
+            cadence: 165.4 // 6 min/km
+            //            startDate: Date(),
+            //            endDate: Date()
         )
     ], indoorRuns: [
         //        RunData(
@@ -358,26 +333,30 @@ struct RunDetailView: View {
         //            endDate: Date()
         //        )
     ],
-                    indoorRunCount:[
-                        RunData(
-                            duration: 1500, // 25 minutes
-                            distance: 3000, // 3 km
-                            calories: 200.0,
-                            pace: 300, cadence: 175.4, // 5 min/km
-                            startDate: Date(),
-                            endDate: Date()
-                        )
-                    ],
-                    outdoorRunCount: [
-                        RunData(
-                            duration: 1500, // 25 minutes
-                            distance: 3000, // 3 km
-                            calories: 200.0,
-                            pace: 300, cadence: 120, // 5 min/km
-                            startDate: Date(),
-                            endDate: Date()
-                        )
-                    ]
+    indoorRunCount:[
+        RunData(
+            date: Date(),
+            duration: 1500, // 25 minutes
+            distance: 3000, // 3 km
+            calories: 200.0,
+            pace: 300,
+            cadence: 175.4 // 5 min/km
+            //                            startDate: Date(),
+            //                            endDate: Date()
+        )
+    ],
+    outdoorRunCount: [
+        RunData(
+            date: Date(),
+            duration: 1500, // 25 minutes
+            distance: 3000, // 3 km
+            calories: 200.0,
+            pace: 300,
+            cadence: 120 // 5 min/km
+            //                            startDate: Date(),
+            //                            endDate: Date()
+        )
+    ]
     )
     .background(Color.green)
     .environment(\.colorScheme, .dark)

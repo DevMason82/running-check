@@ -4,74 +4,6 @@
 //
 //  Created by mason on 11/30/24.
 //
-
-//import Foundation
-//
-//@MainActor
-//class HealthKitViewModel: ObservableObject {
-//    @Published var activeCalories: Double = 0.0
-//    @Published var runningDistance: Double = 0.0
-//    @Published var errorMessage: String?
-//
-//    private let healthKitManager = HealthKitManager()
-//    private let calendar = Calendar.current
-//
-//    // HealthKit 권한 요청
-//    func requestAuthorization() async {
-//        do {
-//            try await healthKitManager.requestAuthorization()
-//        } catch {
-//            setError("Failed to authorize HealthKit: \(error.localizedDescription)")
-//        }
-//    }
-//
-//    // 오늘 칼로리 데이터 가져오기
-//    func fetchActiveCaloriesToday() async {
-//        do {
-//            let todayCalories = try await healthKitManager.fetchActiveCalories(startDate: startOfDay, endDate: Date())
-//            self.activeCalories = todayCalories
-//        } catch {
-//            setError("Failed to fetch today's calories: \(error.localizedDescription)")
-//        }
-//    }
-//
-//    // 오늘 러닝 거리 데이터 가져오기
-//    func fetchRunningDistanceToday() async {
-//        do {
-//            let todayDistance = try await healthKitManager.fetchRunningDistance(startDate: startOfDay, endDate: Date())
-//            self.runningDistance = todayDistance
-//        } catch {
-//            setError("Failed to fetch today's running distance: \(error.localizedDescription)")
-//        }
-//    }
-//
-//    // 모든 데이터 가져오기 (오늘 기준)
-//    func fetchAllHealthDataToday() async {
-//        await fetchActiveCaloriesToday()
-//        await fetchRunningDistanceToday()
-//    }
-//
-//    // 에러 메시지 설정
-//    private func setError(_ message: String) {
-//        DispatchQueue.main.async {
-//            self.errorMessage = message
-//        }
-//    }
-//
-//    // 오늘의 시작 시간 계산
-//    private var startOfDay: Date {
-//        calendar.startOfDay(for: Date())
-//    }
-//
-//    // 미리보기용 ViewModel
-//    static var preview: HealthKitViewModel {
-//        let viewModel = HealthKitViewModel()
-//        viewModel.activeCalories = 350.0
-//        viewModel.runningDistance = 5000.0
-//        return viewModel
-//    }
-//}
-
 import Foundation
 
 @MainActor
@@ -94,6 +26,7 @@ class HealthKitViewModel: ObservableObject {
     @Published var averagePace: Double = 0.0 // 초/킬로미터
     @Published var averageCadence: Double = 0.0 // 스텝/분
     @Published var currentMonth: String = ""
+    @Published var averageMonthlyCadence: Double = 0.0 // 이번 달 평균 케이던스
     
     
     private let calendar = Calendar.current
@@ -165,11 +98,20 @@ class HealthKitViewModel: ObservableObject {
         }
     }
     
+    func fetchMonthlyCadence() async {
+            do {
+                let cadence = try await healthKitManager.fetchMonthlyAverageCadence()
+                self.averageMonthlyCadence = cadence
+                print("이번 달 평균 케이던스: \(cadence) spm")
+            } catch {
+                setError("Failed to fetch monthly cadence: \(error.localizedDescription)")
+            }
+        }
+    
     func fetchMonthlyData() async {
             do {
                 // 현재 달 이름
                 let dateFormatter = DateFormatter()
-//                dateFormatter.dateFormat = "yy-MM"
                 dateFormatter.dateFormat = "yy년 M월"
                 currentMonth = dateFormatter.string(from: Date())
                 
@@ -186,9 +128,12 @@ class HealthKitViewModel: ObservableObject {
                 let totalPace = allRuns.reduce(0) { $0 + $1.pace }
                 averagePace = allRuns.count > 0 ? totalPace / Double(allRuns.count) : 0
                 
-                // 평균 케이던스 계산 (예제 데이터)
-                let totalCadence = allRuns.reduce(0) { $0 + $1.cadence } // $1.cadence 사용
+                // 평균 케이던스 계산
+                let totalCadence = allRuns.reduce(0) { $0 + $1.cadence }
                 averageCadence = allRuns.count > 0 ? totalCadence / Double(allRuns.count) : 0
+
+                // 이번 달 평균 케이던스 가져오기
+                await fetchMonthlyCadence()
                 
                 indoorRunCount = indoorCount
                 outdoorRunCount = outdoorCount
@@ -196,6 +141,38 @@ class HealthKitViewModel: ObservableObject {
                 print("Error fetching monthly data: \(error.localizedDescription)")
             }
         }
+
+    
+//    func fetchMonthlyData() async {
+//            do {
+//                // 현재 달 이름
+//                let dateFormatter = DateFormatter()
+//                dateFormatter.dateFormat = "yy년 M월"
+//                currentMonth = dateFormatter.string(from: Date())
+//                
+//                let (indoorRuns, outdoorRuns, indoorCount, outdoorCount) = try await healthKitManager.fetchRunsThisMonth()
+//                
+//                // 총 러닝 데이터
+//                let allRuns = indoorRuns + outdoorRuns
+//                
+//                totalRunningDistance = allRuns.reduce(0) { $0 + $1.distance } / 1000.0 // Convert to km
+//                totalCaloriesBurned = allRuns.reduce(0) { $0 + $1.calories }
+//                totalRunningTime = allRuns.reduce(0) { $0 + $1.duration }
+//                
+//                // 평균 페이스 (초/킬로미터)
+//                let totalPace = allRuns.reduce(0) { $0 + $1.pace }
+//                averagePace = allRuns.count > 0 ? totalPace / Double(allRuns.count) : 0
+//                
+//                // 평균 케이던스 계산 (예제 데이터)
+//                let totalCadence = allRuns.reduce(0) { $0 + $1.cadence } // $1.cadence 사용
+//                averageCadence = allRuns.count > 0 ? totalCadence / Double(allRuns.count) : 0
+//                
+//                indoorRunCount = indoorCount
+//                outdoorRunCount = outdoorCount
+//            } catch {
+//                print("Error fetching monthly data: \(error.localizedDescription)")
+//            }
+//        }
     
     // 모든 데이터 가져오기 (오늘 기준)
     func fetchAllHealthDataToday() async {
