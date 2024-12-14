@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MonthlyRunningDataView: View {
     @StateObject private var healthViewModel = HealthKitViewModel()
+    @StateObject private var currentMonthRunningReportViewModel = CurrentMonthRunningReportViewModel()
     @StateObject private var prevRunningReportViewModel = PrevRunningReportViewModel()
     @State private var isLoading = true // 로딩 상태를 관리
     
@@ -16,19 +17,28 @@ struct MonthlyRunningDataView: View {
         ScrollView(showsIndicators: false) {
             if isLoading {
                 // 로딩 UI
-                PendingView(message: "\(healthViewModel.currentMonth) 러닝 기록 가져오는 중입니다...")
+                PendingView(message: "러닝 기록 가져오는 중입니다...")
             } else {
                 VStack {
                     if healthViewModel.totalRunningDistance > 0 {
                         MonthlyInfoView(
-                            totalRunningDistance: healthViewModel.totalRunningDistance,
-                            totalCaloriesBurned: healthViewModel.totalCaloriesBurned,
-                            totalRunningTime: healthViewModel.totalRunningTime,
-                            averagePace: healthViewModel.averagePace,
-                            averageCadence: healthViewModel.averageMonthlyCadence,
-                            indoorRunCount: healthViewModel.indoorRunCount,
-                            outdoorRunCount: healthViewModel.outdoorRunCount,
-                            lastMonthReport: prevRunningReportViewModel.lastMonthReport
+                            month:healthViewModel.currentMonth,
+                            totalDistance: currentMonthRunningReportViewModel.totalDistance,
+                            totalCalories: currentMonthRunningReportViewModel.totalCalories,
+                            totalDuration: currentMonthRunningReportViewModel.totalDuration,
+                            averagePace: currentMonthRunningReportViewModel.averagePace,
+                            averageCadence: currentMonthRunningReportViewModel.averageCadence,
+                            runCount: currentMonthRunningReportViewModel.runCount
+                        )
+                        Divider()
+                            .padding(.vertical, 20)
+                        PrevMonthlyInfoView(
+                            totalDistance: prevRunningReportViewModel.totalDistance,
+                            totalCalories: prevRunningReportViewModel.totalCalories,
+                            totalDuration: prevRunningReportViewModel.totalDuration,
+                            averagePace: prevRunningReportViewModel.averagePace,
+                            averageCadence: prevRunningReportViewModel.averageCadence,
+                            runCount: prevRunningReportViewModel.runCount
                         )
                     } else {
                         NoDataView()
@@ -39,7 +49,6 @@ struct MonthlyRunningDataView: View {
         }
         .navigationTitle("\(healthViewModel.currentMonth) 러닝 기록")
         .navigationBarTitleDisplayMode(.large)
-//        .navigationBarBackButtonHidden(true)
         .onAppear {
             fetchData()
         }
@@ -49,6 +58,7 @@ struct MonthlyRunningDataView: View {
         Task {
             isLoading = true
             await healthViewModel.fetchMonthlyData()
+            await currentMonthRunningReportViewModel.fetchCurrentMonthReport()
             await prevRunningReportViewModel.fetchLastMonthReport()
             isLoading = false
         }

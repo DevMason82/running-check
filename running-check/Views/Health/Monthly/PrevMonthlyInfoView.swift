@@ -1,24 +1,23 @@
 //
-//  MonthlyInfoView.swift
+//  PrevMonthlyInfoView.swift
 //  running-check
 //
-//  Created by mason on 12/12/24.
+//  Created by mason on 12/13/24.
 //
 
 import SwiftUI
 
-struct MonthlyInfoView: View {
-    let month: String
+struct PrevMonthlyInfoView: View {
     let totalDistance: Double // 총 거리 (km)
     let totalCalories: Double // 총 소모 칼로리 (kcal)
     let totalDuration: TimeInterval // 총 러닝 시간 (초)
-    let averagePace: Double // 평균 페이스 ("12'22\"/km")
+    let averagePace: Double // 평균 페이스
     let averageCadence: Double // 평균 케이던스 (spm)
     let runCount: Int // 러닝 횟수
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("\(month) 러닝 기록")
+            Text("지난달 러닝 기록")
                 .font(.headline)
                 .padding(.bottom, 10)
             
@@ -26,7 +25,7 @@ struct MonthlyInfoView: View {
                 Text("총 거리")
                 Spacer()
                 Text("\(formattedNumber(Int(totalDistance))) km")
-                                    .bold()
+                    .bold()
             }
             .padding(.horizontal)
             
@@ -34,7 +33,7 @@ struct MonthlyInfoView: View {
                 Text("총 칼로리")
                 Spacer()
                 Text("\(formattedNumber(Int(totalCalories))) kcal")
-                                    .bold()
+                    .bold()
             }
             .padding(.horizontal)
             
@@ -53,7 +52,7 @@ struct MonthlyInfoView: View {
                     .bold()
             }
             .padding(.horizontal)
-            
+
             HStack {
                 Text("평균 케이던스")
                 Spacer()
@@ -74,19 +73,6 @@ struct MonthlyInfoView: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(10)
         .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3)
-    }
-    private func formattedTime(_ time: TimeInterval) -> String {
-        let hours = Int(time) / 3600
-        let minutes = (Int(time) % 3600) / 60
-        let seconds = Int(time) % 60
-        return "\(hours):\(minutes):\(seconds)"
-    }
-    
-    private func formattedPace(_ pace: Double) -> String {
-        guard pace > 0 else { return "-" }
-        let minutes = Int(pace) / 60
-        let seconds = Int(pace) % 60
-        return String(format: "%d:%02d min/km", minutes, seconds)
     }
     
     private func formatDuration(_ duration: TimeInterval) -> String {
@@ -109,68 +95,8 @@ struct MonthlyInfoView: View {
     }
 }
 
-struct HighlightCard: View {
-    let title: String
-    let value: String
-    let systemImage: String
-    
-    var body: some View {
-        VStack(spacing: 10) {
-            Image(systemName: systemImage)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 50, height: 50)
-                .foregroundColor(.white)
-            Text(value)
-                .font(.title2)
-                .bold()
-                .foregroundColor(.white)
-            Text(title)
-                .font(.subheadline)
-                .foregroundColor(.white.opacity(0.8))
-        }
-        .padding()
-        .frame(maxWidth: .infinity, minHeight: 150)
-        .background(LinearGradient(
-            gradient: Gradient(colors: [.blue, .purple]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        ))
-        .cornerRadius(15)
-        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
-    }
-}
-
-struct StatCard: View {
-    let title: String
-    let value: String
-    let systemImage: String
-    
-    var body: some View {
-        VStack(spacing: 10) {
-            Image(systemName: systemImage)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 40, height: 40)
-                .foregroundColor(.accentColor)
-            Text(value)
-                .font(.title)
-                .bold()
-            Text(title)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-        }
-        .padding()
-        .frame(maxWidth: .infinity, minHeight: 120)
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3)
-    }
-}
-
 #Preview {
-    MonthlyInfoView(
-        month: "24년 12월",
+    PrevMonthlyInfoView(
         totalDistance: 223300,
         totalCalories: 4500,
         totalDuration: 3600 * 5 + 30 * 60,
@@ -179,5 +105,3 @@ struct StatCard: View {
         runCount: 20
     )
 }
-
-

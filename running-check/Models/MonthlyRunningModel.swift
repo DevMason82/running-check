@@ -26,5 +26,13 @@ struct RunData {
     let calories: Double
     let pace: Double
     let cadence: Double
-    
+}
+
+struct RunningReport {
+    let totalDistance: Double // 총 거리 (km)
+    let totalCalories: Double // 총 소모 칼로리 (kcal)
+    let totalDuration: TimeInterval // 총 러닝 시간 (초)
+    let averagePace: Double // 평균 페이스 (초/킬로미터)
+    let averageCadence: Double // 평균 케이던스 (spm)
+    let runCount: Int // 러닝 횟수
 }
