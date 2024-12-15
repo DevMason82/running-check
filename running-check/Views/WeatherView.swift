@@ -131,6 +131,7 @@ struct WeatherView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var lastRefreshTime: Date = .distantPast // 마지막 데이터 로드 시간
+    @State private var isLoading: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -215,21 +216,23 @@ struct WeatherView: View {
     }
 
     private func refreshData() async {
-        if shouldRefresh() {
+        guard !isLoading, shouldRefresh() else { return }
+            isLoading = true
+            defer { isLoading = false }
+            
             lastRefreshTime = Date()
             await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
             await healthViewModel.fetchAllHealthDataToday()
-        }
     }
 
     private func refreshDataIfNeeded() async {
-        if Date().timeIntervalSince(lastRefreshTime) > 300 { // 최소 5분 간격으로 갱신
+        if Date().timeIntervalSince(lastRefreshTime) > 180 { // 최소 3분 간격으로 갱신
             await refreshData()
         }
     }
 
     private func shouldRefresh() -> Bool {
-        return Date().timeIntervalSince(lastRefreshTime) > 300 // 최소 5분 간격 확인
+        return Date().timeIntervalSince(lastRefreshTime) > 180 // 최소 3분 간격 확인
     }
 
     private func openAppSettings() {

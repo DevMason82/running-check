@@ -70,9 +70,10 @@ struct PrevMonthlyInfoView: View {
             .padding(.horizontal)
         }
         .padding()
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(10)
-        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3)
+        .foregroundColor(Color("CardFontColor"))
+//        .background(Color(.secondarySystemBackground))
+//        .cornerRadius(10)
+//        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3)
     }
     
     private func formatDuration(_ duration: TimeInterval) -> String {
