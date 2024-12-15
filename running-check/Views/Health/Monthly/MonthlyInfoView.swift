@@ -26,7 +26,7 @@ struct MonthlyInfoView: View {
                 Text("총 거리")
                 Spacer()
                 Text("\(formattedNumber(Int(totalDistance))) km")
-                                    .bold()
+                    .bold()
             }
             .padding(.horizontal)
             
@@ -34,7 +34,7 @@ struct MonthlyInfoView: View {
                 Text("총 칼로리")
                 Spacer()
                 Text("\(formattedNumber(Int(totalCalories))) kcal")
-                                    .bold()
+                    .bold()
             }
             .padding(.horizontal)
             
@@ -71,7 +71,8 @@ struct MonthlyInfoView: View {
             .padding(.horizontal)
         }
         .padding()
-        .background(Color(.secondarySystemBackground))
+        .background(Color("CardColor").opacity(0.3))
+        .foregroundColor(Color("CardFontColor"))
         .cornerRadius(10)
         .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3)
     }
@@ -109,64 +110,64 @@ struct MonthlyInfoView: View {
     }
 }
 
-struct HighlightCard: View {
-    let title: String
-    let value: String
-    let systemImage: String
-    
-    var body: some View {
-        VStack(spacing: 10) {
-            Image(systemName: systemImage)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 50, height: 50)
-                .foregroundColor(.white)
-            Text(value)
-                .font(.title2)
-                .bold()
-                .foregroundColor(.white)
-            Text(title)
-                .font(.subheadline)
-                .foregroundColor(.white.opacity(0.8))
-        }
-        .padding()
-        .frame(maxWidth: .infinity, minHeight: 150)
-        .background(LinearGradient(
-            gradient: Gradient(colors: [.blue, .purple]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        ))
-        .cornerRadius(15)
-        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
-    }
-}
-
-struct StatCard: View {
-    let title: String
-    let value: String
-    let systemImage: String
-    
-    var body: some View {
-        VStack(spacing: 10) {
-            Image(systemName: systemImage)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 40, height: 40)
-                .foregroundColor(.accentColor)
-            Text(value)
-                .font(.title)
-                .bold()
-            Text(title)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-        }
-        .padding()
-        .frame(maxWidth: .infinity, minHeight: 120)
-        .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3)
-    }
-}
+//struct HighlightCard: View {
+//    let title: String
+//    let value: String
+//    let systemImage: String
+//    
+//    var body: some View {
+//        VStack(spacing: 10) {
+//            Image(systemName: systemImage)
+//                .resizable()
+//                .scaledToFit()
+//                .frame(width: 50, height: 50)
+//                .foregroundColor(.white)
+//            Text(value)
+//                .font(.title2)
+//                .bold()
+//                .foregroundColor(.white)
+//            Text(title)
+//                .font(.subheadline)
+//                .foregroundColor(.white.opacity(0.8))
+//        }
+//        .padding()
+//        .frame(maxWidth: .infinity, minHeight: 150)
+//        .background(LinearGradient(
+//            gradient: Gradient(colors: [.blue, .purple]),
+//            startPoint: .topLeading,
+//            endPoint: .bottomTrailing
+//        ))
+//        .cornerRadius(15)
+//        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
+//    }
+//}
+//
+//struct StatCard: View {
+//    let title: String
+//    let value: String
+//    let systemImage: String
+//    
+//    var body: some View {
+//        VStack(spacing: 10) {
+//            Image(systemName: systemImage)
+//                .resizable()
+//                .scaledToFit()
+//                .frame(width: 40, height: 40)
+//                .foregroundColor(.accentColor)
+//            Text(value)
+//                .font(.title)
+//                .bold()
+//            Text(title)
+//                .font(.subheadline)
+//                .foregroundColor(.secondary)
+//        }
+//        .padding()
+//        .frame(maxWidth: .infinity, minHeight: 120)
+//        .background(Color(.secondarySystemBackground))
+//        .cornerRadius(12)
+//        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3)
+//    }
+//}
 
 #Preview {
     MonthlyInfoView(
