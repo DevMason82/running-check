@@ -32,12 +32,13 @@ struct CoachCard: View {
         VStack(alignment: .leading, spacing: 5) {
             Text(title)
                 .bold()
-                .font(.headline)
+                .font(.subheadline)
                 .foregroundColor(Color("CardFontColor"))
                 .frame(maxWidth: .infinity, alignment: .leading)
             Text(content)
                 .bold()
-                .font(.system(size: 16))
+//                .font(.system(size: 16))
+                .font(.body)
                 .foregroundColor(Color("CardFontColor"))
                 .frame(maxWidth: .infinity, alignment: .leading)
         }

@@ -23,7 +23,7 @@ struct RunningDataView: View {
             VStack(alignment: .leading, spacing: 10) {
                 
                 Text("\(formattedCurrentMonthYear()) 러닝 기록")
-                    .font(.title2)
+                    .font(.title)
                     .bold()
                     .foregroundColor(Color("CardFontColor"))
                 
@@ -69,7 +69,7 @@ struct RunningDataView: View {
                 // 실내 러닝 정보
                 SectionView(runs: indoorRuns, title: "\(formattedCurrentDay()) 실내 러닝")
             }
-            .padding(.leading, 15)
+//            .padding(.leading, 15)
             .padding(.bottom, 5)
             
             // NavigationLink to MonthlyRunningDataView
@@ -145,22 +145,23 @@ struct SectionView: View {
             HStack {
                 Text(title)
                     .bold()
-                    .font(.system(size: 16))
+//                    .font(.system(size: 16))
+                    .font(.title3)
                     .foregroundColor(Color("CardFontColor"))
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             if runs.isEmpty {
                 VStack{
                     Text("아직 러닝 기록이 없네요.")
-                    //                        .font(.system(size: 14))
+//                                            .font(.system(size: 16))
                         .foregroundColor(Color("CardFontColor"))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text("지금이 시작하기에 가장 좋은 시간이에요!🏃🏻‍♀️")
-                    //                        .font(.system(size: 14))
+//                                            .font(.system(size: 16))
                         .foregroundColor(Color("CardFontColor"))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .font(.system(size: 14))
+                .font(.system(size: 16))
                 .padding(10)
                 .background(Color("CardColor").opacity(0.3))
                 .cornerRadius(10)
@@ -200,7 +201,7 @@ struct RunDetailView: View {
                     .foregroundColor(Color("CardFontColor"))
                     .bold()
                 Text("\(formatDuration(run.duration))")
-                    .font(.title2)
+                    .font(.system(size: 20))
                     .bold()
                     .foregroundColor(.yellow)
             }
@@ -211,7 +212,7 @@ struct RunDetailView: View {
                     .foregroundColor(Color("CardFontColor"))
                     .bold()
                 Text("\(run.distance / 1000, specifier: "%.2f") km")
-                    .font(.title2)
+                    .font(.system(size: 20))
                     .bold()
                     .foregroundColor(.blue)
             }
@@ -222,7 +223,7 @@ struct RunDetailView: View {
                     .foregroundColor(Color("CardFontColor"))
                     .bold()
                 Text("\(run.calories, specifier: "%.1f") kcal")
-                    .font(.title2)
+                    .font(.system(size: 20))
                     .bold()
                     .foregroundColor(.pink)
             }
@@ -233,7 +234,7 @@ struct RunDetailView: View {
                     .foregroundColor(Color("CardFontColor"))
                     .bold()
                 Text("\(formatPace(run.pace))/km")
-                    .font(.title2)
+                    .font(.system(size: 20))
                     .bold()
                     .foregroundColor(.mint)
             }
@@ -244,7 +245,7 @@ struct RunDetailView: View {
                     .foregroundColor(Color("CardFontColor"))
                     .bold()
                 Text("\(run.cadence, specifier: "%.1f")spm")
-                    .font(.title2)
+                    .font(.system(size: 20))
                     .bold()
                     .foregroundColor(.mint)
             }
