@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MonthlyRunningDataView: View {
+    @Environment(\.presentationMode) var presentationMode // 뒤로가기 기능을 제공
     @StateObject private var weatherKitViewModel = WeatherKitViewModel()
     @StateObject private var healthViewModel = HealthKitViewModel()
     @StateObject private var currentMonthRunningReportViewModel = CurrentMonthRunningReportViewModel()
@@ -43,7 +44,14 @@ struct MonthlyRunningDataView: View {
                                     totalDuration: currentMonthRunningReportViewModel.totalDuration,
                                     averagePace: currentMonthRunningReportViewModel.averagePace,
                                     averageCadence: currentMonthRunningReportViewModel.averageCadence,
-                                    runCount: currentMonthRunningReportViewModel.runCount
+                                    runCount: currentMonthRunningReportViewModel.runCount,
+                                    
+                                    prevTotalDistance: prevRunningReportViewModel.totalDistance,
+                                    prevTotalCalories: prevRunningReportViewModel.totalCalories,
+                                    prevTotalDuration: prevRunningReportViewModel.totalDuration,
+                                    prevAveragePace: prevRunningReportViewModel.averagePace,
+                                    prevAverageCadence: prevRunningReportViewModel.averageCadence,
+                                    prevRunCount: prevRunningReportViewModel.runCount
                                 )
                                 PrevMonthlyInfoView(
                                     totalDistance: prevRunningReportViewModel.totalDistance,
@@ -61,11 +69,29 @@ struct MonthlyRunningDataView: View {
                     }
                     .navigationTitle("\(healthViewModel.currentMonth) 러닝 기록")
                     .navigationBarTitleDisplayMode(.large)
+//                    .navigationBarBackButtonHidden()
+//                    .toolbarBackgroundVisibility(.hidden)
+//                    .scrollContentBackground(.hidden)
+//                    .toolbar {
+//                        ToolbarItem(placement: .navigationBarLeading) {
+//                            Button(action: {
+//                                presentationMode.wrappedValue.dismiss() // 뒤로가기 동작
+//                            }) {
+//                                HStack {
+//                                    Image(systemName: "chevron.left")
+//                                        .font(.body)
+//                                }
+//                                .foregroundColor(Color("CardFontColor")) // 뒤로가기 버튼 색상
+//                            }
+//                        }
+//                        
+//                        ToolbarItem(placement: .principal) { // 타이틀 커스텀
+//                            Text("\(healthViewModel.currentMonth) 러닝 기록")
+//                                .font(.largeTitle.bold())
+//                                .foregroundStyle(Color("CardFontColor")) // 타이틀 색상 변경
+//                        }
+//                    }
                 }
-                
-//                .onAppear {
-//                    fetchData()
-//                }
             }
         }
         .animation(.easeInOut, value: isLoading) // 상태 변경 시 애니메이션
@@ -100,8 +126,8 @@ struct HeaderView: View {
 struct NoDataView: View {
     var body: some View {
         ZStack {
-//            Color(.systemBackground)
-//                .ignoresSafeArea()
+            //            Color(.systemBackground)
+            //                .ignoresSafeArea()
             
             VStack {
                 Text("이번 달 데이터가 없습니다.")
