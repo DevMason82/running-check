@@ -24,7 +24,7 @@ struct PrevMonthlyInfoView: View {
             HStack {
                 Text("총 거리")
                 Spacer()
-                Text("\(formattedNumber(Int(totalDistance))) km")
+                Text("\(formattedNumber2(totalDistance)) km")
                     .bold()
             }
             .padding(.horizontal)
@@ -94,15 +94,21 @@ struct PrevMonthlyInfoView: View {
         numberFormatter.numberStyle = .decimal
         return numberFormatter.string(from: NSNumber(value: value)) ?? "\(value)"
     }
+    private func formattedNumber2(_ value: Double) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        return numberFormatter.string(from: NSNumber(value: value)) ?? "\(value)"
+    }
 }
 
 #Preview {
     PrevMonthlyInfoView(
-        totalDistance: 223300,
+        totalDistance: 223.89,
         totalCalories: 4500,
         totalDuration: 3600 * 5 + 30 * 60,
         averagePace: 360,
         averageCadence: 450,
         runCount: 20
     )
+    .background(.blue)
 }

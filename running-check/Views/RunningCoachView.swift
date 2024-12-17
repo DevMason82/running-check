@@ -43,7 +43,7 @@ struct CoachCard: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding()
-        .background(Color("CardColor").opacity(0.3))
+        .background(Color("CardColor").opacity(0.5))
         .cornerRadius(10)
     }
 }
