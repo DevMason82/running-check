@@ -33,6 +33,7 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate,Observable
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
+        content.badge = NSNumber(value: 1)
         content.sound = .default
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
@@ -98,6 +99,7 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate,Observable
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
+        content.badge = NSNumber(value: 1)
         content.sound = .default
         
         var dateComponents = DateComponents()
