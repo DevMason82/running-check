@@ -33,7 +33,7 @@ struct WeatherGridView: View {
                     //            WeatherCard(title: "적설량", value: weather.snowfallAmount)
                     WeatherCard(title: "자외선", value: weather.uvIndex)
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 20)
             }
         }
         

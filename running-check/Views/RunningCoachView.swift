@@ -13,12 +13,22 @@ struct RunningCoachView: View {
 
     var body: some View {
         if let coach = coach {
-            VStack(alignment: .leading, spacing: 10) {
-                CoachCard(title: "러닝코멘트", content: coach.comment)
-                CoachCard(title: "러닝용품", content: coach.gear)
-                CoachCard(title: "러닝화", content: coach.shoes)
+            VStack(alignment: .leading) {
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(alignment: .top, spacing: 20) {
+                        CoachCard(title: "러닝코멘트", content: coach.comment)
+                        CoachCard(title: "러닝추천", content: coach.alternative)
+                        CoachCard(title: "러닝용품", content: coach.gear)
+                        CoachCard(title: "러닝화", content: coach.shoes)
+                    }
+                    .scrollTargetLayout()
+                }
+                .contentMargins(20, for: .scrollContent) // Add padding
+                .scrollTargetBehavior(.viewAligned) // Align content behavior
+                
             }
-            .padding(.horizontal)
+//            .padding(.horizontal)
         }
     }
 }
@@ -45,13 +55,19 @@ struct CoachCard: View {
         .padding()
         .background(Color("CardColor").opacity(0.5))
         .cornerRadius(10)
+        .frame(width: UIScreen.main.bounds.width - 80)
+        .scrollTransition { content, phase in
+            content
+                .opacity(phase.isIdentity ? 1 : 0.5) // Apply opacity animation
+                .scaleEffect(y: phase.isIdentity ? 1 : 0.7) // Apply scale animation
+        }
     }
 }
 
 #Preview {
     RunningCoachView(
         coach: RunningCoach(
-            comment: "Great weather for running. Stay hydrated and enjoy your run!",
+            comment: "Great weather for running. Stay hydrated and enjoy your run!", alternative: "sdfsdjvlkjsdlkjsf",
             gear: "Light running clothes",
             shoes: "Cushioned running shoes"
         )
@@ -64,6 +80,7 @@ struct CoachCard: View {
     RunningCoachView(
         coach: RunningCoach(
             comment: "Great weather for running. Stay hydrated and enjoy your run!",
+            alternative: "sdfsdjvlkjsdlkjsf",
             gear: "Light running clothes",
             shoes: "Cushioned running shoes"
         )

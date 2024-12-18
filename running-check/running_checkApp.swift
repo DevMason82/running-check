@@ -38,21 +38,43 @@ struct running_checkApp: App {
                 }
             }
             .animation(.easeInOut, value: isLoading) // 상태 변경 시 애니메이션
-//            .onAppear {
-//                // 요청 초기화 알림 권한
-//                notificationManager.requestAuthorization()
-//            }
+            //            .onAppear {
+            //                // 요청 초기화 알림 권한
+            //                notificationManager.requestAuthorization()
+            //            }
         }
     }
     
     private func fetchInitialData() async {
         isLoading = true
+        
         // 데이터 불러오기 순서: 위치 → 날씨 → 헬스 데이터
         await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
         await healthViewModel.requestAuthorization()
         await healthViewModel.fetchAllHealthDataToday()
+        
+        // 알림 권한 요청
         notificationManager.requestNotificationPermission()
-        notificationManager.scheduleDailyNotifications()
+        
+        // 계절별 알림 스케줄링
+        let currentSeason = getCurrentSeason()
+        notificationManager.scheduleSeasonalDailyNotifications(for: currentSeason)
+        
         isLoading = false
+    }
+    
+    /// 현재 계절 반환
+    private func getCurrentSeason() -> String {
+        let month = Calendar.current.component(.month, from: Date())
+        switch month {
+        case 3...5:
+            return "spring" // 봄
+        case 6...8:
+            return "summer" // 여름
+        case 9...11:
+            return "autumn" // 가을
+        default:
+            return "winter" // 겨울
+        }
     }
 }
