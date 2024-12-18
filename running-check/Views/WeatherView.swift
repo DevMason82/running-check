@@ -197,9 +197,13 @@ struct WeatherView: View {
             }
             
             RunningCoachView(coach: weatherKitViewModel.runningCoach)
-                .padding(.bottom, 15)
+//                .padding(.bottom, 15)
             
-            Divider().padding(.horizontal).padding(.bottom, 15)
+            Divider()
+                .frame(height: 1)
+                .background(Color("CardFontColor"))
+                .padding(.horizontal)
+                .padding(.bottom, 15)
             
             RunningDataView(
                 outdoorRuns: healthViewModel.outdoorRuns,
@@ -207,9 +211,13 @@ struct WeatherView: View {
                 indoorRunCount: healthViewModel.allIndoorRunsThisMonth,
                 outdoorRunCount: healthViewModel.allOutdoorRunsThisMonth
             )
-            .padding(.bottom, 15)
+//            .padding(.bottom, 15)
             
-            Divider().padding(.horizontal).padding(.bottom, 15)
+            Divider()
+                .frame(height: 1)
+                .background(Color("CardFontColor"))
+                .padding(.horizontal)
+                .padding(.bottom, 15)
             
             WeatherGridView(weather: weather)
         }

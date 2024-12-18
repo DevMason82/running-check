@@ -22,7 +22,7 @@ struct RunningDataView: View {
                 .foregroundColor(Color("CardFontColor"))
                 .padding(.horizontal)
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 25) {
+                HStack(spacing: 20) {
                     VStack(alignment: .center) {
                         HStack {
                             Image(systemName: "figure.run")
@@ -38,7 +38,7 @@ struct RunningDataView: View {
                                 .foregroundColor(Color("CardFontColor"))
                                 .font(.system(size: 20))
                         }
-                        .padding(.bottom, 10)
+                        .padding(.bottom, 15)
                         
 //                        Spacer()
                         
@@ -68,7 +68,7 @@ struct RunningDataView: View {
                                 .foregroundColor(Color("CardFontColor"))
                                 .font(.system(size: 20))
                         }
-                        .padding(.bottom, 10)
+                        .padding(.bottom, 15)
                         
 //                        Spacer()
                         
@@ -86,7 +86,7 @@ struct RunningDataView: View {
                 .scrollTargetLayout()
                 
             }
-            .contentMargins(30, for: .scrollContent) // Add padding
+            .contentMargins(20, for: .scrollContent) // Add padding
             .scrollTargetBehavior(.viewAligned) // Align content behavior
             
             NavigationLink(destination: MonthlyRunningDataView()) {
@@ -102,8 +102,8 @@ struct RunningDataView: View {
                 .padding()
                 .frame(maxWidth: .infinity)
                 //                        .background(Color("CardColor").opacity(0.3))
-                .cornerRadius(12)
-                .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+//                .cornerRadius(12)
+//                .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
             }
         }
     }
@@ -175,7 +175,7 @@ struct SectionView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .font(.system(size: 16))
-                .padding(10)
+                .padding()
                 .background(Color("CardColor").opacity(0.5))
                 .cornerRadius(10)
                 .frame(maxWidth: .infinity, alignment: .leading)
