@@ -25,10 +25,6 @@ struct MonthlyInfoView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-//            Text("\(month) 러닝 기록")
-//                .font(.headline)
-//                .padding(.bottom, 10)
-            
             ComparisonRow(title: "총 거리", currentValue: totalDistance, prevValue: prevTotalDistance, unit: "KM")
             ComparisonRow(title: "총 칼로리", currentValue: totalCalories, prevValue: prevTotalCalories, unit: "KCAL", isCalories: true)
             ComparisonRow(
@@ -110,24 +106,48 @@ struct ComparisonRow: View {
     }
     
     var arrowImage: Image {
-        if difference > 0 {
-            return Image(systemName: "arrowtriangle.up.fill") // 업 화살표
-        } else if difference < 0 {
-            return Image(systemName: "arrowtriangle.down.fill") // 다운 화살표
-        } else {
-            return Image(systemName: "minus") // 변화 없음
+            if isPace {
+                // 페이스는 낮을수록 좋음
+                if difference < 0 {
+                    return Image(systemName: "arrowtriangle.down.fill") // 업 화살표
+                } else if difference > 0 {
+                    return Image(systemName: "arrowtriangle.up.fill") // 다운 화살표
+                } else {
+                    return Image(systemName: "minus") // 변화 없음
+                }
+            } else {
+                // 일반적인 경우
+                if difference > 0 {
+                    return Image(systemName: "arrowtriangle.up.fill") // 업 화살표
+                } else if difference < 0 {
+                    return Image(systemName: "arrowtriangle.down.fill") // 다운 화살표
+                } else {
+                    return Image(systemName: "minus") // 변화 없음
+                }
+            }
         }
-    }
-    
-    var arrowColor: Color {
-        if difference > 0 {
-            return .green // 상승일 때 초록색
-        } else if difference < 0 {
-            return .red // 하락일 때 빨간색
-        } else {
-            return .gray // 변화 없음
+        
+        var arrowColor: Color {
+            if isPace {
+                // 페이스는 낮을수록 좋음
+                if difference < 0 {
+                    return .green // 좋아짐 (낮아짐)
+                } else if difference > 0 {
+                    return .red // 나빠짐 (높아짐)
+                } else {
+                    return .gray // 변화 없음
+                }
+            } else {
+                // 일반적인 경우
+                if difference > 0 {
+                    return .green // 상승일 때 초록색
+                } else if difference < 0 {
+                    return .red // 하락일 때 빨간색
+                } else {
+                    return .gray // 변화 없음
+                }
+            }
         }
-    }
     
     var body: some View {
         HStack(alignment: .top, spacing: 2) {
@@ -219,14 +239,14 @@ struct ComparisonRow: View {
         totalDistance: 223.67,
         totalCalories: 4100,
         totalDuration: 3600 * 5 + 30 * 60,
-        averagePace: 360,
+        averagePace: 760,
         averageCadence: 450,
         runCount: 20,
         
         prevTotalDistance: 210.3,
         prevTotalCalories: 4200,
         prevTotalDuration: 3600 * 3 + 30 * 60,
-        prevAveragePace: 260,
+        prevAveragePace: 560,
         prevAverageCadence: 350,
         prevRunCount: 10
     )

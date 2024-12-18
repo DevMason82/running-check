@@ -58,6 +58,7 @@ struct running_checkApp: App {
         
         // 계절별 알림 스케줄링
         let currentSeason = getCurrentSeason()
+        print("Season:", currentSeason)
         notificationManager.scheduleSeasonalDailyNotifications(for: currentSeason)
         
         isLoading = false
