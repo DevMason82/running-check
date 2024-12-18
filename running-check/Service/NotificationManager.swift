@@ -8,7 +8,7 @@
 import Foundation
 import UserNotifications
 
-class NotificationManager: NSObject, UNUserNotificationCenterDelegate,ObservableObject {
+class NotificationManager: NSObject, UNUserNotificationCenterDelegate, ObservableObject {
     static let shared = NotificationManager()
     
     private override init() {
@@ -28,8 +28,11 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate,Observable
         }
     }
     
-    /// 특정 시간에 로컬 알림 등록
+    /// 특정 시간에 로컬 알림 등록 및 갱신
     func scheduleNotification(identifier: String, title: String, body: String, timeInterval: TimeInterval) {
+        // 기존 알림 제거
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
+        
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
@@ -44,25 +47,12 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate,Observable
             if let error = error {
                 print("알림 등록 실패: \(error.localizedDescription)")
             } else {
-                print("알림 등록 성공: \(identifier)")
+                print("알림 갱신 성공: \(identifier)")
             }
         }
     }
     
-    //    /// 아침, 점심, 저녁 알림 설정
-    //    func scheduleDailyNotifications() {
-    //        let notifications = [
-    //            (identifier: "MorningNotification", title: "굿모닝 러너!", body: "상쾌한 아침! 러닝 계획을 확인하려면 앱을 열어보세요.", hour: 6, minute: 30),
-    //            (identifier: "LunchNotification", title: "점심 러닝 알림", body: "점심 전 짧은 러닝으로 활력을 더해보세요. 자세한 내용은 앱에서 확인하세요!", hour: 11, minute: 30),
-    //            (identifier: "EveningNotification", title: "저녁 러닝 시간!", body: "하루를 마무리하며 여유로운 러닝을 즐겨보세요. 앱에서 러닝 기록을 확인해보세요!", hour: 18, minute: 30)
-    //        ]
-    //
-    //        for notification in notifications {
-    //            scheduleDailyNotification(notification.identifier, title: notification.title, body: notification.body, hour: notification.hour, minute: notification.minute)
-    //        }
-    //    }
-    
-    /// 계절별 알림 설정
+    /// 계절별 알림 설정 및 갱신
     func scheduleSeasonalDailyNotifications(for season: String) {
         var notifications: [(identifier: String, title: String, body: String, hour: Int, minute: Int)] = []
         
@@ -94,8 +84,11 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate,Observable
         }
     }
     
-    /// 특정 시간에 반복 알림 등록
+    /// 특정 시간에 반복 알림 등록 및 갱신
     private func scheduleDailyNotification(_ identifier: String, title: String, body: String, hour: Int, minute: Int) {
+        // 기존 알림 제거
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
+        
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
@@ -114,7 +107,7 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate,Observable
             if let error = error {
                 print("알림 등록 실패: \(error.localizedDescription)")
             } else {
-                print("알림 등록 성공: \(identifier)")
+                print("알림 갱신 성공: \(identifier)")
             }
         }
     }
