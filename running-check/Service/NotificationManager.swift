@@ -7,6 +7,7 @@
 
 import Foundation
 import UserNotifications
+import UIKit
 
 class NotificationManager: NSObject, UNUserNotificationCenterDelegate, ObservableObject {
     static let shared = NotificationManager()
@@ -136,5 +137,16 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate, Observabl
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         print("알림을 클릭했습니다: \(response.notification.request.identifier)")
         completionHandler()
+    }
+    
+    /// 배지 초기화 (iOS 17 이상)
+    func clearBadgeCount() {
+        UNUserNotificationCenter.current().setBadgeCount(0) { error in
+            if let error = error {
+                print("배지 초기화 실패: \(error.localizedDescription)")
+            } else {
+                print("배지가 초기화되었습니다.")
+            }
+        }
     }
 }

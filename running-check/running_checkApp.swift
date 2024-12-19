@@ -13,6 +13,7 @@ struct running_checkApp: App {
     @StateObject private var healthViewModel = HealthKitViewModel()
     @StateObject private var notificationManager = NotificationManager.shared // Added NotificationManager
     @State private var isLoading = true // 데이터 로딩 상태
+    @Environment(\.scenePhase) private var scenePhase // 앱 상태 감지
     
     var body: some Scene {
         WindowGroup {
@@ -38,10 +39,12 @@ struct running_checkApp: App {
                 }
             }
             .animation(.easeInOut, value: isLoading) // 상태 변경 시 애니메이션
-            //            .onAppear {
-            //                // 요청 초기화 알림 권한
-            //                notificationManager.requestAuthorization()
-            //            }
+            .onChange(of: scenePhase) {
+                if scenePhase == .active {
+                    // 앱 활성화 시 배지 초기화
+                    notificationManager.clearBadgeCount()
+                }
+            }
         }
     }
     
