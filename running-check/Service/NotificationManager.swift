@@ -28,15 +28,14 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate, Observabl
         }
     }
     
-    /// 특정 시간에 로컬 알림 등록 및 갱신
+    /// 기존 알림 삭제 후 특정 시간에 로컬 알림 등록
     func scheduleNotification(identifier: String, title: String, body: String, timeInterval: TimeInterval) {
-        // 기존 알림 제거
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
+        // 기존 알림 삭제
+        removeNotification(withIdentifier: identifier)
         
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
-        content.badge = NSNumber(value: 1)
         content.sound = .default
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
@@ -47,13 +46,16 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate, Observabl
             if let error = error {
                 print("알림 등록 실패: \(error.localizedDescription)")
             } else {
-                print("알림 갱신 성공: \(identifier)")
+                print("알림 등록 성공: \(identifier)")
             }
         }
     }
     
-    /// 계절별 알림 설정 및 갱신
+    /// 모든 기존 알림 삭제 후 계절별 알림 설정
     func scheduleSeasonalDailyNotifications(for season: String) {
+        // 기존 계절 알림 삭제
+        removeAllNotifications()
+        
         var notifications: [(identifier: String, title: String, body: String, hour: Int, minute: Int)] = []
         
         switch season.lowercased() {
@@ -84,15 +86,14 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate, Observabl
         }
     }
     
-    /// 특정 시간에 반복 알림 등록 및 갱신
+    /// 특정 시간에 반복 알림 등록 및 기존 알림 삭제
     private func scheduleDailyNotification(_ identifier: String, title: String, body: String, hour: Int, minute: Int) {
-        // 기존 알림 제거
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
+        // 기존 알림 삭제
+        removeNotification(withIdentifier: identifier)
         
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
-        content.badge = NSNumber(value: 1)
         content.sound = .default
         
         var dateComponents = DateComponents()
@@ -107,9 +108,21 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate, Observabl
             if let error = error {
                 print("알림 등록 실패: \(error.localizedDescription)")
             } else {
-                print("알림 갱신 성공: \(identifier)")
+                print("알림 등록 성공: \(identifier)")
             }
         }
+    }
+    
+    /// 특정 알림 제거
+    func removeNotification(withIdentifier identifier: String) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [identifier])
+    }
+    
+    /// 모든 알림 제거
+    func removeAllNotifications() {
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
     }
     
     // MARK: - UNUserNotificationCenterDelegate Methods
