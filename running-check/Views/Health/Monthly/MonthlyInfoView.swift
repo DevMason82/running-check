@@ -346,17 +346,17 @@ struct ChartView: View {
             Text(title)
                 .font(.subheadline)
                 .bold()
-                .foregroundColor(Color("CardFontColor"))
+                .foregroundStyle(Color(.darkGray))
             
             Chart {
                 // 이번 달 데이터
                 BarMark(
-                    x: .value("Value", animatedCurrentValue),
+                    x: .value("Value", animatedCurrentValue), // 애니메이션 값 사용
                     y: .value("Category", "이번 달")
                 )
                 .foregroundStyle(Color.blue)
                 .annotation(position: .trailing) { // 값 표시
-                    Text("\(Int(animatedCurrentValue))")
+                    Text("\(Int(currentValue))") // 원래 값 표시
                         .font(.caption)
                         .foregroundColor(.blue)
                         .bold()
@@ -364,44 +364,43 @@ struct ChartView: View {
                 
                 // 전 달 데이터
                 BarMark(
-                    x: .value("Value", animatedPrevValue),
+                    x: .value("Value", animatedPrevValue), // 애니메이션 값 사용
                     y: .value("Category", "전 달")
                 )
-                .foregroundStyle(Color.gray)
+                .foregroundStyle(Color.gray )
                 .annotation(position: .trailing) { // 값 표시
-                    Text("\(Int(animatedPrevValue))")
+                    Text("\(Int(prevValue))") // 원래 값 표시
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color(.darkGray))
                 }
             }
             .chartYAxis {
                 AxisMarks(preset: .automatic, position: .leading) { mark in
                     AxisValueLabel()
-                        .foregroundStyle(Color("CardFontColor")) // Y축 텍스트 색상
+                        .foregroundStyle(Color(.darkGray)) // Y축 텍스트 색상
                     AxisTick()
-                        .foregroundStyle(Color("CardFontColor")) // Y축 눈금선 색상
+                        .foregroundStyle(Color(.darkGray)) // Y축 눈금선 색상
                 }
             }
             .chartXAxis {
                 AxisMarks(preset: .automatic, position: .bottom) { mark in
                     AxisValueLabel()
-                        .foregroundStyle(Color("CardFontColor")) // X축 텍스트 색상
+                        .foregroundStyle(Color(.darkGray)) // X축 텍스트 색상
                     AxisTick()
-                        .foregroundStyle(Color("CardFontColor")) // X축 눈금선 색상
+                        .foregroundStyle(Color(.darkGray)) // X축 눈금선 색상
                 }
             }
             .chartXAxisLabel(unit) // X축에 단위 표시
             .frame(height: 150) // 가로 차트 높이 조정
-            .cornerRadius(8)
+//            .cornerRadius(8)
             .onAppear {
-                // 애니메이션 효과
-                withAnimation(.easeOut(duration: 1.0)) {
-                    animatedCurrentValue = currentValue
-                    animatedPrevValue = prevValue
-                }
+                // 애니메이션 효과 (왼쪽에서 오른쪽으로)
+                withAnimation(.easeInOut(duration: 1.0)) {
+                                    animatedCurrentValue = currentValue
+                                    animatedPrevValue = prevValue
+                                }
             }
         }
-//        .background(Color("CardColor").opacity(0.5))
         .padding(.bottom, 15)
     }
 }
@@ -561,7 +560,7 @@ struct StatCardView: View {
         prevAverageCadence: 350,
         prevRunCount: 10
     )
-    .background(Color.green)
+    .background(Color("BackgroundColor"))
 }
 
 //import SwiftUI

@@ -28,11 +28,15 @@ struct MonthlyRunningDataView: View {
                     }
             } else {
                 ZStack {
-                    if let runningGrade = weatherKitViewModel.runningGrade {
-                        GradientBackground(runningGrade: runningGrade)
-                    } else {
-                        GradientBackgroundPlaceholder()
-                    }
+                    LinearGradient(
+                                            gradient: Gradient(colors: [
+                                                Color(hex: "F1F0E8"), // 밝은 회색
+                                                Color(hex: "E5E1DA")// 중간 회색
+                                            ]),
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                    .ignoresSafeArea()
                     
                     ScrollView(showsIndicators: false) {
                         VStack {
@@ -131,7 +135,7 @@ struct NoDataView: View {
             
             VStack {
                 Text("이번 달 데이터가 없습니다.")
-                    .foregroundColor(Color("CardFontColor"))
+//                    .foregroundColor(Color("CardFontColor"))
                     .font(.headline)
                     .padding()
             }
