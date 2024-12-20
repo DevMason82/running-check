@@ -27,10 +27,10 @@ struct MonthlyInfoView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Text("\(month) 러닝 기록")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding(.bottom, 10)
+//                Text("\(month) 러닝 기록")
+//                    .font(.largeTitle)
+//                    .bold()
+//                    .padding(.bottom, 10)
                 
                 //                TotalTimeView(totalDuration: totalDuration, prevTotalDuration: prevTotalDuration)
                 
@@ -329,11 +329,17 @@ struct ComparisonRow: View {
 }
 
 // MARK: - ChartView Component
+import SwiftUI
+import Charts
+
 struct ChartView: View {
     let title: String
     let currentValue: Double
     let prevValue: Double
     let unit: String
+    
+    @State private var animatedCurrentValue: Double = 0 // 애니메이션 값
+    @State private var animatedPrevValue: Double = 0    // 애니메이션 값
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -343,33 +349,59 @@ struct ChartView: View {
                 .foregroundColor(Color("CardFontColor"))
             
             Chart {
+                // 이번 달 데이터
                 BarMark(
-                    x: .value("Category", "이번 달"),
-                    y: .value("Value", currentValue)
+                    x: .value("Value", animatedCurrentValue),
+                    y: .value("Category", "이번 달")
                 )
                 .foregroundStyle(Color.blue)
+                .annotation(position: .trailing) { // 값 표시
+                    Text("\(Int(animatedCurrentValue))")
+                        .font(.caption)
+                        .foregroundColor(.blue)
+                        .bold()
+                }
                 
+                // 전 달 데이터
                 BarMark(
-                    x: .value("Category", "전 달"),
-                    y: .value("Value", prevValue)
+                    x: .value("Value", animatedPrevValue),
+                    y: .value("Category", "전 달")
                 )
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.gray)
+                .annotation(position: .trailing) { // 값 표시
+                    Text("\(Int(animatedPrevValue))")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
             }
-            
             .chartYAxis {
-                            AxisMarks(preset: .automatic, position: .leading)
-                        }
-                        
-                        .chartXAxis {
-                            AxisMarks(preset: .automatic, position: .bottom)
-                        }
-            .chartYAxisLabel(unit)
-            .frame(height: 120) // 작고 심플한 차트
-//            .padding()
-//            .background(Color("CardColor").opacity(0.5))
-            .foregroundColor(Color("CardFontColor"))
+                AxisMarks(preset: .automatic, position: .leading) { mark in
+                    AxisValueLabel()
+                        .foregroundStyle(Color("CardFontColor")) // Y축 텍스트 색상
+                    AxisTick()
+                        .foregroundStyle(Color("CardFontColor")) // Y축 눈금선 색상
+                }
+            }
+            .chartXAxis {
+                AxisMarks(preset: .automatic, position: .bottom) { mark in
+                    AxisValueLabel()
+                        .foregroundStyle(Color("CardFontColor")) // X축 텍스트 색상
+                    AxisTick()
+                        .foregroundStyle(Color("CardFontColor")) // X축 눈금선 색상
+                }
+            }
+            .chartXAxisLabel(unit) // X축에 단위 표시
+            .frame(height: 150) // 가로 차트 높이 조정
             .cornerRadius(8)
+            .onAppear {
+                // 애니메이션 효과
+                withAnimation(.easeOut(duration: 1.0)) {
+                    animatedCurrentValue = currentValue
+                    animatedPrevValue = prevValue
+                }
+            }
         }
+//        .background(Color("CardColor").opacity(0.5))
         .padding(.bottom, 15)
     }
 }

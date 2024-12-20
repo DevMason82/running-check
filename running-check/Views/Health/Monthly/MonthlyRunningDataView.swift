@@ -53,14 +53,14 @@ struct MonthlyRunningDataView: View {
                                     prevAverageCadence: prevRunningReportViewModel.averageCadence,
                                     prevRunCount: prevRunningReportViewModel.runCount
                                 )
-                                PrevMonthlyInfoView(
-                                    totalDistance: prevRunningReportViewModel.totalDistance,
-                                    totalCalories: prevRunningReportViewModel.totalCalories,
-                                    totalDuration: prevRunningReportViewModel.totalDuration,
-                                    averagePace: prevRunningReportViewModel.averagePace,
-                                    averageCadence: prevRunningReportViewModel.averageCadence,
-                                    runCount: prevRunningReportViewModel.runCount
-                                )
+//                                PrevMonthlyInfoView(
+//                                    totalDistance: prevRunningReportViewModel.totalDistance,
+//                                    totalCalories: prevRunningReportViewModel.totalCalories,
+//                                    totalDuration: prevRunningReportViewModel.totalDuration,
+//                                    averagePace: prevRunningReportViewModel.averagePace,
+//                                    averageCadence: prevRunningReportViewModel.averageCadence,
+//                                    runCount: prevRunningReportViewModel.runCount
+//                                )
                             } else {
                                 NoDataView()
                             }
