@@ -28,6 +28,8 @@ struct MonthlyRunningDataView: View {
                     }
             } else {
                 ZStack {
+                    Color("BackgroundColor")
+                        .ignoresSafeArea()
 //                    LinearGradient(
 //                                            gradient: Gradient(colors: [
 //                                                Color(hex: "F1F0E8"), // 밝은 회색
