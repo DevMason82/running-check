@@ -28,15 +28,15 @@ struct MonthlyRunningDataView: View {
                     }
             } else {
                 ZStack {
-                    LinearGradient(
-                                            gradient: Gradient(colors: [
-                                                Color(hex: "F1F0E8"), // 밝은 회색
-                                                Color(hex: "E5E1DA")// 중간 회색
-                                            ]),
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        )
-                    .ignoresSafeArea()
+//                    LinearGradient(
+//                                            gradient: Gradient(colors: [
+//                                                Color(hex: "F1F0E8"), // 밝은 회색
+//                                                Color(hex: "E5E1DA")// 중간 회색
+//                                            ]),
+//                                            startPoint: .topLeading,
+//                                            endPoint: .bottomTrailing
+//                                        )
+//                    .ignoresSafeArea()
                     
                     ScrollView(showsIndicators: false) {
                         VStack {
@@ -73,6 +73,7 @@ struct MonthlyRunningDataView: View {
                     }
                     .navigationTitle("\(healthViewModel.currentMonth) 러닝 기록")
                     .navigationBarTitleDisplayMode(.large)
+                    .frame(maxWidth: .infinity)
 //                    .navigationBarBackButtonHidden()
 //                    .toolbarBackgroundVisibility(.hidden)
 //                    .scrollContentBackground(.hidden)
@@ -135,7 +136,6 @@ struct NoDataView: View {
             
             VStack {
                 Text("이번 달 데이터가 없습니다.")
-//                    .foregroundColor(Color("CardFontColor"))
                     .font(.headline)
                     .padding()
             }
@@ -146,5 +146,6 @@ struct NoDataView: View {
 
 #Preview {
     MonthlyRunningDataView()
+        .background(Color("BackgroundColor"))
     
 }
