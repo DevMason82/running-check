@@ -11,10 +11,10 @@ struct WeatherView: View {
     @EnvironmentObject private var locationManagerNew: LocationManagerNew
     @EnvironmentObject private var healthViewModel: HealthKitViewModel
     @Environment(\.scenePhase) private var scenePhase
-
+    
     @State private var lastRefreshTime: Date = .distantPast // 마지막 데이터 로드 시간
     @State private var isLoading: Bool = false
-
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -45,7 +45,7 @@ struct WeatherView: View {
             }
         }
     }
-
+    
     private var contentView: some View {
         Group {
             if let errorMessage = weatherKitViewModel.errorMessage {
@@ -60,7 +60,7 @@ struct WeatherView: View {
             }
         }
     }
-
+    
     private func weatherContent(weather: WeatherData) -> some View {
         VStack {
             WeatherHeaderView(
@@ -75,15 +75,44 @@ struct WeatherView: View {
             } else {
                 Text("Running grade is being evaluated...")
                     .foregroundColor(.secondary)
-                    .padding(.bottom, 15)
+                    .padding(.bottom, 5)
             }
             
-            RunningCoachView(coach: weatherKitViewModel.runningCoach)
-//                .padding(.bottom, 15)
+            //RunningCoachView(coach: weatherKitViewModel.runningCoach)
+            
+            
+            VStack {
+                Text(weatherKitViewModel.runningCoach?.simpleFeedback ?? "러닝 준비 완료!")
+                    .font(.body)
+                    .foregroundStyle(Color("CardFontColor"))
+                    .bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .lineSpacing(5)
+            }
+            .padding()
+            .background(Color("CardColor").opacity(0.3))
+            .cornerRadius(10)
+            .padding(.horizontal)
+            
+            VStack {
+                NavigationLink(destination: RunningCoachView(coach: weatherKitViewModel.runningCoach, grade: weatherKitViewModel.runningGrade)) {
+                    HStack {
+                        Text("자세히 보기")
+                            .font(.headline)
+                            .foregroundColor(Color("CardFontColor"))
+                        Image(systemName: "arrow.forward")
+                            .font(.title3)
+                            .foregroundColor(Color("CardFontColor"))
+                    }
+                    .padding()
+//                    .frame(maxWidth: .infinity)
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            }
             
             Divider()
                 .frame(height: 1)
-                .background(Color("CardFontColor"))
+                .background(Color("CardFontColor").opacity(0.35))
                 .padding(.horizontal)
                 .padding(.bottom, 15)
             
@@ -93,38 +122,38 @@ struct WeatherView: View {
                 indoorRunCount: healthViewModel.allIndoorRunsThisMonth,
                 outdoorRunCount: healthViewModel.allOutdoorRunsThisMonth
             )
-//            .padding(.bottom, 15)
+            //            .padding(.bottom, 15)
             
             Divider()
                 .frame(height: 1)
-                .background(Color("CardFontColor"))
+                .background(Color("CardFontColor").opacity(0.35))
                 .padding(.horizontal)
                 .padding(.bottom, 15)
             
             WeatherGridView(weather: weather)
         }
     }
-
+    
     private func refreshData() async {
         guard !isLoading, shouldRefresh() else { return }
-            isLoading = true
-            defer { isLoading = false }
-            
-            lastRefreshTime = Date()
-            await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
-            await healthViewModel.fetchAllHealthDataToday()
+        isLoading = true
+        defer { isLoading = false }
+        
+        lastRefreshTime = Date()
+        await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
+        await healthViewModel.fetchAllHealthDataToday()
     }
-
+    
     private func refreshDataIfNeeded() async {
         if Date().timeIntervalSince(lastRefreshTime) > 180 { // 최소 3분 간격으로 갱신
             await refreshData()
         }
     }
-
+    
     private func shouldRefresh() -> Bool {
         return Date().timeIntervalSince(lastRefreshTime) > 180 // 최소 3분 간격 확인
     }
-
+    
     private func openAppSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else {
             print("Unable to open app settings.")

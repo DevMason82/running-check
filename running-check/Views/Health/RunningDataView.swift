@@ -89,22 +89,24 @@ struct RunningDataView: View {
             .contentMargins(20, for: .scrollContent) // Add padding
             .scrollTargetBehavior(.viewAligned) // Align content behavior
             
-            NavigationLink(destination: MonthlyRunningDataView()) {
-                HStack {
-                    
-                    Text("이번 달 상세 기록 보기")
-                        .font(.headline)
-                        .foregroundColor(Color("CardFontColor"))
-                    Image(systemName: "arrow.forward")
-                        .font(.title3)
-                        .foregroundColor(Color("CardFontColor"))
+            VStack {
+                NavigationLink(destination: MonthlyRunningDataView()) {
+                    HStack {
+                        
+                        Text("이번달 상세 기록")
+                            .font(.headline)
+                            .foregroundColor(Color("CardFontColor"))
+                        Image(systemName: "arrow.forward")
+                            .font(.title3)
+                            .foregroundColor(Color("CardFontColor"))
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity,  alignment: .trailing)
                 }
-                .padding()
-                .frame(maxWidth: .infinity)
-                //                        .background(Color("CardColor").opacity(0.3))
-//                .cornerRadius(12)
-//                .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
             }
+//            .navigationDestination(destination: MonthlyRunningDataView())
+            
+            
         }
     }
     
@@ -169,14 +171,14 @@ struct SectionView: View {
                     //                                            .font(.system(size: 16))
                         .foregroundColor(Color("CardFontColor"))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text("지금이 시작하기에 가장 좋은 시간이에요!🏃🏻‍♀️")
+                    Text("지금이 시작하기에 가장 좋은 시간이에요!")
                     //                                            .font(.system(size: 16))
                         .foregroundColor(Color("CardFontColor"))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .font(.system(size: 16))
                 .padding()
-                .background(Color("CardColor").opacity(0.5))
+                .background(Color("CardColor").opacity(0.3))
                 .cornerRadius(10)
                 .frame(maxWidth: .infinity, alignment: .leading)
             } else {
@@ -265,7 +267,7 @@ struct RunDetailView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding()
-        .background(Color("CardColor").opacity(0.5))
+        .background(Color("CardColor").opacity(0.3))
         .cornerRadius(10)
     }
     

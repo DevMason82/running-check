@@ -19,6 +19,7 @@ enum RunningGrade: String {
 
 // 러닝 코치 메세지
 struct RunningCoach {
+    let simpleFeedback: String
     let comment: String
     let alternative: String
     let gear: String
