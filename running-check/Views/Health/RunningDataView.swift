@@ -100,7 +100,9 @@ struct RunningDataView: View {
                             .font(.title3)
                             .foregroundColor(Color("CardFontColor"))
                     }
-                    .padding()
+                    .padding(.horizontal)
+                    .padding(.top, 5)
+                    .padding(.bottom, 15)
                     .frame(maxWidth: .infinity,  alignment: .trailing)
                 }
             }

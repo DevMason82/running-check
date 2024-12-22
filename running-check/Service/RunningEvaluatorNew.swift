@@ -77,7 +77,7 @@ class RunningEvaluatorNew {
             - 접지력이 뛰어난 러닝화: 미끄러짐 방지.
             """
             alternative = "실내 러닝머신을 이용하거나 비가 그친 후 러닝을 계획하세요."
-            simpleFeedback = "비가 예상됩니다.\n▶️실내 러닝 추천!"
+            simpleFeedback = "비가 예상됩니다. 실내 러닝 추천!"
 
         } else if rainVolume {
             comment = """
@@ -93,7 +93,7 @@ class RunningEvaluatorNew {
             - 방수 러닝화 또는 신발 커버: 빗물 차단 필수.
             """
             alternative = "비가 멈춘 뒤 노면이 마른 후 러닝을 추천합니다."
-            simpleFeedback = "비가 많이 내립니다.\n▶️러닝 삼가세요."
+            simpleFeedback = "비가 많이 내립니다. 러닝 삼가세요."
 
         } else if snowVolume {
             comment = """
@@ -111,7 +111,7 @@ class RunningEvaluatorNew {
             - 방수 처리된 러닝화: 눈으로 인해 젖지 않도록 보호.
             """
             alternative = "눈이 녹은 뒤 안정된 환경에서 러닝을 추천합니다."
-            simpleFeedback = "눈이 옵니다.\n▶️실내 운동 추천!"
+            simpleFeedback = "눈이 옵니다. 실내 운동 추천!"
 
         } else if cold {
             comment = """
@@ -130,7 +130,7 @@ class RunningEvaluatorNew {
             alternative = """
             충분한 워밍업으로 근육을 이완시키고, 실내에서 러닝을 고려하거나 낮 시간대의 따뜻한 환경에서 러닝을 시도하세요.
             """
-            simpleFeedback = "날씨가 춥습니다.\n▶️워밍업 후 짧게 러닝!"
+            simpleFeedback = "날씨가 춥습니다. 워밍업 후 짧게 러닝!"
 
         } else if hot {
             comment = """
@@ -147,7 +147,7 @@ class RunningEvaluatorNew {
             alternative = """
             햇볕이 약한 시간대(이른 아침이나 늦은 저녁)에 러닝을 추천합니다.
             """
-            simpleFeedback = "더운 날씨입니다.\n▶️물 자주 마시고 짧게 러닝!"
+            simpleFeedback = "더운 날씨입니다. 물 자주 마시고 짧게 러닝!"
 
         }
         
@@ -187,7 +187,7 @@ class RunningEvaluatorNew {
             - 발목을 덮는 러닝화 추천: 보온성과 안정성을 높임.
             """
             alternative = "낮 시간대의 따뜻한 시간에 러닝하거나 실내 러닝을 고려하세요."
-            simpleFeedback = "춥습니다!\n▶️워밍업 필수, 보온 장비 착용 후 짧게 달리세요."
+            simpleFeedback = "춥습니다! 워밍업 필수, 보온 장비 착용 후 짧게 달리세요."
             
         } else if hot {
             comment = """
@@ -204,7 +204,7 @@ class RunningEvaluatorNew {
             - 밝은 색상의 러닝화: 태양광 흡수를 줄여 발의 온도를 낮춤.
             """
             alternative = "햇볕이 약한 이른 아침이나 늦은 저녁 시간에 러닝을 추천합니다."
-            simpleFeedback = "더웁습니다!\n▶️짧게 달리기 + 물 자주 마시세요."
+            simpleFeedback = "더웁습니다! 짧게 달리기 + 물 자주 마시세요."
 
         } else if humid {
             comment = """
@@ -220,7 +220,7 @@ class RunningEvaluatorNew {
             - 흡습 패드 또는 인솔: 발 땀을 흡수해 쾌적하게 유지.
             """
             alternative = "습도가 낮은 시간대(아침 또는 저녁)에 러닝을 시도하거나 실내 운동을 고려하세요."
-            simpleFeedback = "습합니다!\n▶️천천히 달리기, 자주 휴식하세요."
+            simpleFeedback = "습합니다! 천천히 달리기, 자주 휴식하세요."
 
         } else if rainVolume {
             comment = """
@@ -236,7 +236,7 @@ class RunningEvaluatorNew {
             - 접지력이 좋은 러닝화: 미끄러운 길에서도 안정적으로 달릴 수 있도록.
             """
             alternative = "비가 멈춘 후 러닝을 추천하거나 실내 러닝머신을 이용해보세요."
-            simpleFeedback = "비가 옵니다!\n▶️실내 러닝 추천, 외부는 조심히."
+            simpleFeedback = "비가 옵니다! 실내 러닝 추천, 외부는 조심히."
 
         } else if snowVolume {
             comment = """
@@ -252,7 +252,7 @@ class RunningEvaluatorNew {
             - 방수 처리된 러닝화: 눈으로 인해 젖는 것을 방지.
             """
             alternative = "눈이 제설된 안전한 길에서 러닝하거나 실내 러닝머신을 이용하세요."
-            simpleFeedback = "눈이 옵니다!\n▶️짧게 달리기, 미끄럼 방지 신발 필수."
+            simpleFeedback = "눈이 옵니다! 짧게 달리기, 미끄럼 방지 신발 필수."
 
         } else if uvIndex {
             comment = """
@@ -268,7 +268,7 @@ class RunningEvaluatorNew {
             - 통기성 높은 러닝화: 발 과열 방지.
             """
             alternative = "자외선이 약한 아침이나 저녁 시간대에 러닝을 계획하세요."
-            simpleFeedback = "자외선 강함!\n▶️모자, 썬크림 필수, 짧게 러닝하세요."
+            simpleFeedback = "자외선 강함! 모자, 썬크림 필수, 짧게 러닝하세요."
         }
 
         return RunningCoach(
@@ -301,7 +301,7 @@ class RunningEvaluatorNew {
             - 가벼운 러닝 재킷: 초반 체온을 보호하고 땀 배출이 용이한 재질 추천.
             - 가벼운 모자: 체온 손실 방지와 햇볕 차단.
             """
-            simpleFeedback = "상쾌한 날씨!\n▶️긴 팔 러닝복으로 편하게 달리세요."
+            simpleFeedback = "상쾌한 날씨! 긴 팔 러닝복으로 편하게 달리세요."
 
         } else if feelsLike <= 25 {
             comment = """
@@ -316,7 +316,7 @@ class RunningEvaluatorNew {
             - 경량 모자: 햇볕 차단과 열 배출.
             - 스마트 워치: 페이스와 심박수를 확인하며 효율적으로 러닝.
             """
-            simpleFeedback = "완벽한 날씨!\n▶️반팔 러닝복으로 가볍게 달리세요."
+            simpleFeedback = "완벽한 날씨! 반팔 러닝복으로 가볍게 달리세요."
 
         } else {
             comment = """
@@ -331,7 +331,7 @@ class RunningEvaluatorNew {
             - 밝은 색상의 모자: 열 흡수를 줄이고 햇볕을 차단.
             - 물병 또는 수분 백팩: 지속적인 수분 섭취를 위한 필수 아이템.
             """
-            simpleFeedback = "따뜻한 날씨!\n▶️물 자주 마시고 가볍게 달리세요."
+            simpleFeedback = "따뜻한 날씨! 물 자주 마시고 가볍게 달리세요."
         }
 
         return RunningCoach(

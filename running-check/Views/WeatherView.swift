@@ -97,15 +97,16 @@ struct WeatherView: View {
             VStack {
                 NavigationLink(destination: RunningCoachView(coach: weatherKitViewModel.runningCoach, grade: weatherKitViewModel.runningGrade)) {
                     HStack {
-                        Text("자세히 보기")
+                        Text("더보기")
                             .font(.headline)
                             .foregroundColor(Color("CardFontColor"))
                         Image(systemName: "arrow.forward")
                             .font(.title3)
                             .foregroundColor(Color("CardFontColor"))
                     }
-                    .padding()
-//                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal)
+                    .padding(.top, 5)
+                    .padding(.bottom, 15)
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
