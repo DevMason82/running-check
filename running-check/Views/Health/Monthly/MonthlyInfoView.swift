@@ -28,7 +28,10 @@ struct MonthlyInfoView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading) {
+                Text("*지난달 과 비교")
+                    .font(.body)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 // 데이터 카드를 반응형으로 배치
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 16)], spacing: 16) {
                     StatCardView(
@@ -138,10 +141,9 @@ struct MonthlyInfoView: View {
                 //                    ComparisonRow(title: "러닝 횟수", currentValue: Double(runCount), prevValue: Double(prevRunCount), unit: "회", isInteger: true)
                 //                }
                 //                .padding(.top, 20)
+                
+                
             }
-            //            .padding()
-            //            .background(Color("CardColor").opacity(0.1))
-            //            .cornerRadius(10)
             .padding()
         }
         //        .background(Color("BackgroundColor"))
