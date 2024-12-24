@@ -16,7 +16,7 @@ struct WeatherGridView: View {
     ]
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack {
             Text("날씨 정보")
                 .font(.title)
                 .foregroundColor(Color("CardFontColor"))
@@ -35,6 +35,25 @@ struct WeatherGridView: View {
                 }
                 .padding(.horizontal, 20)
             }
+            
+            Spacer()
+            
+            // Apple Weather Attribution
+            HStack {
+                Text("날씨 데이터 제공:  Weather")
+                    .font(.footnote)
+                    .foregroundColor(Color("CardFontColor"))
+                
+                Spacer()
+                
+                Link("자세한 정보 보기", destination: URL(string: "https://weatherkit.apple.com/legal-attribution.html")!)
+                    .font(.footnote)
+                    .foregroundColor(Color("CardFontColor"))
+                    .padding(.top, 1)
+            }
+            .padding(.horizontal)
+            //                        .background(Color.black.opacity(0.1))
+            .frame(maxWidth: .infinity, alignment: .trailing)
         }
         
     }
