@@ -26,6 +26,10 @@ struct RunningCoach {
     let shoes: String
 }
 
+enum Season {
+    case spring, summer, autumn, winter
+}
+
 @MainActor
 class WeatherKitViewModel: ObservableObject {
     @Published var weatherData: WeatherData?
@@ -69,6 +73,22 @@ class WeatherKitViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    private func determineSeason() -> Season {
+        let currentMonth = Calendar.current.component(.month, from: Date())
+        
+        switch currentMonth {
+        case 3...5:
+            return .spring
+        case 6...8:
+            return .summer
+        case 9...11:
+            return .autumn
+        default:
+            return .winter
+        }
+    }
+    
+    
     /// 네트워크 요청과 재시도 로직을 포함한 함수
     func fetchWeatherAndEvaluateRunning() async {
         let location = CLLocation(latitude: locationManager.latitude, longitude: locationManager.longitude)
@@ -78,13 +98,11 @@ class WeatherKitViewModel: ObservableObject {
         while attempt < maxRetries {
             attempt += 1
             do {
-                // 네트워크 요청에 Timeout 설정 적용
                 let weather = try await withTimeout(seconds: 10) { [self] in
                     try await self.weatherService.weather(for: location)
                 }
                 let currentWeather = weather.currentWeather
                 
-                // WeatherData 생성
                 let hourlyForecast = weather.hourlyForecast.first
                 let snowfallAmount = hourlyForecast?.precipitationAmount.value ?? 0
                 let precipitationChance = hourlyForecast?.precipitationChance ?? 0.0
@@ -99,6 +117,8 @@ class WeatherKitViewModel: ObservableObject {
                     expirationDate: currentWeather.metadata.expirationDate,
                     location: location
                 )
+                
+                let season = determineSeason()  // 계절 판별
                 
                 self.weatherData = WeatherData(
                     temperature: "\(Int(currentWeather.temperature.value))°C",
