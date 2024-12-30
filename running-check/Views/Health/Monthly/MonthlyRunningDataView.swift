@@ -71,7 +71,6 @@ struct MonthlyRunningDataView: View {
                                 NoDataView()
                             }
                         }
-                        .padding()
                     }
                     .navigationTitle("\(healthViewModel.currentMonth) 러닝 기록")
                     .navigationBarTitleDisplayMode(.large)

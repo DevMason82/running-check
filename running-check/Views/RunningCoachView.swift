@@ -31,7 +31,7 @@ struct RunningCoachView: View {
             if let coach = coach {
                 VStack(alignment: .leading) {
                     ScrollView( showsIndicators: false) {
-                        VStack(alignment: .leading, spacing: 20) {
+                        VStack(alignment: .leading, spacing: 5) {
                             CoachCard(title: "피드백", content: coach.comment)
                             CoachCard(title: "계획", content: coach.alternative)
                             CoachCard(title: "용품", content: coach.gear)
@@ -43,29 +43,9 @@ struct RunningCoachView: View {
                     .navigationBarTitleDisplayMode(.large)
                     .foregroundStyle(Color("AccentColor"))
                     .frame(maxWidth: .infinity)
-    //                .contentMargins(20, for: .scrollContent) // Add padding
-    //                .scrollTargetBehavior(.viewAligned) // Align content behavior
-                    
-    //                ScrollView(.horizontal, showsIndicators: false) {
-    //                    HStack(alignment: .top, spacing: 20) {
-    //                        CoachCard(title: "러닝코멘트", content: coach.comment)
-    //                        CoachCard(title: "러닝추천", content: coach.alternative)
-    //                        CoachCard(title: "러닝용품", content: coach.gear)
-    //                        CoachCard(title: "러닝화", content: coach.shoes)
-    //                    }
-    //                    .scrollTargetLayout()
-    //                }
-    //                .navigationTitle("러닝 코치")
-    //                .navigationBarTitleDisplayMode(.large)
-    //                .contentMargins(20, for: .scrollContent) // Add padding
-    //                .scrollTargetBehavior(.viewAligned) // Align content behavior
-                    
                 }
-                .padding(.horizontal)
             }
         }
-        
-        
     }
 }
 
@@ -90,8 +70,8 @@ struct CoachCard: View {
                 .lineSpacing(3.5)
         }
         .padding()
-        .background(Color("CardColor").opacity(0.3))
-        .cornerRadius(10)
+        .background(Color("CardColor").opacity(0.1))
+//        .cornerRadius(10)
 //        .frame(width: UIScreen.main.bounds.width - 80)
 //        .scrollTransition { content, phase in
 //            content

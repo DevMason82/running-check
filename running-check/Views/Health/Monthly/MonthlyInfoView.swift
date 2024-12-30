@@ -26,14 +26,87 @@ struct MonthlyInfoView: View {
     
     @Environment(\.scenePhase) private var scenePhase
     
+//    var difference: Double {
+//        totalDistance - prevTotalDistance
+//    }
+//    
+//    var arrowImage: Image {
+//        if difference > 0 {
+//            return Image(systemName: "arrowtriangle.up.fill") // 증가
+//        } else if difference < 0 {
+//            return Image(systemName: "arrowtriangle.down.fill") // 감소
+//        } else {
+//            return Image(systemName: "minus") // 변화 없음
+//        }
+//    }
+//    
+//    var arrowColor: Color {
+//        return difference > 0 ? .green : .red
+//    }
+    
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
-                Text("*지난달 과 비교")
-                    .font(.body)
+            KMTotalView(totalDistance: totalDistance, prevTotalDistance: prevTotalDistance)
+//            HStack {
+//                VStack(alignment: .leading, spacing: 0) {
+//                    Text(formattedValue(value: totalDistance))
+//                        .font(.system(size: 52))
+//                        .bold()
+//                    Text("킬로미터")
+//                }
+//                // 변화량 및 화살표
+//                HStack(spacing: 5) {
+//                    arrowImage
+//                        .foregroundColor(arrowColor)
+//                        .bold()
+//                    Text(formattedValue(value: difference))
+//                        .foregroundColor(arrowColor)
+//                        .bold()
+//                }
+//                
+//            }
+//            .frame(maxWidth: .infinity, alignment: .leading)
+//            .padding(.horizontal)
+            
+            
+            VStack() {
+                Text("*비교값: 지난달")
+                    .font(.caption)
                     .frame(maxWidth: .infinity, alignment: .trailing)
+                
+               
+                    
+               
                 // 데이터 카드를 반응형으로 배치
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 16)], spacing: 16) {
+                    StatCardView(
+                        title: "평균 페이스",
+                        currentValue: averagePace,
+                        prevValue: prevAveragePace,
+                        unit: "",
+                        isPace: true
+                    )
+                    StatCardView(
+                        title: "총 칼로리",
+                        currentValue: totalCalories,
+                        prevValue: prevTotalCalories,
+                        unit: "",
+                        isCalories: true
+                    )
+//                    StatCardView(
+//                        title: "총 거리",
+//                        currentValue: totalDistance,
+//                        prevValue: prevTotalDistance,
+//                        unit: "KM"
+//                    )
+                                        StatCardView(
+                        title: "평균 케이던스",
+                        currentValue: averageCadence,
+                        prevValue: prevAverageCadence,
+                        unit: "",
+                        isInteger: true
+                    )
+                    
                     StatCardView(
                         title: "총 시간",
                         currentValue: totalDuration,
@@ -42,112 +115,22 @@ struct MonthlyInfoView: View {
                         isDuration: true
                     )
                     StatCardView(
-                        title: "총 칼로리",
-                        currentValue: totalCalories,
-                        prevValue: prevTotalCalories,
-                        unit: "KCAL",
-                        isCalories: true
-                    )
-                    StatCardView(
-                        title: "총 거리",
-                        currentValue: totalDistance,
-                        prevValue: prevTotalDistance,
-                        unit: "KM"
-                    )
-                    StatCardView(
-                        title: "평균 페이스",
-                        currentValue: averagePace,
-                        prevValue: prevAveragePace,
-                        unit: "/KM",
-                        isPace: true
-                    )
-                    StatCardView(
-                        title: "평균 케이던스",
-                        currentValue: averageCadence,
-                        prevValue: prevAverageCadence,
-                        unit: "SPM",
-                        isInteger: true
-                    )
-                    StatCardView(
                         title: "러닝 횟수",
                         currentValue: Double(runCount),
                         prevValue: Double(prevRunCount),
-                        unit: "회",
+                        unit: "",
                         isInteger: true
                     )
                 }
-                .padding(.top, 10)
-                
-                // 차트 개별 구성
-//                VStack(spacing: 15) {
-//                    ChartView(
-//                        title: "총 시간",
-//                        currentValue: totalDuration,
-//                        prevValue: prevTotalDuration,
-//                        unit: ""
-//                    )
-//                    ChartView(
-//                        title: "총 칼로리",
-//                        currentValue: totalCalories,
-//                        prevValue: prevTotalCalories,
-//                        unit: "KCAL"
-//                    )
-//                    ChartView(
-//                        title: "총 거리",
-//                        currentValue: totalDistance,
-//                        prevValue: prevTotalDistance,
-//                        unit: "KM"
-//                    )
-//                    ChartView(
-//                        title: "평균 페이스",
-//                        currentValue: averagePace,
-//                        prevValue: prevAveragePace,
-//                        unit: "/KM"
-//                    )
-//                    ChartView(
-//                        title: "평균 케이던스",
-//                        currentValue: averageCadence,
-//                        prevValue: prevAverageCadence,
-//                        unit: "SPM"
-//                    )
-//                    ChartView(
-//                        title: "러닝 횟수",
-//                        currentValue: Double(runCount),
-//                        prevValue: Double(prevRunCount),
-//                        unit: "회"
-//                    )
-//                }
-//                .padding(.top, 20)
-                
-                // 상세 데이터
-                //                VStack(spacing: 10) {
-                //                    ComparisonRow(title: "총 거리", currentValue: totalDistance, prevValue: prevTotalDistance, unit: "KM")
-                //                    ComparisonRow(title: "총 칼로리", currentValue: totalCalories, prevValue: prevTotalCalories, unit: "KCAL", isCalories: true)
-                //                    ComparisonRow(
-                //                        title: "총 시간",
-                //                        currentValue: totalDuration,
-                //                        prevValue: prevTotalDuration,
-                //                        unit: "",
-                //                        isDuration: true
-                //                    )
-                //                    ComparisonRow(
-                //                        title: "평균 페이스",
-                //                        currentValue: averagePace,
-                //                        prevValue: prevAveragePace,
-                //                        unit: "/KM",
-                //                        isPace: true
-                //                    )
-                //                    ComparisonRow(title: "평균 케이던스", currentValue: averageCadence, prevValue: prevAverageCadence, unit: "SPM", isInteger: true)
-                //                    ComparisonRow(title: "러닝 횟수", currentValue: Double(runCount), prevValue: Double(prevRunCount), unit: "회", isInteger: true)
-                //                }
-                //                .padding(.top, 20)
-                
-                
             }
             .padding()
         }
-        //        .background(Color("BackgroundColor"))
     }
+    
+    // 값 포맷팅
+//    private func formattedValue(value: Double) -> String {
+//        return String(format: "%.2f", value)
+//    }
 }
 
 // MARK: - BarChart View
@@ -505,18 +488,20 @@ struct StatCardView: View {
             HStack(spacing: 5) {
                 arrowImage
                     .foregroundColor(arrowColor)
-                    .font(.caption)
+                    .bold()
+//                    .font(.caption)
                 Text(formattedDifference())
                     .foregroundColor(arrowColor)
-                    .font(.caption)
+                    .bold()
+//                    .font(.caption)
             }
-            Text(unit)
-                .font(.subheadline)
+//            Text(unit)
+//                .font(.subheadline)
         }
         .padding()
         .frame(minWidth: 150, maxWidth: .infinity)
-        .background(Color("CardColor").opacity(0.5))
-        .foregroundColor(Color("CardFontColor"))
+        .background(Color("CardColor").opacity(0.1))
+//        .foregroundColor(Color("CardFontColor"))
         .cornerRadius(10)
         .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
     }

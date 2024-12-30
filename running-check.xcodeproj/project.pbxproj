@@ -416,7 +416,7 @@
 				CODE_SIGN_ENTITLEMENTS = "running-check/running_check.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2412231;
+				CURRENT_PROJECT_VERSION = 2412281;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"running-check/Preview Content\"";
 				DEVELOPMENT_TEAM = T8827V5ML9;
@@ -424,6 +424,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "running-check/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "러닝체크";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "러닝 데이터 및 칼로리 소모량을 기록하기 위해 건강 데이터를 업데이트합니다.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "사용자의 운동 결과와 활동 데이터를 분석해 맞춤형 운동 계획을 세우기 위해 건강 데이터를 읽습니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "러닝 중 운동 거리 및 속도를 계산하기 위해 사용자의 위치 정보를 사용합니다.";
@@ -441,7 +443,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = 1.7.3;
 				PRODUCT_BUNDLE_IDENTIFIER = masonlab.runningCheck;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -462,7 +464,7 @@
 				CODE_SIGN_ENTITLEMENTS = "running-check/running_check.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2412231;
+				CURRENT_PROJECT_VERSION = 2412281;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"running-check/Preview Content\"";
 				DEVELOPMENT_TEAM = T8827V5ML9;
@@ -470,6 +472,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "running-check/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "러닝체크";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "러닝 데이터 및 칼로리 소모량을 기록하기 위해 건강 데이터를 업데이트합니다.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "사용자의 운동 결과와 활동 데이터를 분석해 맞춤형 운동 계획을 세우기 위해 건강 데이터를 읽습니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "러닝 중 운동 거리 및 속도를 계산하기 위해 사용자의 위치 정보를 사용합니다.";
@@ -487,7 +491,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.7.1;
+				MARKETING_VERSION = 1.7.3;
 				PRODUCT_BUNDLE_IDENTIFIER = masonlab.runningCheck;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
