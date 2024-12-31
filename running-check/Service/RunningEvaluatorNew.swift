@@ -56,7 +56,7 @@ class RunningEvaluatorNew {
         let humidity = Double(current.humidity.replacingOccurrences(of: "%", with: "")) ?? 0
         let windSpeed = Double(current.windSpeed.components(separatedBy: " ").first ?? "") ?? 0
         let precipitationProbability = Double(current.precipitationProbability.replacingOccurrences(of: "%", with: "")) ?? 0
-        let rainVolume = Double(current.temperature.replacingOccurrences(of: " mm", with: "")) ?? 0
+        _ = Double(current.temperature.replacingOccurrences(of: " mm", with: "")) ?? 0
         let snowVolume = Double(current.temperature.replacingOccurrences(of: " mm", with: "")) ?? 0
         let uvIndex = Double(current.conditionDescription.replacingOccurrences(of: " UV", with: "")) ?? 0
         
