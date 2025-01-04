@@ -43,13 +43,13 @@ struct KMTotalView: View {
 //                        withAnimation(.easeOut(duration: 1)) {
 //                            self.aniDistance = self.totalDistance
 //                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             withAnimation(.interpolatingSpring(stiffness: 5, damping: 5)) {
                                 aniDistance = totalDistance
                             }
                         }
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             self.showDiffer = true
                         }
                     }

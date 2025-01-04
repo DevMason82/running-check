@@ -89,7 +89,8 @@ struct CoachCard: View {
             alternative: "sdfsdjvlkjsdlkjsf",
             gear: "Light running clothes",
             shoes: "Cushioned running shoes"
-        ), grade: .good
+        ),
+        grade: .good
     )
     .environment(\.colorScheme, .light)
     .background(Color("BackgroundColor"))
@@ -103,7 +104,8 @@ struct CoachCard: View {
             alternative: "sdfsdjvlkjsdlkjsf",
             gear: "Light running clothes",
             shoes: "Cushioned running shoes"
-        ), grade: .warning
+        ),
+        grade: .warning
     )
     .environment(\.colorScheme, .dark)
     .background(Color("BackgroundColor"))

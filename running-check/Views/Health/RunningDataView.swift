@@ -40,7 +40,7 @@ struct RunningDataView: View {
                         }
                         .padding(.bottom, 15)
                         
-//                        Spacer()
+                        //                        Spacer()
                         
                         SectionView(runs: outdoorRuns, title: "\(formattedCurrentDay()) 실외 러닝")
                         
@@ -70,7 +70,7 @@ struct RunningDataView: View {
                         }
                         .padding(.bottom, 15)
                         
-//                        Spacer()
+                        //                        Spacer()
                         
                         SectionView(runs: indoorRuns, title: "\(formattedCurrentDay()) 실내 러닝")
                         
@@ -89,10 +89,11 @@ struct RunningDataView: View {
             .contentMargins(20, for: .scrollContent) // Add padding
             .scrollTargetBehavior(.viewAligned) // Align content behavior
             
+            
+            
             VStack {
                 NavigationLink(destination: MonthlyRunningDataView()) {
                     HStack {
-                        
                         Text("이번달 상세 기록")
                             .font(.headline)
                             .foregroundColor(Color("CardFontColor"))
@@ -105,10 +106,8 @@ struct RunningDataView: View {
                     .padding(.bottom, 15)
                     .frame(maxWidth: .infinity,  alignment: .trailing)
                 }
+                Spacer()
             }
-//            .navigationDestination(destination: MonthlyRunningDataView())
-            
-            
         }
     }
     

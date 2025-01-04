@@ -18,7 +18,8 @@ enum RunningGrade: String {
 }
 
 // 러닝 코치 메세지
-struct RunningCoach {
+struct RunningCoach: Hashable {
+    let id: UUID = UUID()
     let simpleFeedback: String
     let comment: String
     let alternative: String

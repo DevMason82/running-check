@@ -424,11 +424,11 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "running-check/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "러닝체크";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "러닝 데이터 및 칼로리 소모량을 기록하기 위해 건강 데이터를 업데이트합니다.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "사용자의 운동 결과와 활동 데이터를 분석해 맞춤형 운동 계획을 세우기 위해 건강 데이터를 읽습니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "러닝 중 운동 거리 및 속도를 계산하기 위해 사용자의 위치 정보를 사용합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "러닝 기록 이미지를 저장하려면 사진 접근 권한이 필요합니다.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -472,11 +472,11 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "running-check/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "러닝체크";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "러닝 데이터 및 칼로리 소모량을 기록하기 위해 건강 데이터를 업데이트합니다.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "사용자의 운동 결과와 활동 데이터를 분석해 맞춤형 운동 계획을 세우기 위해 건강 데이터를 읽습니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "러닝 중 운동 거리 및 속도를 계산하기 위해 사용자의 위치 정보를 사용합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "러닝 기록 이미지를 저장하려면 사진 접근 권한이 필요합니다.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
