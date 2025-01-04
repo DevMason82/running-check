@@ -22,17 +22,19 @@ class LocationManagerNew: NSObject, ObservableObject, CLLocationManagerDelegate 
 
     private let manager = CLLocationManager()
     private let geocoder = CLGeocoder()
+    private var debounceTimer: Timer?
+    private var isFetching = false  // 요청 중복 방지 플래그
 
     override init() {
         super.init()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest // 위치 정확도 설정
+        manager.desiredAccuracy = kCLLocationAccuracyBest
         checkAndRequestLocationPermission()
     }
 
     func checkAndRequestLocationPermission() {
         let status = manager.authorizationStatus
-        self.locationStatus = status // 현재 권한 상태 저장
+        self.locationStatus = status
 
         switch status {
         case .notDetermined:
@@ -58,14 +60,17 @@ class LocationManagerNew: NSObject, ObservableObject, CLLocationManagerDelegate 
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return } // 최신 위치 가져오기
+        guard let location = locations.last else { return }
         DispatchQueue.main.async {
             self.latitude = location.coordinate.latitude
             self.longitude = location.coordinate.longitude
             print("Updated Location: \(self.latitude), \(self.longitude)")
-
-            // 위치 업데이트 후 주소 가져오기
-            self.fetchAddress(from: location)
+            
+            // 디바운스 타이머 설정 (2초 내 중복 요청 방지)
+            self.debounceTimer?.invalidate()  // 기존 타이머 취소
+            self.debounceTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [weak self] _ in
+                self?.fetchAddress(from: location)
+            }
         }
     }
 
@@ -76,11 +81,14 @@ class LocationManagerNew: NSObject, ObservableObject, CLLocationManagerDelegate 
         }
     }
 
-    // 주소를 가져오는 메서드
     private func fetchAddress(from location: CLLocation) {
+        guard !isFetching else { return }  // 중복 요청 방지
+        isFetching = true  // 요청 시작
+        
         geocoder.reverseGeocodeLocation(location) { [weak self] placemarks, error in
             guard let self = self else { return }
-
+            self.isFetching = false  // 요청 완료
+            
             if let error = error {
                 DispatchQueue.main.async {
                     self.errorMessage = "주소를 가져오지 못했습니다: \(error.localizedDescription)"
@@ -90,12 +98,11 @@ class LocationManagerNew: NSObject, ObservableObject, CLLocationManagerDelegate 
 
             if let placemark = placemarks?.first {
                 DispatchQueue.main.async {
-                    // 각 주소 요소를 별도로 저장
-                    self.thoroughfare = placemark.thoroughfare             // 도로명
-                    self.subThoroughfare = placemark.subThoroughfare       // 도로 번호
-                    self.locality = placemark.locality                     // 시/군/구
-                    self.administrativeArea = placemark.administrativeArea // 도/광역시
-                    self.country = placemark.country                       // 국가
+                    self.thoroughfare = placemark.thoroughfare
+                    self.subThoroughfare = placemark.subThoroughfare
+                    self.locality = placemark.locality
+                    self.administrativeArea = placemark.administrativeArea
+                    self.country = placemark.country
                     print("Address Fetched: \(self.fullAddress)")
                 }
             } else {
@@ -106,7 +113,6 @@ class LocationManagerNew: NSObject, ObservableObject, CLLocationManagerDelegate 
         }
     }
 
-    // 전체 주소를 문자열로 반환
     var fullAddress: String {
         [
             thoroughfare,

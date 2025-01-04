@@ -30,15 +30,7 @@ struct MonthlyRunningDataView: View {
                 ZStack {
                     Color("BackgroundColor")
                         .ignoresSafeArea()
-//                    LinearGradient(
-//                                            gradient: Gradient(colors: [
-//                                                Color(hex: "F1F0E8"), // 밝은 회색
-//                                                Color(hex: "E5E1DA")// 중간 회색
-//                                            ]),
-//                                            startPoint: .topLeading,
-//                                            endPoint: .bottomTrailing
-//                                        )
-//                    .ignoresSafeArea()
+
                     
                     ScrollView(showsIndicators: false) {
                         VStack {
@@ -59,14 +51,7 @@ struct MonthlyRunningDataView: View {
                                     prevAverageCadence: prevRunningReportViewModel.averageCadence,
                                     prevRunCount: prevRunningReportViewModel.runCount
                                 )
-//                                PrevMonthlyInfoView(
-//                                    totalDistance: prevRunningReportViewModel.totalDistance,
-//                                    totalCalories: prevRunningReportViewModel.totalCalories,
-//                                    totalDuration: prevRunningReportViewModel.totalDuration,
-//                                    averagePace: prevRunningReportViewModel.averagePace,
-//                                    averageCadence: prevRunningReportViewModel.averageCadence,
-//                                    runCount: prevRunningReportViewModel.runCount
-//                                )
+
                             } else {
                                 NoDataView()
                             }
@@ -75,28 +60,6 @@ struct MonthlyRunningDataView: View {
                     .navigationTitle("\(healthViewModel.currentMonth) 러닝 기록")
                     .navigationBarTitleDisplayMode(.large)
                     .frame(maxWidth: .infinity)
-//                    .navigationBarBackButtonHidden()
-//                    .toolbarBackgroundVisibility(.hidden)
-//                    .scrollContentBackground(.hidden)
-//                    .toolbar {
-//                        ToolbarItem(placement: .navigationBarLeading) {
-//                            Button(action: {
-//                                presentationMode.wrappedValue.dismiss() // 뒤로가기 동작
-//                            }) {
-//                                HStack {
-//                                    Image(systemName: "chevron.left")
-//                                        .font(.body)
-//                                }
-//                                .foregroundColor(Color("CardFontColor")) // 뒤로가기 버튼 색상
-//                            }
-//                        }
-//                        
-//                        ToolbarItem(placement: .principal) { // 타이틀 커스텀
-//                            Text("\(healthViewModel.currentMonth) 러닝 기록")
-//                                .font(.largeTitle.bold())
-//                                .foregroundStyle(Color("CardFontColor")) // 타이틀 색상 변경
-//                        }
-//                    }
                 }
             }
         }

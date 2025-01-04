@@ -10,28 +10,29 @@ struct WeatherView: View {
     @EnvironmentObject private var weatherKitViewModel: WeatherKitViewModel
     @EnvironmentObject private var locationManagerNew: LocationManagerNew
     @EnvironmentObject private var healthViewModel: HealthKitViewModel
+    @EnvironmentObject private var weeklyRunningDataViewModel: WeeklyRunningDataViewModel
     @Environment(\.scenePhase) private var scenePhase
     
     @State private var lastRefreshTime: Date = .distantPast // 마지막 데이터 로드 시간
     @State private var isLoading: Bool = false
+    @State private var lastScenePhaseRefresh: Date = .distantPast
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                if let runningGrade = weatherKitViewModel.runningGrade {
-                    GradientBackground(runningGrade: runningGrade)
-                } else {
-                    GradientBackgroundPlaceholder()
-                }
-                
-                ScrollView(showsIndicators: false) {
-                    contentView
-                }
-                .refreshable {
-                    await refreshData()
-                }
+        ZStack {
+            if let runningGrade = weatherKitViewModel.runningGrade {
+                GradientBackground(runningGrade: runningGrade)
+            } else {
+                GradientBackgroundPlaceholder()
+            }
+            
+            ScrollView(showsIndicators: false) {
+                contentView
+            }
+            .refreshable {
+                await refreshData()
             }
         }
+        
         .onAppear {
             Task {
                 await refreshData()
@@ -40,7 +41,7 @@ struct WeatherView: View {
         .onChange(of: scenePhase) {
             if scenePhase == .active {
                 Task {
-                    await refreshDataIfNeeded()
+                    await throttledRefresh()
                 }
             }
         }
@@ -95,7 +96,7 @@ struct WeatherView: View {
             .padding(.horizontal)
             
             VStack {
-                NavigationLink(destination: RunningCoachView(coach: weatherKitViewModel.runningCoach, grade: weatherKitViewModel.runningGrade)) {
+                NavigationLink(value: weatherKitViewModel.runningCoach) {
                     HStack {
                         Text("더보기")
                             .font(.headline)
@@ -110,6 +111,9 @@ struct WeatherView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
+            .navigationDestination(for: RunningCoach.self) { coach in
+                RunningCoachView(coach: coach, grade: weatherKitViewModel.runningGrade)
+            }
             
             Divider()
                 .frame(height: 1)
@@ -117,19 +121,26 @@ struct WeatherView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 15)
             
-            RunningDataView(
-                outdoorRuns: healthViewModel.outdoorRuns,
-                indoorRuns: healthViewModel.indoorRuns,
-                indoorRunCount: healthViewModel.allIndoorRunsThisMonth,
-                outdoorRunCount: healthViewModel.allOutdoorRunsThisMonth
-            )
-            //            .padding(.bottom, 15)
+            WeeklyRunningChckView()
             
             Divider()
                 .frame(height: 1)
                 .background(Color("CardFontColor").opacity(0.35))
                 .padding(.horizontal)
-                .padding(.bottom, 15)
+                .padding(.vertical, 15)
+            
+//            RunningDataView(
+//                outdoorRuns: healthViewModel.outdoorRuns,
+//                indoorRuns: healthViewModel.indoorRuns,
+//                indoorRunCount: healthViewModel.allIndoorRunsThisMonth,
+//                outdoorRunCount: healthViewModel.allOutdoorRunsThisMonth
+//            )
+//            
+//            Divider()
+//                .frame(height: 1)
+//                .background(Color("CardFontColor").opacity(0.35))
+//                .padding(.horizontal)
+//                .padding(.bottom, 15)
             
             WeatherGridView(weather: weather)
         }
@@ -143,11 +154,20 @@ struct WeatherView: View {
         lastRefreshTime = Date()
         await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
         await healthViewModel.fetchAllHealthDataToday()
+        await weeklyRunningDataViewModel.fetchWeeklyRunningData()
     }
     
     private func refreshDataIfNeeded() async {
         if Date().timeIntervalSince(lastRefreshTime) > 180 { // 최소 3분 간격으로 갱신
             await refreshData()
+        }
+    }
+    
+    private func throttledRefresh() async {
+        let now = Date()
+        if now.timeIntervalSince(lastScenePhaseRefresh) > 180 {
+            await refreshDataIfNeeded()
+            lastScenePhaseRefresh = now
         }
     }
     
@@ -176,6 +196,7 @@ struct GradientBackgroundPlaceholder: View {
         .environmentObject(WeatherKitViewModel())
         .environmentObject(LocationManagerNew())
         .environmentObject(HealthKitViewModel())
+        .environmentObject(WeeklyRunningDataViewModel())
 }
 
 #Preview {
@@ -184,4 +205,5 @@ struct GradientBackgroundPlaceholder: View {
         .environmentObject(WeatherKitViewModel())
         .environmentObject(LocationManagerNew())
         .environmentObject(HealthKitViewModel())
+        .environmentObject(WeeklyRunningDataViewModel())
 }
