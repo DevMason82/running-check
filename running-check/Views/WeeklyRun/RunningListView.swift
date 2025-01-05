@@ -21,10 +21,13 @@ struct RunningListView: View {
                     ProgressView("러닝 데이터 로드 중...🏃‍♂️")
                         .frame(maxWidth: .infinity, alignment: .center)
                 } else if viewModel.selectedDayDetails.isEmpty {
-                    Text("해당 날짜에 러닝 기록이 없습니다.")
-                        .foregroundColor(.gray)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding()
+                    VStack {
+                        Text("해당 날짜에 러닝 기록이 없습니다.")
+                            .font(.body)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding()
+                    .background(Color("BackgroundColor").opacity(0.1))
                 } else {
                     ForEach(viewModel.selectedDayDetails, id: \.id) { detail in
                         NavigationLink(value: detail) {

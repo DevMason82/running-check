@@ -151,25 +151,28 @@ class WeeklyRunningDataViewModel: ObservableObject {
             .map { RunningDayStatus(day: $0.key, hasRun: $0.value) }
             .sorted(by: { weekdayOrder($0.day) < weekdayOrder($1.day) })
     }
-    
+
     // 요일 변환 (숫자 → 한국어 요일)
     private func convertWeekdayToKorean(_ weekday: Int) -> String {
         let weekdays = ["일", "월", "화", "수", "목", "금", "토"]
         return weekdays[weekday - 1]
     }
-    
+
+    // 요일 정렬 (일요일부터 시작)
     private func weekdayOrder(_ day: String) -> Int {
-        let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
+        let weekdays = ["일", "월", "화", "수", "목", "금", "토"]
         return weekdays.firstIndex(of: day.prefix(1).description) ?? 7
     }
-    
+
+    // 주간 초기 상태 (일요일부터 시작)
     private func generateEmptyWeek() -> [RunningDayStatus] {
-        let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
+        let weekdays = ["일", "월", "화", "수", "목", "금", "토"]
         return weekdays.map { RunningDayStatus(day: $0, hasRun: false) }
     }
-    
+
+    // 주간 초기 상태 딕셔너리 (일요일부터 시작)
     private func generateEmptyWeekDict() -> [String: Bool] {
-        let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
+        let weekdays = ["일", "월", "화", "수", "목", "금", "토"]
         return weekdays.reduce(into: [:]) { $0[$1] = false }
     }
 }

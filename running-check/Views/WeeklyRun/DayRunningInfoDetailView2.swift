@@ -1,5 +1,5 @@
 //
-//  DayRunningInfoDetailView.swift
+//  DayRunningInfoDetailView2.swift
 //  running-check
 //
 //  Created by mason on 1/2/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DayRunningInfoDetailView: View {
+struct DayRunningInfoDetailView2: View {
     let distance: Double
     let duration: TimeInterval
     let calories: Double
@@ -18,12 +18,12 @@ struct DayRunningInfoDetailView: View {
     var body: some View {
         GeometryReader { geometry in
             let columnCount = max(2, Int(geometry.size.width / 150))  // 최소 2열 보장
-            let columns: [GridItem] = Array(repeating: GridItem(.flexible()), count: columnCount)
+            let columns: [GridItem] = Array(repeating: GridItem(.fixed(150)), count: columnCount)
             
-            VStack(spacing: 10) {
+            VStack(spacing: 15) {
                 DayKMTotalView(distance: distance)
                 
-                LazyVGrid(columns: columns, spacing: 10) {
+                LazyVGrid(columns: columns) {
                     gridItem(title: "🏃🏻‍♂️평균 페이스", value: formattedPace(pace))
                     gridItem(title: "⏱️ 시간", value: formatTime(duration))
                     gridItem(title: "🔥 칼로리", value: formatWithCommas(calories))
@@ -31,7 +31,7 @@ struct DayRunningInfoDetailView: View {
                     gridItem(title: "👟 평균 케이던스", value: "\(String(format: "%.0f", cadence))")
                 }
             }
-            .padding(.horizontal)
+//            .padding(.horizontal)
         }
     }
     
@@ -99,7 +99,7 @@ struct DayRunningInfoDetailView: View {
 }
 
 #Preview {
-    DayRunningInfoDetailView(
+    DayRunningInfoDetailView2(
         distance: 7560,  // 7.5 km
         duration: 3600,  // 1시간
         calories: 23600,
