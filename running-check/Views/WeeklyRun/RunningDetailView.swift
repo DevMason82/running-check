@@ -83,7 +83,7 @@ struct NewCustomRunningDetailView: View {
     let detail: RunningDayData
     
     var body: some View {
-        VStack(spacing: 15) {
+        VStack {
             HStack {
                 Text("러닝체크")
                     .font(.title3)
@@ -94,18 +94,27 @@ struct NewCustomRunningDetailView: View {
             }
             .padding(.bottom, 15)
             
-            VStack(alignment: .leading, spacing: 8) {
-                Text("거리: \(String(format: "%.2f KM", detail.distance / 1000))")
-                Text("평균 페이스: \(formattedPace(detail.pace))")
-                Text("시간: \(formatTime(detail.duration))")
-                Text("칼로리: \(String(format: "%.0f KCAL", detail.calories))")
-                Text("평균 심박수: \(String(format: "%.0f BPM", detail.heartRate))")
-                Text("평균 케이던스: \(String(format: "%.0f SPM", detail.cadence))")
-            }
-            .font(.body)
+            DayRunningInfoDetailView2(
+                distance: detail.distance,
+                duration: detail.duration,
+                calories: detail.calories,
+                heartRate: detail.heartRate,
+                pace: detail.pace,
+                cadence: detail.cadence
+            )
+            
+//            VStack(alignment: .leading, spacing: 8) {
+//                Text("거리: \(String(format: "%.2f KM", detail.distance / 1000))")
+//                Text("평균 페이스: \(formattedPace(detail.pace))")
+//                Text("시간: \(formatTime(detail.duration))")
+//                Text("칼로리: \(String(format: "%.0f KCAL", detail.calories))")
+//                Text("평균 심박수: \(String(format: "%.0f BPM", detail.heartRate))")
+//                Text("평균 케이던스: \(String(format: "%.0f SPM", detail.cadence))")
+//            }
+//            .font(.body)
         }
         .padding()
-        .background(Color("CardColor").opacity(0.1))
+        .background(Color("BackgroundColor").opacity(0.1))
         .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
         .cornerRadius(10)
     }
@@ -149,6 +158,6 @@ struct NewCustomRunningDetailView: View {
 #Preview {
     RunningDetailView(
         day: "Monday",
-        detail: RunningDayData(date: Date(), distance: 100, duration: 60, calories: 100, heartRate: 100, pace: 100, cadence: 100)
+        detail: RunningDayData(date: Date(), distance: 1300, duration: 60, calories: 100, heartRate: 100, pace: 100, cadence: 100)
     )
 }
