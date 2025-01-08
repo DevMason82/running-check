@@ -90,10 +90,8 @@ struct NewCustomRunningDetailView: View {
                     .bold()
                 Spacer()
                 Text(formatDate(detail.date))
-                    .font(.subheadline)
+                    .font(.title3)
             }
-            .padding(.bottom, 15)
-            
             DayRunningInfoDetailView2(
                 distance: detail.distance,
                 duration: detail.duration,
@@ -102,16 +100,6 @@ struct NewCustomRunningDetailView: View {
                 pace: detail.pace,
                 cadence: detail.cadence
             )
-            
-//            VStack(alignment: .leading, spacing: 8) {
-//                Text("거리: \(String(format: "%.2f KM", detail.distance / 1000))")
-//                Text("평균 페이스: \(formattedPace(detail.pace))")
-//                Text("시간: \(formatTime(detail.duration))")
-//                Text("칼로리: \(String(format: "%.0f KCAL", detail.calories))")
-//                Text("평균 심박수: \(String(format: "%.0f BPM", detail.heartRate))")
-//                Text("평균 케이던스: \(String(format: "%.0f SPM", detail.cadence))")
-//            }
-//            .font(.body)
         }
         .padding()
         .background(Color("BackgroundColor").opacity(0.1))

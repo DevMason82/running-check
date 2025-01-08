@@ -16,23 +16,33 @@ struct DayRunningInfoDetailView2: View {
     let cadence: Double
     
     var body: some View {
-        GeometryReader { geometry in
-            let columnCount = max(2, Int(geometry.size.width / 150))  // 최소 2열 보장
-            let columns: [GridItem] = Array(repeating: GridItem(.fixed(150)), count: columnCount)
+        VStack {
+            DayKMTotalView2(distance: distance)
             
-            VStack(spacing: 15) {
-                DayKMTotalView(distance: distance)
-                
-                LazyVGrid(columns: columns) {
-                    gridItem(title: "🏃🏻‍♂️평균 페이스", value: formattedPace(pace))
-                    gridItem(title: "⏱️ 시간", value: formatTime(duration))
-                    gridItem(title: "🔥 칼로리", value: formatWithCommas(calories))
-                    gridItem(title: "❤️ 평균 심박수", value: "\(String(format: "%.0f", heartRate))")
-                    gridItem(title: "👟 평균 케이던스", value: "\(String(format: "%.0f", cadence))")
-                }
+            LazyVGrid(columns: [GridItem(.fixed(130)), GridItem(.fixed(130))], spacing: 10) {
+                gridItem(title: "🏃🏻‍♂️평균 페이스", value: formattedPace(pace))
+                gridItem(title: "⏱️ 시간", value: formatTime(duration))
+                gridItem(title: "🔥 칼로리", value: formatWithCommas(calories))
+                gridItem(title: "❤️ 평균 심박수", value: "\(String(format: "%.0f", heartRate))")
+                gridItem(title: "👟 평균 케이던스", value: "\(String(format: "%.0f", cadence))")
             }
-//            .padding(.horizontal)
         }
+//        GeometryReader { geometry in
+//            let columnCount = max(2, Int(geometry.size.width / 160))  // 최소 2열 보장
+//            let columns: [GridItem] = Array(repeating: GridItem(.fixed(160)), count: columnCount)
+//            
+//            VStack(spacing: 15) {
+//                DayKMTotalView2(distance: distance)
+//                
+//                LazyVGrid(columns: columns) {
+//                    gridItem(title: "🏃🏻‍♂️평균 페이스", value: formattedPace(pace))
+//                    gridItem(title: "⏱️ 시간", value: formatTime(duration))
+//                    gridItem(title: "🔥 칼로리", value: formatWithCommas(calories))
+//                    gridItem(title: "❤️ 평균 심박수", value: "\(String(format: "%.0f", heartRate))")
+//                    gridItem(title: "👟 평균 케이던스", value: "\(String(format: "%.0f", cadence))")
+//                }
+//            }
+//        }
     }
     
     // 각 그리드 아이템 뷰
@@ -41,7 +51,7 @@ struct DayRunningInfoDetailView2: View {
         VStack {
             Text(value)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .font(.system(size: 22))
+                .font(.title3)
                 .bold()
             Text(title)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -104,7 +114,7 @@ struct DayRunningInfoDetailView2: View {
         duration: 3600,  // 1시간
         calories: 23600,
         heartRate: 145,
-        pace: 360,
+        pace: 398.0845880288003,
         cadence: 177
     )
 }

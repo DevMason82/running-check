@@ -44,7 +44,7 @@ struct MonthlyInfoViewSaveImage: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 
                 // 데이터 카드를 반응형으로 배치
-                LazyVGrid(columns: [GridItem(.fixed(160)), GridItem(.fixed(160))], spacing: 10) {
+                LazyVGrid(columns: [GridItem(.fixed(130)), GridItem(.fixed(130))], spacing: 10) {
                     StatCardView2(
                         title: "총 시간",
                         currentValue: totalDuration,
@@ -135,14 +135,16 @@ struct StatCardView2: View {
     }
     
     var body: some View {
-        VStack(spacing: 5) {
+        VStack {
             Text(title)
                 .font(.caption2)
+                .frame(maxWidth: .infinity, alignment: .leading)
             
             // 현재 값 표시
             Text(formattedValue(value: currentValue))
                 .font(.title3)
                 .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
             
             // 변화량 및 화살표
             HStack(spacing: 5) {
@@ -155,13 +157,9 @@ struct StatCardView2: View {
                     .bold()
                     .font(.caption)
             }
-            //            Text(unit)
-            //                .font(.subheadline)
         }
-        .padding(.all, 5)
-        .frame(minWidth: 150, maxWidth: .infinity)
+        .padding()
         .background(Color("CardColor").opacity(0.1))
-        //        .foregroundColor(Color("CardFontColor"))
         .cornerRadius(10)
         .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
     }

@@ -40,11 +40,7 @@ struct WeeklyRunningChckView: View {
                     .disabled(!status.hasRun)
                 }
             }
-            .onAppear {
-                Task {
-                    await wklyrChckVM.fetchWeeklyRunningData()
-                }
-            }
+            
             
             Spacer()
             
@@ -63,6 +59,11 @@ struct WeeklyRunningChckView: View {
                     .frame(maxWidth: .infinity,  alignment: .trailing)
                 }
                 Spacer()
+            }
+        }
+        .onAppear {
+            Task {
+                await wklyrChckVM.fetchWeeklyRunningData()
             }
         }
         .padding(.horizontal)
