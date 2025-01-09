@@ -41,7 +41,8 @@ struct WeatherView: View {
         .onChange(of: scenePhase) {
             if scenePhase == .active {
                 Task {
-                    await throttledRefresh()
+                    await refreshData()
+//                    await throttledRefresh()
                 }
             }
         }
@@ -121,7 +122,7 @@ struct WeatherView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 15)
             
-            WeeklyRunningChckView()
+            WeeklyRunningChckView(weeklyRunningStatus: weeklyRunningDataViewModel.weeklyRunningStatus)
             
             Divider()
                 .frame(height: 1)
@@ -129,25 +130,12 @@ struct WeatherView: View {
                 .padding(.horizontal)
                 .padding(.vertical, 15)
             
-//            RunningDataView(
-//                outdoorRuns: healthViewModel.outdoorRuns,
-//                indoorRuns: healthViewModel.indoorRuns,
-//                indoorRunCount: healthViewModel.allIndoorRunsThisMonth,
-//                outdoorRunCount: healthViewModel.allOutdoorRunsThisMonth
-//            )
-//            
-//            Divider()
-//                .frame(height: 1)
-//                .background(Color("CardFontColor").opacity(0.35))
-//                .padding(.horizontal)
-//                .padding(.bottom, 15)
-            
             WeatherGridView(weather: weather)
         }
     }
     
     private func refreshData() async {
-        guard !isLoading, shouldRefresh() else { return }
+        guard !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
         
@@ -157,23 +145,23 @@ struct WeatherView: View {
         await weeklyRunningDataViewModel.fetchWeeklyRunningData()
     }
     
-    private func refreshDataIfNeeded() async {
-        if Date().timeIntervalSince(lastRefreshTime) > 180 { // 최소 3분 간격으로 갱신
-            await refreshData()
-        }
-    }
-    
-    private func throttledRefresh() async {
-        let now = Date()
-        if now.timeIntervalSince(lastScenePhaseRefresh) > 180 {
-            await refreshDataIfNeeded()
-            lastScenePhaseRefresh = now
-        }
-    }
-    
-    private func shouldRefresh() -> Bool {
-        return Date().timeIntervalSince(lastRefreshTime) > 180 // 최소 3분 간격 확인
-    }
+//    private func throttledRefresh() async {
+//        let now = Date()
+//        if now.timeIntervalSince(lastScenePhaseRefresh) > 180 {
+//            await refreshDataIfNeeded()
+//            lastScenePhaseRefresh = now
+//        }
+//    }
+//    
+//    private func refreshDataIfNeeded() async {
+//        if Date().timeIntervalSince(lastRefreshTime) > 180 { // 최소 3분 간격으로 갱신
+//            await refreshData()
+//        }
+//    }
+//    
+//    private func shouldRefresh() -> Bool {
+//        return Date().timeIntervalSince(lastRefreshTime) > 180 // 최소 3분 간격 확인
+//    }
     
     private func openAppSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else {

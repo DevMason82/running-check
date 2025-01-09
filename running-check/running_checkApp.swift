@@ -14,7 +14,6 @@ struct running_checkApp: App {
     @StateObject private var notificationManager = NotificationManager.shared // Added NotificationManager
     @StateObject private var weeklyRunningDataViewModel = WeeklyRunningDataViewModel()
     @State private var isLoading = true // 데이터 로딩 상태
-    @State private var path: [AnyHashable] = []
     @Environment(\.scenePhase) private var scenePhase // 앱 상태 감지
     
     var body: some Scene {
@@ -48,6 +47,10 @@ struct running_checkApp: App {
                     if scenePhase == .active {
                         // 앱 활성화 시 배지 초기화
                         notificationManager.clearBadgeCount()
+                        
+//                        Task {
+//                            await fetchInitialData()
+//                        }
                     }
                 }
             }

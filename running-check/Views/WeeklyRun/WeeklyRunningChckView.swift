@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct WeeklyRunningChckView: View {
-    @StateObject private var wklyrChckVM = WeeklyRunningDataViewModel()
+    let weeklyRunningStatus: [RunningDayStatus]
+//    @StateObject private var wklyrChckVM = WeeklyRunningDataViewModel()
     
     var body: some View {
         VStack {
@@ -20,7 +21,7 @@ struct WeeklyRunningChckView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             HStack {
-                ForEach(wklyrChckVM.weeklyRunningStatus) { status in
+                ForEach(weeklyRunningStatus) { status in
                     NavigationLink(value: status.day) {  // NavigationLink 사용
                         VStack {
                             Image(systemName: status.hasRun ? "checkmark.seal" : "x.circle")
@@ -61,11 +62,11 @@ struct WeeklyRunningChckView: View {
                 Spacer()
             }
         }
-        .onAppear {
-            Task {
-                await wklyrChckVM.fetchWeeklyRunningData()
-            }
-        }
+//        .onAppear {
+//            Task {
+//                await wklyrChckVM.fetchWeeklyRunningData()
+//            }
+//        }
         .padding(.horizontal)
         .navigationDestination(for: String.self) { day in
             RunningListView(day: day)  // 선택한 day 값으로 RunningListView 이동
@@ -85,5 +86,16 @@ struct WeeklyRunningChckView: View {
 }
 
 #Preview {
-    WeeklyRunningChckView()
+    WeeklyRunningChckView(
+        weeklyRunningStatus: [
+                    RunningDayStatus(day: "월", hasRun: true),
+                    RunningDayStatus(day: "화", hasRun: false),
+                    RunningDayStatus(day: "수", hasRun: true),
+                    RunningDayStatus(day: "목", hasRun: false),
+                    RunningDayStatus(day: "금", hasRun: true),
+                    RunningDayStatus(day: "토", hasRun: true),
+                    RunningDayStatus(day: "일", hasRun: false)
+                ]
+    )
+    .background(Color("BackgroundColor"))
 }

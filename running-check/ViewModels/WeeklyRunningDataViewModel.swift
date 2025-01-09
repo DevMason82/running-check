@@ -54,18 +54,26 @@ class WeeklyRunningDataViewModel: ObservableObject {
         
         do {
             let workouts = try await healthKitManager.fetchWeeklyRunningData()
+            
+            // 비동기 작업 이후 메인 스레드에서 상태 업데이트
             await MainActor.run {
                 self.isLoading = false
                 self.weeklyRunningStatus = self.processRunningData(workouts)
+                
+                print("주간 러닝 데이터 성공@@@@")
             }
+            
+            print("주간 러닝 데이터 성공!!!")
         } catch {
+            // 에러 발생 시에도 메인 스레드에서 상태 업데이트
             await MainActor.run {
                 self.isLoading = false
                 self.weeklyRunningStatus = self.generateEmptyWeek()
             }
+            
+            print("Error fetching weekly running data: \(error.localizedDescription)")
         }
     }
-
     
     // 특정 요일 선택 시 세부 정보 가져오기 (async/await)
     func fetchRunningDetails(for day: String) async {
@@ -108,23 +116,42 @@ class WeeklyRunningDataViewModel: ObservableObject {
         }
     }
     
-    // 개별 워크아웃에서 데이터 추출 (비동기)
     private func extractWorkoutData(for workout: HKWorkout) async -> RunningDayData {
         let activeEnergyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
         let distanceType = HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning)!
         let heartRateType = HKQuantityType.quantityType(forIdentifier: .heartRate)!
         let stepCountType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
         let speedType = HKQuantityType.quantityType(forIdentifier: .runningSpeed)!
-        
+
         let totalCalories = workout.statistics(for: activeEnergyType)?.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0
         let totalDistance = workout.statistics(for: distanceType)?.sumQuantity()?.doubleValue(for: .meter()) ?? 0
         let averageHeartRate = workout.statistics(for: heartRateType)?.averageQuantity()?.doubleValue(for: HKUnit(from: "count/min")) ?? 0
         let averageSpeed = workout.statistics(for: speedType)?.averageQuantity()?.doubleValue(for: HKUnit.meter().unitDivided(by: HKUnit.second())) ?? 0
         let totalSteps = workout.statistics(for: stepCountType)?.sumQuantity()?.doubleValue(for: HKUnit.count()) ?? 0
-        
-        let pacePerKm = averageSpeed > 0 ? 1000 / averageSpeed : 0
+
+        // Calculate pace manually if averageSpeed is unavailable
+        let pacePerKm: Double
+        if averageSpeed > 0 {
+            pacePerKm = 1000 / averageSpeed
+        } else if totalDistance > 0 && workout.duration > 0 {
+            pacePerKm = (workout.duration / (totalDistance / 1000)) // seconds per km
+        } else {
+            pacePerKm = 0
+        }
+
+        // Calculate cadence
         let averageCadence = workout.duration > 0 ? (totalSteps / workout.duration) * 60 : 0
-        
+
+        print("오늘 러닝 기록", RunningDayData(
+            date: workout.startDate,
+            distance: totalDistance,
+            duration: workout.duration,
+            calories: totalCalories,
+            heartRate: averageHeartRate,
+            pace: pacePerKm,
+            cadence: averageCadence
+        ))
+
         return RunningDayData(
             date: workout.startDate,
             distance: totalDistance,
@@ -151,25 +178,25 @@ class WeeklyRunningDataViewModel: ObservableObject {
             .map { RunningDayStatus(day: $0.key, hasRun: $0.value) }
             .sorted(by: { weekdayOrder($0.day) < weekdayOrder($1.day) })
     }
-
+    
     // 요일 변환 (숫자 → 한국어 요일)
     private func convertWeekdayToKorean(_ weekday: Int) -> String {
         let weekdays = ["일", "월", "화", "수", "목", "금", "토"]
         return weekdays[weekday - 1]
     }
-
+    
     // 요일 정렬 (일요일부터 시작)
     private func weekdayOrder(_ day: String) -> Int {
         let weekdays = ["일", "월", "화", "수", "목", "금", "토"]
         return weekdays.firstIndex(of: day.prefix(1).description) ?? 7
     }
-
+    
     // 주간 초기 상태 (일요일부터 시작)
     private func generateEmptyWeek() -> [RunningDayStatus] {
         let weekdays = ["일", "월", "화", "수", "목", "금", "토"]
         return weekdays.map { RunningDayStatus(day: $0, hasRun: false) }
     }
-
+    
     // 주간 초기 상태 딕셔너리 (일요일부터 시작)
     private func generateEmptyWeekDict() -> [String: Bool] {
         let weekdays = ["일", "월", "화", "수", "목", "금", "토"]
