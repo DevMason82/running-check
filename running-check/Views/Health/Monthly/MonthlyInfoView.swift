@@ -117,12 +117,16 @@ struct StatCardView: View {
         }
     }
     
+//    var arrowColor: Color {
+//        difference > 0 ? .green : (difference < 0 ? .red : .gray)
+//    }
+    
     var arrowColor: Color {
         if isPace {
             // 페이스는 낮을수록 좋음
-            return difference < 0 ? .green : .red
+            return difference < 0 ? .green : (difference > 0 ? .red : .gray)
         } else {
-            return difference > 0 ? .green : .red
+            return difference > 0 ? .green : (difference < 0 ? .red : .gray)
         }
     }
     
@@ -234,7 +238,7 @@ struct StatCardView: View {
         prevTotalCalories: 4200,
         prevTotalDuration: 3600 * 3 + 30 * 60,
         prevAveragePace: 560,
-        prevAverageCadence: 350,
+        prevAverageCadence: 450,
         prevRunCount: 10
     )
     .background(Color("BackgroundColor"))
@@ -255,7 +259,7 @@ struct StatCardView: View {
         prevTotalCalories: 4200,
         prevTotalDuration: 3600 * 3 + 30 * 60,
         prevAveragePace: 560,
-        prevAverageCadence: 350,
+        prevAverageCadence: 450,
         prevRunCount: 10
     )
     .background(Color("BackgroundColor"))

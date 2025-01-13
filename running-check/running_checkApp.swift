@@ -38,7 +38,6 @@ struct running_checkApp: App {
                             .environmentObject(healthViewModel)
                             .environmentObject(weeklyRunningDataViewModel)
                             .transition(.opacity) // 전환 효과
-                        
                     }
                 }
                 

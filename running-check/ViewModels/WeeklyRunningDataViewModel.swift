@@ -62,8 +62,6 @@ class WeeklyRunningDataViewModel: ObservableObject {
                 
                 print("주간 러닝 데이터 성공@@@@")
             }
-            
-            print("주간 러닝 데이터 성공!!!")
         } catch {
             // 에러 발생 시에도 메인 스레드에서 상태 업데이트
             await MainActor.run {
@@ -173,6 +171,8 @@ class WeeklyRunningDataViewModel: ObservableObject {
             let dayName = convertWeekdayToKorean(day)
             dayStatus[dayName] = true
         }
+        
+        print("주간 러닝 상태 처리!!")
         
         return dayStatus
             .map { RunningDayStatus(day: $0.key, hasRun: $0.value) }

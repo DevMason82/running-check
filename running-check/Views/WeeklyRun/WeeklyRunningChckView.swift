@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WeeklyRunningChckView: View {
     let weeklyRunningStatus: [RunningDayStatus]
-//    @StateObject private var wklyrChckVM = WeeklyRunningDataViewModel()
+    @StateObject private var wklyrChckVM = WeeklyRunningDataViewModel()
     
     var body: some View {
         VStack {
@@ -62,11 +62,11 @@ struct WeeklyRunningChckView: View {
                 Spacer()
             }
         }
-//        .onAppear {
-//            Task {
-//                await wklyrChckVM.fetchWeeklyRunningData()
-//            }
-//        }
+        .onAppear {
+            Task {
+                await wklyrChckVM.fetchWeeklyRunningData()
+            }
+        }
         .padding(.horizontal)
         .navigationDestination(for: String.self) { day in
             RunningListView(day: day)  // 선택한 day 값으로 RunningListView 이동

@@ -9,28 +9,10 @@ import SwiftUI
 
 struct DayKMTotalView: View {
     let distance: Double // 총 거리 (km)
-//    let prevTotalDistance: Double // 이전 총 거리
+    //    let prevTotalDistance: Double // 이전 총 거리
     
     @State private var aniDistance: Double = 0
     @State private var showDiffer: Bool = false
-    
-//    var difference: Double {
-//        totalDistance - prevTotalDistance
-//    }
-    
-//    var arrowImage: Image {
-//        if difference > 0 {
-//            return Image(systemName: "arrowtriangle.up.fill") // 증가
-//        } else if difference < 0 {
-//            return Image(systemName: "arrowtriangle.down.fill") // 감소
-//        } else {
-//            return Image(systemName: "minus") // 변화 없음
-//        }
-//    }
-//    
-//    var arrowColor: Color {
-//        return difference > 0 ? .green : .red
-//    }
     
     var body: some View {
         HStack {
@@ -40,45 +22,43 @@ struct DayKMTotalView: View {
                     .fontWeight(.heavy)
                     .contentTransition(.numericText())
                     .onAppear {
-//                        withAnimation(.easeOut(duration: 1)) {
-//                            self.aniDistance = self.totalDistance
-//                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            withAnimation(.interpolatingSpring(stiffness: 5, damping: 5)) {
-                                aniDistance = distance
-                            }
-                        }
-                        
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                            self.showDiffer = true
-//                        }
+                        startAnimation()
+                        //                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        //                            withAnimation(.interpolatingSpring(stiffness: 5, damping: 5)) {
+                        //                                aniDistance = distance
+                        //                            }
+                        //                        }
                     }
                 Text("킬로미터")
                     .font(.caption2)
             }
-            // 변화량 및 화살표
-//            if showDiffer {
-//                HStack(spacing: 5) {
-//                    arrowImage
-//                        .foregroundColor(arrowColor)
-//                        .bold()
-//                    Text(formattedValue(value: difference))
-//                        .foregroundColor(arrowColor)
-//                        .bold()
-//                }
-//            }
-            
-            
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-//        .padding(.horizontal)
+        //        .padding(.horizontal)
     }
     
-//    \(String(format: "%.2f", distance / 1000))KM
+    //    \(String(format: "%.2f", distance / 1000))KM
     
     // 값 포맷팅
     private func formattedValue(value: Double) -> String {
         return String(format: "%.2f", value / 1000)
+    }
+    
+    // 애니메이션 시작
+    private func startAnimation() {
+        aniDistance = 0 // 애니메이션 시작값
+        let stepCount = 50 // 애니메이션 단계 수
+        let stepDuration = 1.0 / Double(stepCount) // 각 단계 간 시간
+        
+        Timer.scheduledTimer(withTimeInterval: stepDuration, repeats: true) { timer in
+            let step = distance / Double(stepCount) // 단계별 증가량
+            aniDistance += step
+            
+            if aniDistance >= distance { // 목표값에 도달 시 애니메이션 종료
+                aniDistance = distance
+                timer.invalidate()
+            }
+        }
     }
 }
 

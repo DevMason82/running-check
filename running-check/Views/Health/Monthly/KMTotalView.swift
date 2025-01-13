@@ -29,7 +29,7 @@ struct KMTotalView: View {
     }
     
     var arrowColor: Color {
-        return difference > 0 ? .green : .red
+        difference > 0 ? .green : (difference < 0 ? .red : .gray)
     }
     
     var body: some View {
@@ -40,18 +40,16 @@ struct KMTotalView: View {
                     .bold()
                     .contentTransition(.numericText())
                     .onAppear {
-//                        withAnimation(.easeOut(duration: 1)) {
-//                            self.aniDistance = self.totalDistance
+                        startAnimation()
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                            withAnimation(.interpolatingSpring(stiffness: 10, damping: 10)) {
+//                                aniDistance = totalDistance
+//                            }
 //                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            withAnimation(.interpolatingSpring(stiffness: 5, damping: 5)) {
-                                aniDistance = totalDistance
-                            }
-                        }
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            self.showDiffer = true
-                        }
+//                        
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                            self.showDiffer = true
+//                        }
                     }
                 Text("킬로미터")
             }
@@ -77,8 +75,30 @@ struct KMTotalView: View {
     private func formattedValue(value: Double) -> String {
         return String(format: "%.2f", value)
     }
+    
+    // 애니메이션 시작
+    private func startAnimation() {
+        aniDistance = 0 // 초기값을 0으로 설정
+        let stepCount = 50 // 애니메이션 단계 수
+        let stepDuration = 1.0 / Double(stepCount) // 각 단계 간 시간
+        
+        Timer.scheduledTimer(withTimeInterval: stepDuration, repeats: true) { timer in
+            let step = totalDistance / Double(stepCount) // totalDistance를 기준으로 단계를 나눔
+            aniDistance += step
+            
+            if aniDistance >= totalDistance { // 목표값에 도달했을 때
+                aniDistance = totalDistance
+                timer.invalidate()
+                
+                // 변화량 표시 활성화
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.showDiffer = true
+                }
+            }
+        }
+    }
 }
 
 #Preview {
-    KMTotalView(totalDistance: 223.67, prevTotalDistance: 200)
+    KMTotalView(totalDistance: 256.89, prevTotalDistance: 228.60)
 }
