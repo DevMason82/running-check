@@ -27,15 +27,22 @@ struct MonthlyRunningSummary {
 
 struct MonthlyRunningDataView: View {
     @Environment(\.presentationMode) var presentationMode // 뒤로가기 기능을 제공
-    @StateObject private var weatherKitViewModel = WeatherKitViewModel()
-    @StateObject private var healthViewModel = HealthKitViewModel()
+//    @StateObject private var weatherKitViewModel = WeatherKitViewModel()
+    @EnvironmentObject private var weatherKitViewModel: WeatherKitViewModel
+//    @StateObject private var healthViewModel = HealthKitViewModel()
+    @EnvironmentObject private var healthViewModel: HealthKitViewModel
+    
     @StateObject private var currentMonthRunningReportViewModel = CurrentMonthRunningReportViewModel()
     @StateObject private var prevRunningReportViewModel = PrevRunningReportViewModel()
+    
     @State private var isLoading = true // 로딩 상태를 관리
     @State private var capturedImage: UIImage? = nil
     
     var body: some View {
         ZStack {
+            Color("BackgroundColor")
+                .ignoresSafeArea()
+            
             if isLoading {
                 // 로딩 UI
                 LoadingView(message: "러닝체크 로딩중...🏃🏻‍♂️")
@@ -46,13 +53,13 @@ struct MonthlyRunningDataView: View {
                         }
                     }
             } else {
-                ZStack {
-                    Color("BackgroundColor")
-                        .ignoresSafeArea()
+//                ZStack {
+//                    Color("BackgroundColor")
+//                        .ignoresSafeArea()
                     
                     
                     ScrollView(showsIndicators: false) {
-                        VStack {
+                        
                             if healthViewModel.totalRunningDistance > 0 {
                                 MonthlyInfoView(
                                     month:healthViewModel.currentMonth,
@@ -74,7 +81,7 @@ struct MonthlyRunningDataView: View {
                             } else {
                                 NoDataView()
                             }
-                        }
+                        
                     }
                     .onAppear() {
                         captureAndSave()
@@ -94,7 +101,7 @@ struct MonthlyRunningDataView: View {
                         }
                     }
                     
-                }
+                
             }
         }
         .animation(.easeInOut, value: isLoading) // 상태 변경 시 애니메이션
@@ -185,7 +192,7 @@ struct MonthlyCustomRunningDetailView: View {
             
         }
         .padding()
-        .background(Color("BackgroundColor").opacity(0.1))
+        .background(Color.white)
         .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
         .cornerRadius(10)
     }
@@ -253,6 +260,8 @@ struct NoDataView: View {
 
 #Preview {
     MonthlyRunningDataView()
-        .background(Color("BackgroundColor"))
+//        .background(Color("BackgroundColor"))
+        .environmentObject(WeatherKitViewModel())
+        .environmentObject(HealthKitViewModel())
     
 }

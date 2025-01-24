@@ -25,14 +25,30 @@ struct WeatherView: View {
                 GradientBackgroundPlaceholder()
             }
             
-            ScrollView(showsIndicators: false) {
-                contentView
+            if let errorMessage = weatherKitViewModel.errorMessage {
+                ErrorView(
+                    errorMessage: errorMessage,
+                    onSettingsTap: openAppSettings
+                )
+            } else if weatherKitViewModel.weatherData != nil {
+//                weatherContent(weather: weather)
+                ScrollView(showsIndicators: false) {
+                    contentView
+                }
+                .refreshable {
+                    await refreshData()
+                }
+            } else {
+                LoadingView(message: "러닝체크 로딩중...🏃🏻‍♂️")
             }
-            .refreshable {
-                await refreshData()
-            }
+            
+//            ScrollView(showsIndicators: false) {
+//                contentView
+//            }
+//            .refreshable {
+//                await refreshData()
+//            }
         }
-        
         .onAppear {
             Task {
                 await refreshData()
@@ -58,7 +74,7 @@ struct WeatherView: View {
             } else if let weather = weatherKitViewModel.weatherData {
                 weatherContent(weather: weather)
             } else {
-                LoadingView(message: "Loading...")
+                LoadingView(message: "러닝체크 로딩중...🏃🏻‍♂️")
             }
         }
     }
@@ -97,9 +113,14 @@ struct WeatherView: View {
             .padding(.horizontal)
             
             VStack {
-                NavigationLink(value: weatherKitViewModel.runningCoach) {
-                    HStack {
-                        Text("더보기")
+                NavigationLink(destination: AICoachView()) {
+                    HStack(spacing: 5) {
+                        Image(systemName: "sparkles")
+                            .resizable() // 이미지 크기를 조절할 수 있도록 설정
+                            .scaledToFit() // 이미지의 비율을 유지하며 크기 조절
+                            .foregroundColor(Color("CardFontColor"))
+                            .frame(width: 14) // 원하는 크기 지정
+                        Text("AI 러닝코칭")
                             .font(.headline)
                             .foregroundColor(Color("CardFontColor"))
                         Image(systemName: "arrow.forward")
@@ -112,9 +133,26 @@ struct WeatherView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
-            .navigationDestination(for: RunningCoach.self) { coach in
-                RunningCoachView(coach: coach, grade: weatherKitViewModel.runningGrade)
-            }
+            
+//            VStack {
+//                NavigationLink(value: weatherKitViewModel.runningCoach) {
+//                    HStack {
+//                        Text("더보기")
+//                            .font(.headline)
+//                            .foregroundColor(Color("CardFontColor"))
+//                        Image(systemName: "arrow.forward")
+//                            .font(.title3)
+//                            .foregroundColor(Color("CardFontColor"))
+//                    }
+//                    .padding(.horizontal)
+//                    .padding(.top, 5)
+//                    .padding(.bottom, 15)
+//                }
+//                .frame(maxWidth: .infinity, alignment: .trailing)
+//            }
+//            .navigationDestination(for: RunningCoach.self) { coach in
+//                RunningCoachView(coach: coach, grade: weatherKitViewModel.runningGrade)
+//            }
             
             Divider()
                 .frame(height: 1)
@@ -123,7 +161,7 @@ struct WeatherView: View {
                 .padding(.bottom, 15)
             
             WeeklyRunningChckView(weeklyRunningStatus: weeklyRunningDataViewModel.weeklyRunningStatus)
-            
+               
             Divider()
                 .frame(height: 1)
                 .background(Color("CardFontColor").opacity(0.35))
@@ -139,7 +177,7 @@ struct WeatherView: View {
         isLoading = true
         defer { isLoading = false }
         
-        lastRefreshTime = Date()
+//        lastRefreshTime = Date()
         await weatherKitViewModel.fetchWeatherAndEvaluateRunning()
         await healthViewModel.fetchAllHealthDataToday()
         await weeklyRunningDataViewModel.fetchWeeklyRunningData()

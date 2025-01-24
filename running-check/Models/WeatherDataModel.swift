@@ -27,4 +27,8 @@ struct WeatherData {
     let minTemperature: String
     let uvIndex: String
     let snowfallAmount: String
+    let airQualityIndex: String
+    let airQualityCategory: String
+    let season: String
+    let pollutants: [String: Double]
 }

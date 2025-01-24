@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct RunningListView: View {
-    @StateObject private var viewModel = WeeklyRunningDataViewModel()
+//    @StateObject private var viewModel: WeeklyRunningDataViewModel = WeeklyRunningDataViewModel()
+    @EnvironmentObject private var viewModel: WeeklyRunningDataViewModel
     let day: String
     
     var body: some View {
@@ -27,7 +28,7 @@ struct RunningListView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding()
-                    .background(Color("BackgroundColor").opacity(0.1))
+//                    .background(Color("BackgroundColor").opacity(0.1))
                 } else {
                     ForEach(viewModel.selectedDayDetails, id: \.id) { detail in
                         NavigationLink(value: detail) {
@@ -37,7 +38,7 @@ struct RunningListView: View {
                 }
             }
             .scrollContentBackground(.hidden)
-            .background(Color("CardColor").opacity(0.1))
+//            .background(Color("CardColor").opacity(0.1))
             .navigationTitle("\(day)요일")
             .onAppear {
                 Task {
@@ -85,4 +86,5 @@ struct RunningListRowView: View {
 
 #Preview {
     RunningListView(day: "Monday")
+        .environmentObject(WeeklyRunningDataViewModel())
 }

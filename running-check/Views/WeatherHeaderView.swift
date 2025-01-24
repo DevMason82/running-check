@@ -59,7 +59,20 @@ struct WeatherHeaderView: View {
             maxTemperature: "30°C",
             minTemperature: "20°C",
             uvIndex: "5",
-            snowfallAmount: "0 mm"
+            snowfallAmount: "0 mm",
+            airQualityIndex: "",
+            airQualityCategory: "",
+            season: "겨울",
+            pollutants: [
+                "CO": 201.94,
+                "NO": 0.02,
+                "NO₂": 0.77,
+                "O₃": 95.08,
+                "SO₂": 0.16,
+                "PM2.5": 15.35,
+                "PM10": 19.11,
+                "NH₃": 0.56
+            ]
         ),
         locationName: "San Francisco",
         thoroughfare: "Market Street"

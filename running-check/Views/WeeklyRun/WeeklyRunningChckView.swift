@@ -9,11 +9,10 @@ import SwiftUI
 
 struct WeeklyRunningChckView: View {
     let weeklyRunningStatus: [RunningDayStatus]
-    @StateObject private var wklyrChckVM = WeeklyRunningDataViewModel()
-    
+   
     var body: some View {
         VStack {
-            Text("\(formattedCurrentMonthYear()) 러닝")
+            Text("\(formattedCurrentMonthYear())")
                 .font(.title)
                 .bold()
                 .foregroundColor(Color("CardFontColor"))
@@ -27,7 +26,7 @@ struct WeeklyRunningChckView: View {
                             Image(systemName: status.hasRun ? "checkmark.seal" : "x.circle")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 30, height: 30)
+                                .frame(width: 32, height: 32)
                                 .foregroundColor(Color("CardFontColor"))
                                 .opacity(status.hasRun ? 1.0 : 0.3)
                             
@@ -41,7 +40,10 @@ struct WeeklyRunningChckView: View {
                     .disabled(!status.hasRun)
                 }
             }
-            
+            .navigationDestination(for: String.self) { day in
+                RunningListView(day: day)  // 선택한 day 값으로 RunningListView 이동
+            }
+            .padding(.bottom, 10)
             
             Spacer()
             
@@ -55,22 +57,14 @@ struct WeeklyRunningChckView: View {
                             .font(.title3)
                             .foregroundColor(Color("CardFontColor"))
                     }
-                    .padding()
-                    //                    .padding(.bottom, 0)
                     .frame(maxWidth: .infinity,  alignment: .trailing)
                 }
                 Spacer()
             }
-        }
-        .onAppear {
-            Task {
-                await wklyrChckVM.fetchWeeklyRunningData()
-            }
+            
         }
         .padding(.horizontal)
-        .navigationDestination(for: String.self) { day in
-            RunningListView(day: day)  // 선택한 day 값으로 RunningListView 이동
-        }
+        
     }
     
     private func formattedCurrentMonthYear() -> String {
@@ -81,21 +75,22 @@ struct WeeklyRunningChckView: View {
         let calendar = Calendar.current
         let currentWeek = calendar.component(.weekOfMonth, from: Date())
         
-        return "\(monthYear) \(currentWeek)주차"
+        return "\(monthYear) \(currentWeek)주차 러닝"
     }
 }
 
 #Preview {
     WeeklyRunningChckView(
         weeklyRunningStatus: [
-                    RunningDayStatus(day: "월", hasRun: true),
-                    RunningDayStatus(day: "화", hasRun: false),
-                    RunningDayStatus(day: "수", hasRun: true),
-                    RunningDayStatus(day: "목", hasRun: false),
-                    RunningDayStatus(day: "금", hasRun: true),
-                    RunningDayStatus(day: "토", hasRun: true),
-                    RunningDayStatus(day: "일", hasRun: false)
-                ]
+            RunningDayStatus(day: "일", hasRun: false),
+            RunningDayStatus(day: "월", hasRun: true),
+            RunningDayStatus(day: "화", hasRun: false),
+            RunningDayStatus(day: "수", hasRun: true),
+            RunningDayStatus(day: "목", hasRun: false),
+            RunningDayStatus(day: "금", hasRun: true),
+            RunningDayStatus(day: "토", hasRun: true)
+            
+        ]
     )
     .background(Color("BackgroundColor"))
 }

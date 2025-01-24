@@ -27,7 +27,7 @@ struct MonthlyInfoView: View {
     @Environment(\.scenePhase) private var scenePhase
     
     var body: some View {
-        ScrollView {
+        VStack {
             KMTotalView(totalDistance: totalDistance, prevTotalDistance: prevTotalDistance)
             
             VStack() {
@@ -241,7 +241,7 @@ struct StatCardView: View {
         prevAverageCadence: 450,
         prevRunCount: 10
     )
-    .background(Color("BackgroundColor"))
+//    .background(Color("BackgroundColor"))
     .environment(\.colorScheme, .light)
 }
 
@@ -262,6 +262,6 @@ struct StatCardView: View {
         prevAverageCadence: 450,
         prevRunCount: 10
     )
-    .background(Color("BackgroundColor"))
+//    .background(Color("BackgroundColor"))
     .environment(\.colorScheme, .dark)
 }

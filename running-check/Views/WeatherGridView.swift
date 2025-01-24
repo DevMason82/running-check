@@ -26,6 +26,7 @@ struct WeatherGridView: View {
                 .padding(.bottom, 15)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHGrid(rows: columns, spacing: 10) {
+                    WeatherCard(title: "대기질", value: weather.airQualityCategory)
                     WeatherCard(title: "최고 / 최저", value: "\(weather.maxTemperature) / \(weather.minTemperature)")
                     WeatherCard(title: "풍속", value: weather.windSpeed)
                     WeatherCard(title: "습도", value: weather.humidity)
@@ -51,7 +52,7 @@ struct WeatherGridView: View {
                     .foregroundColor(Color("CardFontColor"))
                     .padding(.top, 1)
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 24)
             //                        .background(Color.black.opacity(0.1))
             .frame(maxWidth: .infinity, alignment: .trailing)
         }
@@ -77,7 +78,21 @@ struct WeatherGridView: View {
             maxTemperature: "30°C",
             minTemperature: "20°C",
             uvIndex: "5",
-            snowfallAmount: "0 mm"
+            snowfallAmount: "0 mm",
+            airQualityIndex: "",
+            airQualityCategory: "",
+            season: "겨울",
+            pollutants: [
+                "CO": 201.94,
+                "NO": 0.02,
+                "NO₂": 0.77,
+                "O₃": 95.08,
+                "SO₂": 0.16,
+                "PM2.5": 15.35,
+                "PM10": 19.11,
+                "NH₃": 0.56
+            ]
+            
         )
     )
 }
