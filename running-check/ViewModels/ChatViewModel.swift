@@ -14,7 +14,7 @@ class ChatViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     
     private let chatAPI: ChatGPTAPI
-    private let apiKey: String = ProcessInfo.processInfo.environment["OPENAI_API_KEY"] ?? ""
+    let apiKey = Bundle.main.object(forInfoDictionaryKey: "OPENAI_API_KEY") as? String ?? ""
 
     init() {
         // 하드코딩된 API 키를 사용하여 ChatGPTAPI 초기화
