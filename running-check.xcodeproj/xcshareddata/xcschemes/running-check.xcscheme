@@ -76,8 +76,8 @@
       </BuildableProductRunnable>
       <EnvironmentVariables>
          <EnvironmentVariable
-            key = "CHATGPT_API_KEY"
-            value = "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"
+            key = "OPENAI_API_KEY"
+            value = "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"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

@@ -17,7 +17,7 @@ class ChatViewModel: ObservableObject {
     
     init() {
         // 환경변수에서 API 키 가져오기
-        guard let apiKey = ProcessInfo.processInfo.environment["CHATGPT_API_KEY"], !apiKey.isEmpty else {
+        guard let apiKey = ProcessInfo.processInfo.environment["OPENAI_API_KEY"], !apiKey.isEmpty else {
             fatalError("환경변수 'CHATGPT_API_KEY'가 설정되지 않았습니다.")
         }
         self.chatAPI = ChatGPTAPI(apiKey: apiKey)
