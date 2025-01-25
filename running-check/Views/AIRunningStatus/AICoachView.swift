@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AICoachView: View {
     @EnvironmentObject private var weatherKitViewModel: WeatherKitViewModel
-    @StateObject private var viewModel = ChatViewModel(apiKey: "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")
+    @StateObject private var viewModel = ChatViewModel()
         
     
     var body: some View {
