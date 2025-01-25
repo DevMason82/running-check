@@ -40,6 +40,7 @@ struct RunningListView: View {
             .scrollContentBackground(.hidden)
 //            .background(Color("CardColor").opacity(0.1))
             .navigationTitle("\(day)요일")
+            .navigationBarTitleDisplayMode(.large)
             .onAppear {
                 Task {
                     await viewModel.fetchRunningDetails(for: day)
