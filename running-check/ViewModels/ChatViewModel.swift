@@ -16,7 +16,8 @@ class ChatViewModel: ObservableObject {
     private let chatAPI: ChatGPTAPI
     
     // 하드코딩된 API 키
-    private let apiKey: String = "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"
+//    private let apiKey: String = "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"
+    private let apiKey: String = ProcessInfo.processInfo.environment["OPENAI_API_KEY"] ?? ""
 
     init() {
         // 하드코딩된 API 키를 사용하여 ChatGPTAPI 초기화
